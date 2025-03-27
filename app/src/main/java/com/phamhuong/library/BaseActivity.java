@@ -1,6 +1,8 @@
 package com.phamhuong.library;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -66,6 +68,10 @@ public class BaseActivity extends AppCompatActivity {
 
         if (id == R.id.nav_home) {
             fragment = new HomeFragment();
+        } else if (id == R.id.nav_logout) {
+            Intent intent = new Intent(BaseActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
         }
 
         if (fragment != null) {

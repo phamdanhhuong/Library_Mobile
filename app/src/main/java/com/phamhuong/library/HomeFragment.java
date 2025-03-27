@@ -1,5 +1,8 @@
 package com.phamhuong.library;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,22 +41,8 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
     RecyclerView rcCategory;
     RecyclerView rcBook;
     TextView txtGenre;
+    String token;
 
-
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        EdgeToEdge.enable(this);
-//        setContentView(R.layout.activity_main);
-//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-//            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-//            return insets;
-//        });
-//        init();
-//        fetchCategoty();
-//        fetchBookRecent();
-//    }
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -72,9 +61,12 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
         rcCategory = view.findViewById(R.id.rcCategory);
         rcBook = view.findViewById(R.id.rcBook);
         txtGenre = view.findViewById(R.id.tvNameCategory);
+
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("LoginPrefs", MODE_PRIVATE);
+        token = sharedPreferences.getString("token", "");
     }
     private void fetchCategoty(){
-        apiService = RetrofitClient.getRetrofit().create(APIService.class);
+        apiService = RetrofitClient.getRetrofit(token).create(APIService.class);
         Call<List<Category>> call = apiService.getCategoryAll();
         call.enqueue(new Callback<List<Category>>() {
             @Override
@@ -95,7 +87,7 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
         });
     }
     public void fetchBookRecent(){
-        apiService = RetrofitClient.getRetrofit().create(APIService.class);
+        apiService = RetrofitClient.getRetrofit(token).create(APIService.class);
         Call<List<Book>> call = apiService.getBookRecent();
         call.enqueue(new Callback<List<Book>>() {
             @Override
@@ -119,7 +111,7 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
     }
 
     public void fetchBookByCategory(String genre){
-        apiService = RetrofitClient.getRetrofit().create(APIService.class);
+        apiService = RetrofitClient.getRetrofit(token).create(APIService.class);
         Call<List<Book>> call = apiService.getBookByCategory(genre);
         call.enqueue(new Callback<List<Book>>() {
             @Override

@@ -2,6 +2,7 @@ package com.phamhuong.library;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -63,16 +64,37 @@ public class LoginActivity extends AppCompatActivity {
         btnDontHaveAccount = findViewById(R.id.txtDontHaveAccount);
         btnLogin = findViewById(R.id.btnLogin);
         cbRememberMe = findViewById(R.id.cbRememberMe);
+
+
+        SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
+        boolean isRemembered = sharedPreferences.getBoolean("rememberMe", false);
+
+        if (isRemembered) {
+            String savedUsername = sharedPreferences.getString("username", "");
+            String savedPassword = sharedPreferences.getString("password", "");
+            txtUsername.setText(savedUsername);
+            txtPassword.setText(savedPassword);
+            cbRememberMe.setChecked(true);
+        }
     }
 
     public void Login(){
-        apiService = RetrofitClient.getRetrofit().create(APIService.class);
+        SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
+
+        apiService = RetrofitClient.getRetrofit(token).create(APIService.class);
         Call<LoginResponse> call = apiService.login(new LoginRequest(txtUsername.getText().toString(),txtPassword.getText().toString()));
         call.enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 LoginResponse body = response.body();
                 if (body.getToken()!=null) {
+                    if (cbRememberMe.isChecked()) {
+                        saveLoginInfo(txtUsername.getText().toString(), txtPassword.getText().toString(), body.getToken());
+                    }
+                    if (!cbRememberMe.isChecked()) {
+                        clearLoginInfo();
+                    }
                     Intent intent = new Intent(LoginActivity.this, BaseActivity.class);
                     startActivity(intent);
                     finish();
@@ -86,5 +108,20 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
+    }
+    private void saveLoginInfo(String username, String password, String token) {
+        SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("username", username);
+        editor.putString("password", password);
+        editor.putString("token", token);
+        editor.putBoolean("rememberMe", true);
+        editor.apply();
+    }
+    private void clearLoginInfo() {
+        SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear(); // Xóa tất cả dữ liệu đã lưu
+        editor.apply();
     }
 }
