@@ -4,7 +4,11 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -20,13 +24,29 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.google.android.material.navigation.NavigationView;
+import com.phamhuong.library.adapter.BookAdapter;
+import com.phamhuong.library.model.Book;
+import com.phamhuong.library.model.InfoResponse;
+import com.phamhuong.library.model.RetrofitClient;
+import com.phamhuong.library.service.APIService;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class BaseActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     Toolbar toolbar;
     NavigationView navigationView;
+    TextView txtFullName;
+    TextView txtUserEmail;
+    APIService apiService;
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,6 +62,10 @@ public class BaseActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         navigationView = findViewById(R.id.nav_view);
         setSupportActionBar(toolbar);
+
+        View headerView = navigationView.getHeaderView(0);
+        txtFullName = headerView.findViewById(R.id.txtFullName);
+        txtUserEmail = headerView.findViewById(R.id.txtUserEmail);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar,
@@ -61,6 +85,8 @@ public class BaseActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        getInfo();
     }
     public boolean onNavigationItemSelectedCustom(@NonNull MenuItem item) {
         Fragment fragment = null;
@@ -94,5 +120,30 @@ public class BaseActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    public void getInfo(){
+        SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
+
+        String username = sharedPreferences.getString("username", "");
+
+        apiService = RetrofitClient.getRetrofit(token).create(APIService.class);
+        Call<InfoResponse> call = apiService.getInfo(username);
+        call.enqueue(new Callback<InfoResponse>() {
+            @Override
+            public void onResponse(Call<InfoResponse> call, Response<InfoResponse> response) {
+                InfoResponse body = response.body();
+                if(body!=null){
+                    txtFullName.setText(body.getFull_name());
+                    txtUserEmail.setText(body.getEmail());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<InfoResponse> call, Throwable t) {
+
+            }
+        });
     }
 }

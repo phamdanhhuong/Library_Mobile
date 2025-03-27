@@ -2,6 +2,7 @@ package com.phamhuong.library.service;
 
 import com.phamhuong.library.model.Book;
 import com.phamhuong.library.model.Category;
+import com.phamhuong.library.model.InfoResponse;
 import com.phamhuong.library.model.LoginRequest;
 import com.phamhuong.library.model.LoginResponse;
 
@@ -22,4 +23,7 @@ public interface APIService {
     Call<List<Book>> getBookByCategory(@Path("genre") String genre);
     @POST("auth/login")
     Call<LoginResponse> login(@Body LoginRequest loginRequest);
+
+    @GET("info/{username}")
+    Call<InfoResponse> getInfo(@Path("username") String username);
 }
