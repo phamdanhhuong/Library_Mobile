@@ -4,16 +4,20 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.phamhuong.library.model.Book;
 
 public class BookFragment extends Fragment {
     TextView txtTitle;
+    TextView txtAuthor;
+    ImageView imgBook;
     Book book;
 
     @Nullable
@@ -25,13 +29,21 @@ public class BookFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        txtTitle = view.findViewById(R.id.tvBookTile);
+        txtTitle = view.findViewById(R.id.tvBookName);
+        txtAuthor = view.findViewById(R.id.tvBookAuthor);
+        imgBook = view.findViewById(R.id.bookImage);
+
+
         Bundle bundle = getArguments();
         if (bundle != null) {
             book = (Book) bundle.getSerializable("book");
-
             if (book != null) {
                 txtTitle.setText(book.getTitle());
+                txtAuthor.setText(book.getAuthor());
+                // Load ảnh từ URL bằng Glide
+                Glide.with(this)
+                        .load(book.getCoverUrl())
+                        .into(imgBook);
             }
         }
     }
