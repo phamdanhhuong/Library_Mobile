@@ -148,4 +148,5 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
     public void onCategoryClick(String genre) {
         fetchBookByCategory(genre);
     }
+
 }
