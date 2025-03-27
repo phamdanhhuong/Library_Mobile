@@ -6,24 +6,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.phamhuong.library.MainActivity;
 import com.phamhuong.library.R;
 import com.phamhuong.library.model.Category;
+import com.phamhuong.library.service.OnCategoryClickListener;
 
 import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyViewHolder> {
     private Context context;
     private List<Category> categoryList;
-    public CategoryAdapter(Context context, List<Category> categoryList) {
+    private OnCategoryClickListener listener;
+    public CategoryAdapter(Context context, List<Category> categoryList,OnCategoryClickListener listener) {
         this.context = context;
         this.categoryList = categoryList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -45,7 +46,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)context).fetchBookByCategory(category.getGenre());
+                //((MainActivity)context).fetchBookByCategory(category.getGenre());
+                listener.onCategoryClick(category.getGenre());
             }
         });
     }
