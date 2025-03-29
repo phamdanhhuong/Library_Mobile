@@ -54,7 +54,7 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
         super.onViewCreated(view, savedInstanceState);
         init(view);
         fetchCategoty();
-        fetchBookRecent();
+        fetchAllBook();
     }
 
     public void init(View view){
@@ -89,6 +89,30 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
     public void fetchBookRecent(){
         apiService = RetrofitClient.getRetrofit(token).create(APIService.class);
         Call<List<Book>> call = apiService.getBookRecent();
+        call.enqueue(new Callback<List<Book>>() {
+            @Override
+            public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
+                if(response.isSuccessful()){
+                    ListBooks = response.body();
+                    bookAdapter = new BookAdapter(getContext(), ListBooks);
+                    rcBook.setAdapter(bookAdapter);
+                    GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
+                    rcBook.setLayoutManager(layoutManager);
+                    rcBook.setHasFixedSize(true);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Book>> call, Throwable t) {
+                Log.d("API_ERROR", "Lỗi kết nối: " + t.getMessage(), t);
+                Toast.makeText(getContext(), "Lỗi kết nối!" + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void fetchAllBook(){
+        apiService = RetrofitClient.getRetrofit(token).create(APIService.class);
+        Call<List<Book>> call = apiService.getAllBooks();
         call.enqueue(new Callback<List<Book>>() {
             @Override
             public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {

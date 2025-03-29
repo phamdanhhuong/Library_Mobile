@@ -53,7 +53,9 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, "Bạn đã bấm quên mk", Toast.LENGTH_SHORT).show();
         });
         btnDontHaveAccount.setOnClickListener(view -> {
-            Toast.makeText(this, "Bạn đã bấm chưa có tài khoản", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, RegisterActivity.class);
+            startActivity(intent);
+            finish();
         });
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
