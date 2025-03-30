@@ -3,6 +3,7 @@ package com.phamhuong.library;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,6 +22,7 @@ import com.phamhuong.library.service.APIService;
 import java.util.HashMap;
 import java.util.Map;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -62,24 +64,37 @@ public class SendPasswordResetOtpActivity extends AppCompatActivity {
     }
 
     void CallAPI(Map<String, String> requestBody) {
-        Call<String> call = apiService.sendPasswordResetOtp(requestBody);
-        call.enqueue(new Callback<String>() {
+        Call<ResponseBody> call = apiService.sendPasswordResetOtp(requestBody);
+        call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    saveResetInfo(requestBody.get("email"));
-                    navigateToResetPassword();
+                    try {
+                        String responseText = response.body().string();
+                        Log.d("API Response", responseText);
+
+                        if (responseText.equals("Password reset OTP sent to email.")) {
+                            saveResetInfo(requestBody.get("email"));
+                            navigateToResetPassword();
+                        } else {
+                            Toast.makeText(SendPasswordResetOtpActivity.this, "Gửi OTP thất bại", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Toast.makeText(SendPasswordResetOtpActivity.this, "Lỗi xử lý phản hồi", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     Toast.makeText(SendPasswordResetOtpActivity.this, "Gửi OTP thất bại", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Toast.makeText(SendPasswordResetOtpActivity.this, "Lỗi kết nối", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
 
     void navigateToResetPassword() {
         Intent intent = new Intent(SendPasswordResetOtpActivity.this, ResetPasswordActivity.class);

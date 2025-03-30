@@ -11,6 +11,7 @@ import com.phamhuong.library.model.RegisterRequest;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -37,7 +38,7 @@ public interface APIService {
     @POST("/auth/activate-account")
     Call<ApiResponse> activeAccount(@Body Map<String, String> requestBody);
     @POST("/auth//send-password-reset-otp")
-    Call<String> sendPasswordResetOtp(@Body Map<String, String> requestBody);
+    Call<ResponseBody> sendPasswordResetOtp(@Body Map<String, String> requestBody);
     @POST("/auth//reset-password")
-    Call<String> resetPassword(@Body Map<String, String> requestBody);
+    Call<ResponseBody> resetPassword(@Body Map<String, String> requestBody);
 }

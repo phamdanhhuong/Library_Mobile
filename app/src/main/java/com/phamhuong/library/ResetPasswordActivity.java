@@ -21,6 +21,7 @@ import com.phamhuong.library.service.APIService;
 import java.util.HashMap;
 import java.util.Map;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -71,10 +72,10 @@ public class ResetPasswordActivity extends AppCompatActivity {
     }
 
     void CallAPI(Map<String, String> requestBody) {
-        Call<String> call = apiService.resetPassword(requestBody);
-        call.enqueue(new Callback<String>() {
+        Call<ResponseBody> call = apiService.resetPassword(requestBody);
+        call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Toast.makeText(ResetPasswordActivity.this, "Đổi mật khẩu thành công", Toast.LENGTH_SHORT).show();
                     navigateToLogin();
@@ -84,11 +85,12 @@ public class ResetPasswordActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Toast.makeText(ResetPasswordActivity.this, "Lỗi kết nối", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
 
     void navigateToLogin() {
         Intent intent = new Intent(ResetPasswordActivity.this, LoginActivity.class);
