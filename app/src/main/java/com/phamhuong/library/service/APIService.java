@@ -36,4 +36,8 @@ public interface APIService {
     Call<ApiResponse> SendOtpActiveAccount(@Body Map<String, String> requestBody);
     @POST("/auth/activate-account")
     Call<ApiResponse> activeAccount(@Body Map<String, String> requestBody);
+    @POST("/auth//send-password-reset-otp")
+    Call<String> sendPasswordResetOtp(@Body Map<String, String> requestBody);
+    @POST("/auth//reset-password")
+    Call<String> resetPassword(@Body Map<String, String> requestBody);
 }

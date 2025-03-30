@@ -50,7 +50,9 @@ public class LoginActivity extends AppCompatActivity {
         });
         init();
         btnForgotPassword.setOnClickListener(view -> {
-            Toast.makeText(this, "Bạn đã bấm quên mk", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, SendPasswordResetOtpActivity.class);
+            startActivity(intent);
+            finish();
         });
         btnDontHaveAccount.setOnClickListener(view -> {
             Intent intent = new Intent(this, RegisterActivity.class);
