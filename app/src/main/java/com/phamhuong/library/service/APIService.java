@@ -6,7 +6,9 @@ import com.phamhuong.library.model.Category;
 import com.phamhuong.library.model.InfoResponse;
 import com.phamhuong.library.model.LoginRequest;
 import com.phamhuong.library.model.LoginResponse;
+import com.phamhuong.library.model.OtpResetPassRequest;
 import com.phamhuong.library.model.RegisterRequest;
+import com.phamhuong.library.model.ResetPassRequest;
 
 import java.util.List;
 import java.util.Map;
@@ -37,8 +39,8 @@ public interface APIService {
     Call<ApiResponse> SendOtpActiveAccount(@Body Map<String, String> requestBody);
     @POST("/auth/activate-account")
     Call<ApiResponse> activeAccount(@Body Map<String, String> requestBody);
-    @POST("/auth//send-password-reset-otp")
+    @POST("/auth/reset-password")
+    Call<ResponseBody> resetPassword(@Body ResetPassRequest resetPassRequest);
+    @POST("/auth/send-password-reset-otp")
     Call<ResponseBody> sendPasswordResetOtp(@Body Map<String, String> requestBody);
-    @POST("/auth//reset-password")
-    Call<ResponseBody> resetPassword(@Body Map<String, String> requestBody);
 }

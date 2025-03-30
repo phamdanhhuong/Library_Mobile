@@ -27,7 +27,7 @@
         <activity android:name=".RegisterActivity"/>
         <activity android:name=".OtpRegisterActivity"/>
         <activity android:name=".SendPasswordResetOtpActivity"/>
-        <activity android:name=".ResetPassActivity"/>
+        <activity android:name=".ResetPasswordActivity"/>
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>

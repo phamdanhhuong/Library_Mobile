@@ -11,7 +11,7 @@ public class ResetPassRequest implements Serializable {
     @SerializedName("otp")
     private String otp;
 
-    @SerializedName("new_password")
+    @SerializedName("newPassword")
     private String newPassword;
 
     public ResetPassRequest(String email, String otp, String newPassword) {

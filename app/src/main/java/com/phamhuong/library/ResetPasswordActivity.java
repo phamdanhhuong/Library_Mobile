@@ -3,23 +3,18 @@ package com.phamhuong.library;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
+import com.phamhuong.library.model.ApiResponse;
+import com.phamhuong.library.model.ResetPassRequest;
 import com.phamhuong.library.model.RetrofitClient;
 import com.phamhuong.library.service.APIService;
 
-import java.util.HashMap;
-import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -34,9 +29,8 @@ public class ResetPasswordActivity extends AppCompatActivity {
     String email;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_reset_password);
 
         init();
@@ -63,15 +57,12 @@ public class ResetPasswordActivity extends AppCompatActivity {
             return;
         }
 
-        Map<String, String> requestBody = new HashMap<>();
-        requestBody.put("email", email);
-        requestBody.put("otp", otp);
-        requestBody.put("newPassword", newPassword);
+        ResetPassRequest requestBody = new ResetPassRequest(email, otp, newPassword);
 
         CallAPI(requestBody);
     }
 
-    void CallAPI(Map<String, String> requestBody) {
+    void CallAPI(ResetPassRequest requestBody) {
         Call<ResponseBody> call = apiService.resetPassword(requestBody);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -86,11 +77,11 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e("CallAPI", "Lỗi kết nối: " + t.getMessage());
                 Toast.makeText(ResetPasswordActivity.this, "Lỗi kết nối", Toast.LENGTH_SHORT).show();
             }
         });
     }
-
 
     void navigateToLogin() {
         Intent intent = new Intent(ResetPasswordActivity.this, LoginActivity.class);
