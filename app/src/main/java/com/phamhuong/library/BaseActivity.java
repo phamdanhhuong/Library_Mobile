@@ -77,6 +77,11 @@ public class BaseActivity extends AppCompatActivity {
             loadFragment(new HomeFragment());
         }
 
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.bottom_navigation_container, new BottomNavigationFragment())
+                .commit();
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
