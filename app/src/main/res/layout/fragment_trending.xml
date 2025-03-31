@@ -3,20 +3,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="8dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sách Thịnh Hành"
+        android:text="Trending Books"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:textColor="#000"/>
+        android:paddingBottom="8dp" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvTrendingBooks"
+        android:id="@+id/recyclerViewTrending"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:overScrollMode="never"/>
+        android:layout_height="match_parent"
+        android:scrollbars="horizontal" />
 </LinearLayout>

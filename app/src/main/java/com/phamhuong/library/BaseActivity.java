@@ -25,6 +25,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.phamhuong.library.fragment.HomeFragmentNew;
 import com.phamhuong.library.model.InfoResponse;
 import com.phamhuong.library.model.RetrofitClient;
 import com.phamhuong.library.service.APIService;
@@ -74,7 +75,7 @@ public class BaseActivity extends AppCompatActivity {
         toggle.syncState();
 
         if (savedInstanceState == null) {
-            loadFragment(new HomeFragment());
+            loadFragment(new HomeFragmentNew());
         }
 
 
@@ -86,6 +87,8 @@ public class BaseActivity extends AppCompatActivity {
                 return true;
             }
         });
+        bottomNavigationView.setItemIconTintList(null);
+
         bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -101,7 +104,7 @@ public class BaseActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            fragment = new HomeFragment();
+            fragment = new HomeFragmentNew();
         } else if (id == R.id.nav_logout) {
             Intent intent = new Intent(BaseActivity.this, LoginActivity.class);
             startActivity(intent);
@@ -118,10 +121,14 @@ public class BaseActivity extends AppCompatActivity {
     public boolean onBottomNavigationViewItemSelectedCustom(@NonNull MenuItem item) {
         Fragment fragment = null;
         int id = item.getItemId();
+        bottomNavigationView.getMenu().findItem(R.id.nav_home).setIcon(R.drawable.ic_bottom_navbar_home_off);
+        bottomNavigationView.getMenu().findItem(R.id.nav_save).setIcon(R.drawable.ic_bottom_navbar_save_off);
+        bottomNavigationView.getMenu().findItem(R.id.nav_notification).setIcon(R.drawable.ic_bottom_navbar_setting_off);
+        bottomNavigationView.getMenu().findItem(R.id.nav_profile).setIcon(R.drawable.ic_bottom_navbar_user_off);
 
         if (id == R.id.nav_home) {
             item.setIcon(R.drawable.ic_bottom_navbar_home_on);
-            fragment = new HomeFragment();
+            fragment = new HomeFragmentNew();
         } else if (id == R.id.nav_save) {
             item.setIcon(R.drawable.ic_bottom_navbar_save_on);
             fragment = new NotificationFragment();
