@@ -23,12 +23,6 @@
             android:textSize="16sp"
             android:background="@android:color/transparent"/>
 
-        <ImageView
-            android:id="@+id/btnSearch"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@drawable/ic_bottom_navbar_search"
-            android:contentDescription="Search"/>
     </LinearLayout>
 
     <!-- Filter by Genre -->
