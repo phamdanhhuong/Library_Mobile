@@ -1,4 +1,4 @@
-package com.phamhuong.library;
+package com.phamhuong.library.fragment;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.phamhuong.library.R;
 import com.phamhuong.library.adapter.BookAdapter;
 import com.phamhuong.library.adapter.CategoryAdapter;
 import com.phamhuong.library.model.Book;

@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
@@ -16,10 +15,9 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.phamhuong.library.BookFragment;
+import com.phamhuong.library.fragment.BookFragment;
 import com.phamhuong.library.R;
 import com.phamhuong.library.model.Book;
-import com.phamhuong.library.model.Category;
 
 import java.util.List;
 

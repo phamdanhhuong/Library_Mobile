@@ -4,11 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -24,17 +22,16 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
-import com.phamhuong.library.adapter.BookAdapter;
-import com.phamhuong.library.model.Book;
 import com.phamhuong.library.model.InfoResponse;
 import com.phamhuong.library.model.RetrofitClient;
 import com.phamhuong.library.service.APIService;
-
-import java.util.List;
+import com.phamhuong.library.fragment.BookStoreFragment;
+import com.phamhuong.library.fragment.HomeFragment;
+import com.phamhuong.library.fragment.NotificationFragment;
+import com.phamhuong.library.fragment.SearchFragment;
 
 import retrofit2.Call;
 import retrofit2.Callback;

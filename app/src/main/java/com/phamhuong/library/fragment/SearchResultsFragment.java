@@ -1,4 +1,4 @@
-package com.phamhuong.library;
+package com.phamhuong.library.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.phamhuong.library.R;
 
 public class SearchResultsFragment extends Fragment {
     @Nullable

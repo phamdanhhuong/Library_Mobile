@@ -1,4 +1,4 @@
-package com.phamhuong.library;
+package com.phamhuong.library.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.phamhuong.library.R;
 import com.phamhuong.library.model.Book;
 
 public class BookFragment extends Fragment {

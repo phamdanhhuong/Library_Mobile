@@ -1,4 +1,4 @@
-package com.phamhuong.library;
+package com.phamhuong.library.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.phamhuong.library.R;
 import com.phamhuong.library.adapter.GenreAdapter;
 
 import java.util.Arrays;
