@@ -28,8 +28,19 @@
         <!--  content_frame để chứa Fragment  -->
         <FrameLayout android:id="@+id/content_frame"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#FFFFFF"> </FrameLayout>
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="#FFFFFF">
+        </FrameLayout>
+        <!-- Bottom Navigation -->
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavigationView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            app:itemIconTint="@color/bottom_nav_icon_color"
+            app:itemTextColor="@color/bottom_nav_text_color"
+            app:menu="@menu/bottom_nav_menu"/>
     </LinearLayout>
     <!--  Navigation Drawer  -->
     <com.google.android.material.navigation.NavigationView

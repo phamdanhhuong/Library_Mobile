@@ -26,6 +26,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.phamhuong.library.adapter.BookAdapter;
 import com.phamhuong.library.model.Book;
@@ -43,6 +44,7 @@ public class BaseActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     Toolbar toolbar;
     NavigationView navigationView;
+    BottomNavigationView bottomNavigationView;
     TextView txtFullName;
     TextView txtUserEmail;
     APIService apiService;
@@ -61,6 +63,7 @@ public class BaseActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.main_base);
         toolbar = findViewById(R.id.toolbar);
         navigationView = findViewById(R.id.nav_view);
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
         setSupportActionBar(toolbar);
 
         View headerView = navigationView.getHeaderView(0);
@@ -77,16 +80,19 @@ public class BaseActivity extends AppCompatActivity {
             loadFragment(new HomeFragment());
         }
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.bottom_navigation_container, new BottomNavigationFragment())
-                .commit();
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 onNavigationItemSelectedCustom(item);
                 drawerLayout.closeDrawer(GravityCompat.START);
+                return true;
+            }
+        });
+        bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                onBottomNavigationViewItemSelectedCustom(item);
                 return true;
             }
         });
@@ -109,6 +115,25 @@ public class BaseActivity extends AppCompatActivity {
             loadFragment(fragment);
         }
 
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
+    public boolean onBottomNavigationViewItemSelectedCustom(@NonNull MenuItem item) {
+        Fragment fragment = null;
+        int id = item.getItemId();
+
+        if (id == R.id.nav_home) {
+            fragment = new HomeFragment();
+        } else if (id == R.id.nav_notification) {
+            fragment = new NotificationFragment();
+        } else if (id == R.id.nav_search) {
+            fragment = new SearchFragment();
+        } else if (id == R.id.nav_book_store) {
+            fragment = new BookStoreFragment();
+        }
+        if (fragment != null) {
+            loadFragment(fragment);
+        }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
