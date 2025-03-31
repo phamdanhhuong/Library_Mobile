@@ -28,7 +28,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.phamhuong.library.model.InfoResponse;
 import com.phamhuong.library.model.RetrofitClient;
 import com.phamhuong.library.service.APIService;
-import com.phamhuong.library.fragment.BookStoreFragment;
+import com.phamhuong.library.fragment.ProfileFragment;
 import com.phamhuong.library.fragment.HomeFragment;
 import com.phamhuong.library.fragment.NotificationFragment;
 import com.phamhuong.library.fragment.SearchFragment;
@@ -120,13 +120,17 @@ public class BaseActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
+            item.setIcon(R.drawable.ic_bottom_navbar_home_on);
             fragment = new HomeFragment();
-        } else if (id == R.id.nav_notification) {
+        } else if (id == R.id.nav_save) {
+            item.setIcon(R.drawable.ic_bottom_navbar_save_on);
             fragment = new NotificationFragment();
-        } else if (id == R.id.nav_search) {
+        } else if (id == R.id.nav_notification) {
+            item.setIcon(R.drawable.ic_bottom_navbar_setting_on);
             fragment = new SearchFragment();
-        } else if (id == R.id.nav_book_store) {
-            fragment = new BookStoreFragment();
+        } else if (id == R.id.nav_profile) {
+            item.setIcon(R.drawable.ic_bottom_navbar_user_on);
+            fragment = new ProfileFragment();
         }
         if (fragment != null) {
             loadFragment(fragment);

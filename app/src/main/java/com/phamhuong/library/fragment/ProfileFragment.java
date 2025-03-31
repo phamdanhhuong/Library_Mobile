@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import com.phamhuong.library.R;
 
-public class BookStoreFragment extends Fragment {
+public class ProfileFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

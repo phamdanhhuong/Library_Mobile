@@ -3,21 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/nav_home"
-        android:icon="@drawable/ic_bottom_navbar_home"
+        android:icon="@drawable/ic_bottom_navbar_home_off"
         android:title="Home" />
 
     <item
+        android:id="@+id/nav_save"
+        android:icon="@drawable/ic_bottom_navbar_save_off"
+        android:title="Save" />
+
+    <item
         android:id="@+id/nav_notification"
-        android:icon="@drawable/ic_bottom_navbar_notification"
+        android:icon="@drawable/ic_bottom_navbar_setting_off"
         android:title="Notification" />
 
     <item
-        android:id="@+id/nav_search"
-        android:icon="@drawable/ic_bottom_navbar_search"
-        android:title="Search" />
-
-    <item
-        android:id="@+id/nav_book_store"
-        android:icon="@drawable/ic_bottom_navbar_store"
-        android:title="Book Store" />
+        android:id="@+id/nav_profile"
+        android:icon="@drawable/ic_bottom_navbar_user_off"
+        android:title="Profile" />
 </menu>
