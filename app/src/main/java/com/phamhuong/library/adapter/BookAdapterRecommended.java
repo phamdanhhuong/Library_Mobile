@@ -1,6 +1,7 @@
 package com.phamhuong.library.adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +10,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.phamhuong.library.R;
+import com.phamhuong.library.fragment.BookFragment;
 import com.phamhuong.library.model.Book;
 
 import java.util.List;
@@ -51,9 +56,10 @@ public class BookAdapterRecommended extends RecyclerView.Adapter<BookAdapterReco
                 .placeholder(R.drawable.book_placeholder)
                 .into(holder.imgBookCover);
 
-        holder.btnDetails.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onBookClick(book);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openBookFragment(book);
             }
         });
     }
@@ -81,5 +87,22 @@ public class BookAdapterRecommended extends RecyclerView.Adapter<BookAdapterReco
 
     public interface OnBookClickListener {
         void onBookClick(Book book);
+    }
+
+    private void openBookFragment(Book book) {
+        FragmentActivity activity = (FragmentActivity) context;
+        FragmentManager fragmentManager = activity.getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+        BookFragment bookFragment = new BookFragment();
+
+        // Gửi đối tượng Book qua Bundle
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("book", book);
+        bookFragment.setArguments(bundle);
+
+        transaction.replace(R.id.content_frame, bookFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }

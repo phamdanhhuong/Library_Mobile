@@ -63,11 +63,11 @@ public class RegisterActivity extends AppCompatActivity {
 
     void init(){
         txtAlreadyHaveAccount = findViewById(R.id.txtAlreadyHaveAccount);
-        editTextUsername = findViewById(R.id.editTextUsername);
-        editTextPassword = findViewById(R.id.editTextPassword);
-        editTextFullname = findViewById(R.id.editTextFullname);
-        editTextPhonenumber = findViewById(R.id.editTextPhonenumber);
-        editTextEmail = findViewById(R.id.editTextEmail);
+        editTextUsername = findViewById(R.id.etUserName);
+        editTextPassword = findViewById(R.id.etPassword);
+        editTextFullname = findViewById(R.id.etFullName);
+        editTextPhonenumber = findViewById(R.id.etPhone);
+        editTextEmail = findViewById(R.id.etEmail);
         btnSignup = findViewById(R.id.btnSignup);
     }
 

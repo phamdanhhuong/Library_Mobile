@@ -6,7 +6,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
+import androidx.appcompat.widget.SearchView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -63,7 +65,10 @@ public class BaseActivity extends AppCompatActivity {
         navigationView = findViewById(R.id.nav_view);
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         setSupportActionBar(toolbar);
-
+        SearchView searchView = findViewById(R.id.search_view);
+        EditText searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
+        searchEditText.setTextColor(getResources().getColor(R.color.black));
+        searchEditText.setHintTextColor(getResources().getColor(R.color.black));
         View headerView = navigationView.getHeaderView(0);
         txtFullName = headerView.findViewById(R.id.txtFullName);
         txtUserEmail = headerView.findViewById(R.id.txtUserEmail);

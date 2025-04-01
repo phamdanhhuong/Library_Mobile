@@ -3,7 +3,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_margin="12dp"
-
     android:background="@color/transparent">
 
     <!-- Tiêu đề -->
@@ -11,8 +10,9 @@
         android:id="@+id/tvRecommended"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Recommended"
+        android:text="recommended"
         android:textSize="18sp"
+        android:textColor="@color/black"
         android:textStyle="bold"
         android:layout_marginBottom="8dp"/>
 

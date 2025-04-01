@@ -17,7 +17,7 @@
     <!-- Nội dung bên phải ảnh -->
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="136dp"
         android:layout_weight="1"
         android:orientation="vertical"
         android:paddingStart="12dp">
@@ -26,7 +26,10 @@
             android:id="@+id/tvBookTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:text="unseen world"
+            android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -54,6 +57,7 @@
             android:id="@+id/tvDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:text="sara is a little girl who living with her mom. she loves animals. one day when shes playing with her imaginary friend...."
             android:textSize="11sp"
             android:maxLines="2"
@@ -70,7 +74,7 @@
             android:layout_margin="8dp"
             android:text="Details"
             android:textSize="11sp"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"/>
     </LinearLayout>
 
 </LinearLayout>
