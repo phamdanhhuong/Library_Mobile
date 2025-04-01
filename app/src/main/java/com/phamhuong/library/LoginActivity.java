@@ -70,8 +70,8 @@ public class LoginActivity extends AppCompatActivity {
     private void init() {
         txtUsername = findViewById(R.id.editTextUsername);
         txtPassword = findViewById(R.id.editTextPassword);
-        btnForgotPassword = findViewById(R.id.txtForgotPassword);
-        btnDontHaveAccount = findViewById(R.id.txtDontHaveAccount);
+        btnForgotPassword = findViewById(R.id.tvForgotPassword);
+        btnDontHaveAccount = findViewById(R.id.tvDontHaveAccount);
         btnLogin = findViewById(R.id.btnLogin);
         cbRememberMe = findViewById(R.id.cbRememberMe);
 

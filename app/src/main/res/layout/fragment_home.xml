@@ -1,35 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:androidx="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="@drawable/bg_app_all"
+    android:fillViewport="true">
 
-    <!-- Fragment Ads -->
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentAds"
-        android:name="com.phamhuong.library.fragment.FragmentAds"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <!-- Fragment Explore -->
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentExplore"
-        android:name="com.phamhuong.library.fragment.FragmentExplore"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        <!-- Fragment Ads -->
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragmentAds"
+            android:name="com.phamhuong.library.fragment.FragmentAds"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
-    <!-- Fragment Recommended -->
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentRecommended"
-        android:name="com.phamhuong.library.fragment.FragmentRecommended"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        <!-- Fragment Explore -->
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragmentExplore"
+            android:name="com.phamhuong.library.fragment.FragmentExplore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
-    <!-- Fragment Trading -->
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentTrending"
-        android:name="com.phamhuong.library.fragment.FragmentTrending"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-</LinearLayout>
+        <!-- Fragment Recommended -->
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragmentRecommended"
+            android:name="com.phamhuong.library.fragment.FragmentRecommended"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!-- Fragment Trading -->
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragmentTrending"
+            android:name="com.phamhuong.library.fragment.FragmentTrending"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</ScrollView>

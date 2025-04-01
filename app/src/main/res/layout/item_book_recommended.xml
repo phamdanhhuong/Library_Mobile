@@ -1,17 +1,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="12dp"
-    android:background="@android:color/transparent"
+    android:background="@color/transparent"
     android:elevation="4dp"
-    android:layout_margin="8dp">
+    android:layout_margin="2dp">
 
     <!-- Ảnh bìa sách -->
     <ImageView
         android:id="@+id/imgBookCover"
-        android:layout_width="100dp"
-        android:layout_height="140dp"
+        android:layout_width="101dp"
+        android:layout_height="136dp"
         android:scaleType="centerCrop"
         android:src="@drawable/genre_selected" />
 
@@ -36,7 +35,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="by: jamilla francis"
-            android:textSize="14sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textSize="13sp"
             android:textColor="#A08F8F" />
 
         <TextView
@@ -44,7 +45,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="science"
-            android:textSize="12sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textSize="11sp"
             android:textColor="#A08F8F" />
 
         <TextView
@@ -52,7 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="sara is a little girl who living with her mom. she loves animals. one day when shes playing with her imaginary friend...."
-            android:textSize="12sp"
+            android:textSize="11sp"
             android:maxLines="2"
             android:ellipsize="end"
             android:layout_marginTop="4dp" />
@@ -61,11 +64,12 @@
         <Button
             android:id="@+id/btnDetails"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="32dp"
             android:layout_gravity="end"
-            android:layout_marginTop="8dp"
             android:background="@drawable/bg_button_read"
+            android:layout_margin="8dp"
             android:text="Details"
+            android:textSize="11sp"
             android:textColor="@android:color/white" />
     </LinearLayout>
 
