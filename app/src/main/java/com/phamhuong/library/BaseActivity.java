@@ -3,9 +3,12 @@ package com.phamhuong.library;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.TextView;
 import androidx.appcompat.widget.SearchView;
@@ -26,6 +29,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 import com.phamhuong.library.fragment.HomeFragmentNew;
 import com.phamhuong.library.model.InfoResponse;
@@ -45,6 +49,7 @@ public class BaseActivity extends AppCompatActivity {
     Toolbar toolbar;
     NavigationView navigationView;
     BottomNavigationView bottomNavigationView;
+    private View lastSelectedItem;
     TextView txtFullName;
     TextView txtUserEmail;
     APIService apiService;
@@ -65,10 +70,12 @@ public class BaseActivity extends AppCompatActivity {
         navigationView = findViewById(R.id.nav_view);
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         setSupportActionBar(toolbar);
+
         SearchView searchView = findViewById(R.id.search_view);
         EditText searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
         searchEditText.setTextColor(getResources().getColor(R.color.black));
         searchEditText.setHintTextColor(getResources().getColor(R.color.black));
+
         View headerView = navigationView.getHeaderView(0);
         txtFullName = headerView.findViewById(R.id.txtFullName);
         txtUserEmail = headerView.findViewById(R.id.txtUserEmail);
@@ -94,14 +101,43 @@ public class BaseActivity extends AppCompatActivity {
         });
         bottomNavigationView.setItemIconTintList(null);
 
-        bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
+//        bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
+//            @Override
+//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//                onBottomNavigationViewItemSelectedCustom(item);
+//                return true;
+//            }
+//        });
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                View view = bottomNavigationView.findViewById(item.getItemId());
+                int selectedColor = Color.parseColor("#FF5733"); // Màu cam
+                int defaultColor = Color.parseColor("#808080");  // Màu xám
+
+                // Duyệt tất cả item và đặt màu mặc định
+                for (int i = 0; i < bottomNavigationView.getMenu().size(); i++) {
+                    bottomNavigationView.getMenu().getItem(i).getIcon().setTint(defaultColor);
+                }
+
+                // Đổi màu icon của item được chọn
+                item.getIcon().setTint(selectedColor);
+                // Reset animation của item trước
+                if (lastSelectedItem != null) {
+                    Animation scaleDown = AnimationUtils.loadAnimation(BaseActivity.this, R.anim.scale_down);
+                    lastSelectedItem.startAnimation(scaleDown);
+                }
+
+                // Phóng to icon được chọn
+                Animation scaleUp = AnimationUtils.loadAnimation(BaseActivity.this, R.anim.scale_up);
+                view.startAnimation(scaleUp);
+
+                lastSelectedItem = view; // Cập nhật item đã chọn
+
                 onBottomNavigationViewItemSelectedCustom(item);
                 return true;
             }
         });
-
         getInfo();
     }
     public boolean onNavigationItemSelectedCustom(@NonNull MenuItem item) {
