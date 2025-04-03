@@ -1,5 +1,4 @@
 package com.phamhuong.library.fragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,19 +9,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.phamhuong.library.R;
-import com.phamhuong.library.adapter.BookAdapter;
-import com.phamhuong.library.adapter.BookAdapterRecommended;
 import com.phamhuong.library.adapter.BookAdapterTrending;
 import com.phamhuong.library.model.Book;
 import com.phamhuong.library.model.RetrofitClient;
 import com.phamhuong.library.service.APIService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;

@@ -1,0 +1,51 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginStart="16dp">
+
+    <!-- Ảnh bìa sách -->
+    <ImageView
+        android:id="@+id/imgBookCover"
+        android:layout_width="120dp"
+        android:layout_height="180dp"
+        android:scaleType="centerCrop"
+        android:background="@drawable/book_placeholder"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Tên sách -->
+    <TextView
+        android:id="@+id/tvBookName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Book Name"
+        android:textSize="14sp"
+        android:textColor="#000"
+        android:layout_marginBottom="4dp" />
+
+    <!-- Ngôi sao đánh giá -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="8dp">
+
+        <!-- Số sao đánh giá -->
+        <TextView
+            android:id="@+id/tvRatingText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4.5"
+            android:textSize="14sp"
+            android:textColor="#d7590c" />
+        <ImageView
+            android:id="@+id/star1"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_book_info_score" />
+    </LinearLayout>
+
+
+</LinearLayout>

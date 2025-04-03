@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,40 +16,41 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.phamhuong.library.fragment.BookFragment;
 import com.phamhuong.library.R;
+import com.phamhuong.library.fragment.BookFragment;
 import com.phamhuong.library.model.Book;
 
 import java.util.List;
 
-public class BookAdapter extends RecyclerView.Adapter<BookAdapter.MyViewHolder>{
-
+public class BookAdapterRelate extends RecyclerView.Adapter<BookAdapterRelate.ViewHolder> {
     private Context context;
-    private List<Book> ListBook;
+    private List<Book> bookList;
 
-    public BookAdapter(Context context, List<Book> ListBook) {
+    public BookAdapterRelate(Context context, List<Book> bookList) {
         this.context = context;
-        this.ListBook = ListBook;
+        this.bookList = bookList;
     }
 
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.book, parent, false);
-        return new BookAdapter.MyViewHolder(view);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.item_book_relate, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        Book book = ListBook.get(position);
-        holder.txtName.setText(book.getTitle());
-        holder.txtAuthor.setText(book.getAuthor());
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Book book = bookList.get(position);
 
-        // Load ảnh từ URL bằng Glide
-        Glide.with(context)
-                .load(book.getCoverUrl())
-                .into(holder.imgCategory);
+        // Load cover image using Glide
+        Glide.with(context).load(book.getCoverUrl()).into(holder.imgBookCover);
 
+        // Set book name and rating
+        holder.tvBookName.setText(book.getTitle());
+        //float rating = book.getRating();
+        //holder.tvRatingText.setText(String.valueOf(rating)); // assuming getAverageRating returns a float
+
+        // Handle item click
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,20 +61,19 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.MyViewHolder>{
 
     @Override
     public int getItemCount() {
-        return ListBook.size();
+        return bookList.size();
     }
 
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView imgBookCover;
+        TextView tvBookName, tvRatingText;
+        RatingBar ratingBar;
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView txtName;
-        TextView txtAuthor;
-        ImageView imgCategory;
-
-        public MyViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            txtName = itemView.findViewById(R.id.tvBookName);
-            txtAuthor = itemView.findViewById(R.id.tvBookAuthor);
-            imgCategory = itemView.findViewById(R.id.bookImage);
+            imgBookCover = itemView.findViewById(R.id.imgBookCover);
+            tvBookName = itemView.findViewById(R.id.tvBookName);
+            tvRatingText = itemView.findViewById(R.id.tvRatingText);
         }
     }
 
@@ -92,5 +93,4 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.MyViewHolder>{
         transaction.addToBackStack(null);
         transaction.commit();
     }
-
 }

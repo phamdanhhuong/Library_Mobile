@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.phamhuong.library.R;
-import com.phamhuong.library.adapter.BookAdapter;
+import com.phamhuong.library.adapter.BookInfoAdapter;
 import com.phamhuong.library.adapter.CategoryAdapter;
 import com.phamhuong.library.model.Book;
 import com.phamhuong.library.model.Category;
@@ -38,7 +38,7 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
     List<Category> ListCategories;
     List<Book> ListBooks;
     CategoryAdapter adapter;
-    BookAdapter bookAdapter;
+    BookInfoAdapter bookAdapter;
     RecyclerView rcCategory;
     RecyclerView rcBook;
     TextView txtGenre;
@@ -95,7 +95,7 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
             public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
                 if(response.isSuccessful()){
                     ListBooks = response.body();
-                    bookAdapter = new BookAdapter(getContext(), ListBooks);
+                    bookAdapter = new BookInfoAdapter(getContext(), ListBooks);
                     rcBook.setAdapter(bookAdapter);
                     GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
                     rcBook.setLayoutManager(layoutManager);
@@ -119,7 +119,7 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
             public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
                 if(response.isSuccessful()){
                     ListBooks = response.body();
-                    bookAdapter = new BookAdapter(getContext(), ListBooks);
+                    bookAdapter = new BookInfoAdapter(getContext(), ListBooks);
                     rcBook.setAdapter(bookAdapter);
                     GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
                     rcBook.setLayoutManager(layoutManager);
@@ -143,7 +143,7 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
             public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
                 if(response.isSuccessful()){
                     ListBooks = response.body();
-                    bookAdapter = new BookAdapter(getContext(), ListBooks);
+                    bookAdapter = new BookInfoAdapter(getContext(), ListBooks);
                     rcBook.setAdapter(bookAdapter);
                     GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
                     rcBook.setLayoutManager(layoutManager);

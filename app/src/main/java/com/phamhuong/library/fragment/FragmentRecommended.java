@@ -10,13 +10,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.phamhuong.library.R;
-import com.phamhuong.library.adapter.BookAdapter;
+import com.phamhuong.library.adapter.BookInfoAdapter;
 import com.phamhuong.library.adapter.BookAdapterRecommended;
 import com.phamhuong.library.adapter.BookAdapterRecommended.OnBookClickListener;
 
@@ -25,7 +22,6 @@ import com.phamhuong.library.model.Book;
 import com.phamhuong.library.model.RetrofitClient;
 import com.phamhuong.library.service.APIService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -82,7 +78,7 @@ public class FragmentRecommended extends Fragment {
                     bookAdapter = new BookAdapterRecommended(getContext(), bookList, new OnBookClickListener() {
                         @Override
                         public void onBookClick(Book book) {
-                            Intent intent = new Intent(getContext(), BookAdapter.class);
+                            Intent intent = new Intent(getContext(), BookInfoAdapter.class);
                             intent.putExtra("bookId", book.getId());
                             startActivity(intent);
                         }

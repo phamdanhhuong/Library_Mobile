@@ -11,21 +11,18 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentBookInfo"
-            android:name="com.phamhuong.library.fragment.BookFragment"
+            android:name="com.phamhuong.library.fragment.FragmentBookInfo"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"/>
+            android:layout_height="wrap_content"/>
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentCommentSection"
             android:name="com.phamhuong.library.fragment.FragmentCommentSection"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"/>
+            android:layout_height="wrap_content"/>
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentRelateBook"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"/>
+            android:layout_height="wrap_content"/>
 
     </LinearLayout>
 </ScrollView>

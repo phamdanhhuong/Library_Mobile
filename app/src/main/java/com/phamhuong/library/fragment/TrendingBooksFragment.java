@@ -7,17 +7,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.phamhuong.library.R;
-import com.phamhuong.library.adapter.BookAdapter;
-import com.phamhuong.library.adapter.BookAdapterTrending;
-import com.phamhuong.library.model.Book;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class TrendingBooksFragment extends Fragment {
 
