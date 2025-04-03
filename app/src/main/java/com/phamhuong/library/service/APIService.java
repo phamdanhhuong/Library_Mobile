@@ -9,6 +9,7 @@ import com.phamhuong.library.model.LoginResponse;
 import com.phamhuong.library.model.OtpResetPassRequest;
 import com.phamhuong.library.model.RegisterRequest;
 import com.phamhuong.library.model.ResetPassRequest;
+import com.phamhuong.library.model.Review;
 
 import java.util.List;
 import java.util.Map;
@@ -43,4 +44,8 @@ public interface APIService {
     Call<ResponseBody> resetPassword(@Body ResetPassRequest resetPassRequest);
     @POST("/auth/send-password-reset-otp")
     Call<ResponseBody> sendPasswordResetOtp(@Body Map<String, String> requestBody);
+    @GET("reviews/book/{bookId}")
+    Call<List<Review>> getReviewsByBook(@Path("bookId") int bookId);
+    @GET("reviews/book/{bookId}/average")
+    Call<Double> getAverageRating(@Path("bookId") int bookId);
 }

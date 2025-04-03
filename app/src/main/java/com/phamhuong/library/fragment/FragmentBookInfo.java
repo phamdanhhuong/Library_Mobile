@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 import com.phamhuong.library.R;
 
 public class FragmentBookInfo extends Fragment {
-    TextView tvBookName, tvBookAuthor, tvBookDescription;
+    TextView tvBookName, tvBookAuthor, tvBookDescription, tvGenre, tvNumberOfReviews, tvAverageScore;
     ImageView imgBookCover;
 
     @Nullable
@@ -32,6 +32,9 @@ public class FragmentBookInfo extends Fragment {
         tvBookAuthor = view.findViewById(R.id.tvBookAuthor);
         tvBookDescription = view.findViewById(R.id.tvDescription);
         imgBookCover = view.findViewById(R.id.bookImage);
+        tvGenre = view.findViewById(R.id.tvGenre);
+        tvNumberOfReviews = view.findViewById(R.id.tvNumberOfReviews);
+        tvAverageScore = view.findViewById(R.id.tvAverageScore);
     }
 
     void initData() {
