@@ -30,6 +30,8 @@ public interface APIService {
     Call<List<Book>> getAllBooks();
     @GET("books/categories/{genre}")
     Call<List<Book>> getBookByCategory(@Path("genre") String genre);
+    @GET("books/author/{authorName}")
+    Call<List<Book>> getBooksByAuthor(@Path("authorName") String authorName);
     @POST("auth/login")
     Call<LoginResponse> login(@Body LoginRequest loginRequest);
     @GET("info/{username}")

@@ -48,7 +48,7 @@ public class BookAdapterRelate extends RecyclerView.Adapter<BookAdapterRelate.Vi
         // Set book name and rating
         holder.tvBookName.setText(book.getTitle());
         //float rating = book.getRating();
-        //holder.tvRatingText.setText(String.valueOf(rating)); // assuming getAverageRating returns a float
+        //holder.tvRatingText.setText(String.valueOf(rating));
 
         // Handle item click
         holder.itemView.setOnClickListener(new View.OnClickListener() {

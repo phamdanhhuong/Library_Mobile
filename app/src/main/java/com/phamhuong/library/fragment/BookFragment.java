@@ -4,16 +4,26 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.phamhuong.library.R;
+import com.phamhuong.library.adapter.ReviewAdapter;
 import com.phamhuong.library.model.Book;
+import com.phamhuong.library.model.RetrofitClient;
+import com.phamhuong.library.model.Review;
+import com.phamhuong.library.service.APIService;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class BookFragment extends Fragment {
     private Book book;
@@ -30,13 +40,10 @@ public class BookFragment extends Fragment {
             view.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
             view.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
         }
-        List<Book> booksByAuthor = getBooksByAuthor(book.getAuthor());
-        List<Book> booksByCategory = getBooksByCategory(book.getGenre());
         // Load Fragment con
         loadFragment(FragmentBookInfo.newInstance(book.getTitle(), book.getAuthor(), book.getSummary(), book.getCoverUrl()), R.id.fragmentBookInfo);
         loadFragment(FragmentCommentSection.newInstance(book.getId()), R.id.fragmentCommentSection);
-        loadFragment(FragmentRelateBook.newInstance(booksByAuthor, booksByCategory), R.id.fragmentRelateBook);
-
+        loadFragment(FragmentRelateBook.newInstance(book.getAuthor(), book.getGenre()), R.id.fragmentRelateBook);
 
         return view;
     }
@@ -45,14 +52,5 @@ public class BookFragment extends Fragment {
         getChildFragmentManager().beginTransaction()
                 .replace(containerId, fragment)
                 .commit();
-    }
-    private List<Book> getBooksByAuthor(String author) {
-        // Lấy danh sách sách theo tác giả từ nguồn dữ liệu (API, database, v.v...)
-        return new ArrayList<>();  // Thay thế bằng dữ liệu thực tế
-    }
-
-    private List<Book> getBooksByCategory(String category) {
-        // Lấy danh sách sách theo thể loại từ nguồn dữ liệu
-        return new ArrayList<>();  // Thay thế bằng dữ liệu thực tế
     }
 }
