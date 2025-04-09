@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/profile_scroll_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_app_profile"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:id="@+id/profile_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- FragmentUserInfo -->
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragmentUserInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <!-- FragmentHistoryReservation -->
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragmentBrownTo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <!-- FragmentAnalytics -->
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragmentAnalytics"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+</ScrollView>

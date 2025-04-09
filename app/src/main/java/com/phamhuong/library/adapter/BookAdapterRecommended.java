@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -72,7 +73,7 @@ public class BookAdapterRecommended extends RecyclerView.Adapter<BookAdapterReco
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imgBookCover;
         TextView tvBookTitle, tvAuthor, tvCategory, tvDescription;
-        Button btnDetails;
+        ImageButton btnDetails;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

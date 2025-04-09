@@ -31,12 +31,12 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
+import com.phamhuong.library.fragment.FragmentProfile;
 import com.phamhuong.library.fragment.HomeFragmentNew;
 import com.phamhuong.library.model.InfoResponse;
 import com.phamhuong.library.model.RetrofitClient;
 import com.phamhuong.library.service.APIService;
 import com.phamhuong.library.fragment.ProfileFragment;
-import com.phamhuong.library.fragment.HomeFragment;
 import com.phamhuong.library.fragment.NotificationFragment;
 import com.phamhuong.library.fragment.SearchFragment;
 
@@ -50,6 +50,7 @@ public class BaseActivity extends AppCompatActivity {
     NavigationView navigationView;
     BottomNavigationView bottomNavigationView;
     private View lastSelectedItem;
+    SearchView searchView;
     TextView txtFullName;
     TextView txtUserEmail;
     APIService apiService;
@@ -71,7 +72,7 @@ public class BaseActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         setSupportActionBar(toolbar);
 
-        SearchView searchView = findViewById(R.id.search_view);
+        searchView = findViewById(R.id.search_view);
         EditText searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
         searchEditText.setTextColor(getResources().getColor(R.color.black));
         searchEditText.setHintTextColor(getResources().getColor(R.color.black));
@@ -111,29 +112,6 @@ public class BaseActivity extends AppCompatActivity {
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                View view = bottomNavigationView.findViewById(item.getItemId());
-                int selectedColor = Color.parseColor("#FF5733"); // Màu cam
-                int defaultColor = Color.parseColor("#808080");  // Màu xám
-
-                // Duyệt tất cả item và đặt màu mặc định
-                for (int i = 0; i < bottomNavigationView.getMenu().size(); i++) {
-                    bottomNavigationView.getMenu().getItem(i).getIcon().setTint(defaultColor);
-                }
-
-                // Đổi màu icon của item được chọn
-                item.getIcon().setTint(selectedColor);
-                // Reset animation của item trước
-                if (lastSelectedItem != null) {
-                    Animation scaleDown = AnimationUtils.loadAnimation(BaseActivity.this, R.anim.scale_down);
-                    lastSelectedItem.startAnimation(scaleDown);
-                }
-
-                // Phóng to icon được chọn
-                Animation scaleUp = AnimationUtils.loadAnimation(BaseActivity.this, R.anim.scale_up);
-                view.startAnimation(scaleUp);
-
-                lastSelectedItem = view; // Cập nhật item đã chọn
-
                 onBottomNavigationViewItemSelectedCustom(item);
                 return true;
             }
@@ -167,10 +145,12 @@ public class BaseActivity extends AppCompatActivity {
         bottomNavigationView.getMenu().findItem(R.id.nav_notification).setIcon(R.drawable.ic_bottom_navbar_setting_off);
         bottomNavigationView.getMenu().findItem(R.id.nav_profile).setIcon(R.drawable.ic_bottom_navbar_user_off);
 
+        searchView.setVisibility(View.GONE);
         if (id == R.id.nav_home) {
             item.setIcon(R.drawable.ic_bottom_navbar_home_on);
             fragment = new HomeFragmentNew();
-        } else if (id == R.id.nav_save) {
+            searchView.setVisibility(View.VISIBLE);
+        }else if (id == R.id.nav_save) {
             item.setIcon(R.drawable.ic_bottom_navbar_save_on);
             fragment = new NotificationFragment();
         } else if (id == R.id.nav_notification) {
@@ -178,7 +158,7 @@ public class BaseActivity extends AppCompatActivity {
             fragment = new SearchFragment();
         } else if (id == R.id.nav_profile) {
             item.setIcon(R.drawable.ic_bottom_navbar_user_on);
-            fragment = new ProfileFragment();
+            fragment = new FragmentProfile();
         }
         if (fragment != null) {
             loadFragment(fragment);
