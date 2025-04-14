@@ -4,13 +4,16 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.phamhuong.library.R;
 import com.phamhuong.library.adapter.home.BookAdapterRelate;
+import com.phamhuong.library.fragment.book.AllBooksFragment;
 import com.phamhuong.library.model.Book;
 
 import java.util.ArrayList;
@@ -77,13 +80,14 @@ public class BookSectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         Section section = sections.get(position / 2);
-        
+
         if (holder instanceof HeaderViewHolder) {
-            ((HeaderViewHolder) holder).bind(section.title);
+            ((HeaderViewHolder) holder).bind(section.title, section, context);
         } else if (holder instanceof BooksViewHolder) {
             ((BooksViewHolder) holder).bind(section.items);
         }
     }
+
 
     @Override
     public int getItemCount() {
@@ -93,16 +97,31 @@ public class BookSectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     static class HeaderViewHolder extends RecyclerView.ViewHolder {
         TextView tvTitle;
+        ImageButton btnViewAll;
 
         HeaderViewHolder(View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tvSectionTitle);
+            btnViewAll = itemView.findViewById(R.id.btnViewAll);
         }
 
-        void bind(String title) {
+        void bind(String title, Section section, Context context) {
             tvTitle.setText(title);
+
+            btnViewAll.setOnClickListener(v -> {
+                ArrayList<Book> sectionBooks = new ArrayList<>((List<Book>) section.items);
+                AllBooksFragment fragment = AllBooksFragment.newInstance(section.title, sectionBooks);
+
+                FragmentActivity activity = (FragmentActivity) context;
+                activity.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.content_frame, fragment)
+                        .addToBackStack(null)
+                        .commit();
+            });
         }
     }
+
 
     static class BooksViewHolder extends RecyclerView.ViewHolder {
         RecyclerView rvBooks;
