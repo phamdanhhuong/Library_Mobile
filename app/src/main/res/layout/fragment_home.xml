@@ -13,28 +13,28 @@
         <!-- Fragment Ads -->
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentAds"
-            android:name="com.phamhuong.library.fragment.FragmentAds"
+            android:name="com.phamhuong.library.fragment.home.FragmentAds"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
         <!-- Fragment Explore -->
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentExplore"
-            android:name="com.phamhuong.library.fragment.FragmentExplore"
+            android:name="com.phamhuong.library.fragment.home.FragmentExplore"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
         <!-- Fragment Recommended -->
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentRecommended"
-            android:name="com.phamhuong.library.fragment.FragmentRecommended"
+            android:name="com.phamhuong.library.fragment.home.FragmentRecommended"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
         <!-- Fragment Trading -->
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentTrending"
-            android:name="com.phamhuong.library.fragment.FragmentTrending"
+            android:name="com.phamhuong.library.fragment.home.FragmentTrending"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
     </LinearLayout>

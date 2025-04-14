@@ -3,12 +3,9 @@ package com.phamhuong.library;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.TextView;
 import androidx.appcompat.widget.SearchView;
@@ -31,14 +28,13 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
-import com.phamhuong.library.fragment.FragmentProfile;
-import com.phamhuong.library.fragment.HomeFragmentNew;
+import com.phamhuong.library.fragment.profile.FragmentProfile;
+import com.phamhuong.library.fragment.home.HomeFragmentNew;
 import com.phamhuong.library.model.InfoResponse;
 import com.phamhuong.library.model.RetrofitClient;
 import com.phamhuong.library.service.APIService;
-import com.phamhuong.library.fragment.ProfileFragment;
-import com.phamhuong.library.fragment.NotificationFragment;
-import com.phamhuong.library.fragment.SearchFragment;
+import com.phamhuong.library.fragment.notification.NotificationFragment;
+import com.phamhuong.library.fragment.search.FragmentSearch;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -152,10 +148,10 @@ public class BaseActivity extends AppCompatActivity {
             searchView.setVisibility(View.VISIBLE);
         }else if (id == R.id.nav_save) {
             item.setIcon(R.drawable.ic_bottom_navbar_save_on);
-            fragment = new NotificationFragment();
+            fragment = new FragmentSearch();
         } else if (id == R.id.nav_notification) {
             item.setIcon(R.drawable.ic_bottom_navbar_setting_on);
-            fragment = new SearchFragment();
+            fragment = new NotificationFragment();
         } else if (id == R.id.nav_profile) {
             item.setIcon(R.drawable.ic_bottom_navbar_user_on);
             fragment = new FragmentProfile();

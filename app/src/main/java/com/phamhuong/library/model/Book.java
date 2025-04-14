@@ -37,6 +37,11 @@ public class Book implements Serializable {
 
     @SerializedName("borrowedCount")
     private int borrowedCount;
+    @SerializedName("rating")
+    private float rating;
+
+    @SerializedName("price")
+    private int price;
 
     public int getId() {
         return id;
@@ -124,5 +129,21 @@ public class Book implements Serializable {
 
     public void setBorrowedCount(int borrowedCount) {
         this.borrowedCount = borrowedCount;
+    }
+
+    public float getRating() {
+        return rating;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
     }
 }
