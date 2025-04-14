@@ -13,15 +13,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.phamhuong.library.R;
 import com.phamhuong.library.model.Category;
+import com.phamhuong.library.service.OnCategoryClickListener;
+
 import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
     private Context context;
     private List<Category> categories;
+    private OnCategoryClickListener listener;
 
-    public CategoryAdapter(Context context, List<Category> categories) {
+    public CategoryAdapter(Context context, List<Category> categories, OnCategoryClickListener listener) {
         this.context = context;
         this.categories = categories;
+        this.listener = listener;
+    }
+    public interface OnCategoryClickListener {
+        void onCategoryClick(Category category);
     }
 
     @NonNull
@@ -65,8 +72,15 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
                 .into(imgCategory);
 
             itemView.setOnClickListener(v -> {
-                // Handle category click
+                if (listener != null) {
+                    listener.onCategoryClick(category);
+                }
             });
+        }
     }
-}
+    public void updateData(List<Category> newCategories) {
+        categories.clear();
+        categories.addAll(newCategories);
+        notifyDataSetChanged();
+    }
 }

@@ -10,5 +10,5 @@
     <color name="text_secondary">#5D4037</color>
     <color name="text_hint">#9E9E9E</color>
     <color name="text_login">#A3470A</color>
-
+    <color name="selected_button">#d7590c</color>
 </resources>
