@@ -55,7 +55,7 @@ public class FragmentTrending extends Fragment implements BookHorizontalAdapter.
     }
 
     private void setupRecyclerView() {
-        bookAdapter = new BookVerticalAdapter(getContext(), trendingBooks, this::onBookClick);
+        bookAdapter = new BookVerticalAdapter(getContext(), trendingBooks);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         rvTrendingBooks.setLayoutManager(layoutManager);
         rvTrendingBooks.setAdapter(bookAdapter);

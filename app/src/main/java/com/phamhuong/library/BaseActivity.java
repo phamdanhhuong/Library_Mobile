@@ -30,11 +30,11 @@ import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 import com.phamhuong.library.fragment.profile.FragmentProfile;
 import com.phamhuong.library.fragment.home.HomeFragmentNew;
+import com.phamhuong.library.fragment.store.FragmentStore;
 import com.phamhuong.library.model.InfoResponse;
 import com.phamhuong.library.model.RetrofitClient;
 import com.phamhuong.library.service.APIService;
 import com.phamhuong.library.fragment.notification.NotificationFragment;
-import com.phamhuong.library.fragment.search.FragmentSearch;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -148,7 +148,7 @@ public class BaseActivity extends AppCompatActivity {
             searchView.setVisibility(View.VISIBLE);
         }else if (id == R.id.nav_save) {
             item.setIcon(R.drawable.ic_bottom_navbar_save_on);
-            fragment = new FragmentSearch();
+            fragment = new FragmentStore();
         } else if (id == R.id.nav_notification) {
             item.setIcon(R.drawable.ic_bottom_navbar_setting_on);
             fragment = new NotificationFragment();

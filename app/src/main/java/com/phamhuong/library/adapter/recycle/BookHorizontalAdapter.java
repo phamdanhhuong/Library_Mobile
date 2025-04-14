@@ -2,6 +2,7 @@ package com.phamhuong.library.adapter.recycle;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +10,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.phamhuong.library.R;
+import com.phamhuong.library.fragment.book.BookFragment;
 import com.phamhuong.library.model.Book;
 
 import java.util.List;
@@ -20,16 +25,14 @@ import java.util.List;
 public class BookHorizontalAdapter extends RecyclerView.Adapter<BookHorizontalAdapter.BookViewHolder> {
     private Context context;
     private List<Book> books;
-    private OnBookClickListener listener;
 
     public interface OnBookClickListener {
         void onBookClick(Book book);
     }
 
-    public BookHorizontalAdapter(Context context, List<Book> books, OnBookClickListener listener) {
+    public BookHorizontalAdapter(Context context, List<Book> books) {
         this.context = context;
         this.books = books;
-        this.listener = listener;
     }
 
     @NonNull
@@ -43,6 +46,12 @@ public class BookHorizontalAdapter extends RecyclerView.Adapter<BookHorizontalAd
     public void onBindViewHolder(@NonNull BookViewHolder holder, int position) {
         Book book = books.get(position);
         holder.bind(book);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openBookFragment(book);
+            }
+        });
     }
 
     @Override
@@ -64,13 +73,6 @@ public class BookHorizontalAdapter extends RecyclerView.Adapter<BookHorizontalAd
             tvAuthor = itemView.findViewById(R.id.tvAuthor);
             tvRating = itemView.findViewById(R.id.tvRating);
             tvPrice = itemView.findViewById(R.id.tvPrice);
-
-            itemView.setOnClickListener(v -> {
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION && listener != null) {
-                    listener.onBookClick(books.get(position));
-                }
-            });
         }
 
         @SuppressLint("DefaultLocale")
@@ -98,7 +100,22 @@ public class BookHorizontalAdapter extends RecyclerView.Adapter<BookHorizontalAd
                 .into(imgBookCover);
         }
     }
+    private void openBookFragment(Book book) {
+        FragmentActivity activity = (FragmentActivity) context;
+        FragmentManager fragmentManager = activity.getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
 
+        BookFragment bookFragment = new BookFragment();
+
+        // Gửi đối tượng Book qua Bundle
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("book", book);
+        bookFragment.setArguments(bundle);
+
+        transaction.replace(R.id.content_frame, bookFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
     // Method to update data
     public void updateData(List<Book> newBooks) {
         this.books = newBooks;

@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.phamhuong.library.R;
 import com.phamhuong.library.adapter.home.BookAdapterRelate;
+import com.phamhuong.library.adapter.recycle.BookHorizontalAdapter;
+import com.phamhuong.library.adapter.recycle.BookVerticalAdapter;
 import com.phamhuong.library.model.Book;
 import com.phamhuong.library.model.RetrofitClient;
 import com.phamhuong.library.service.APIService;
@@ -32,7 +34,7 @@ public class FragmentRelateBook extends Fragment {
     String token;
     TextView tvByAuthor;
     private RecyclerView recyclerViewSameAuthor, recyclerViewSameCategory;
-    private BookAdapterRelate adapterSameAuthor, adapterSameCategory;
+    private BookVerticalAdapter adapterSameAuthor, adapterSameCategory;
     private List<Book> booksSameAuthor= new ArrayList<>(), booksSameCategory = new ArrayList<>();
     ;
 
@@ -53,13 +55,13 @@ public class FragmentRelateBook extends Fragment {
         initData();
 
         if (booksSameAuthor != null) {
-            adapterSameAuthor = new BookAdapterRelate(getContext(), booksSameAuthor);
+            adapterSameAuthor = new BookVerticalAdapter(getContext(), booksSameAuthor);
             recyclerViewSameAuthor.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
             recyclerViewSameAuthor.setAdapter(adapterSameAuthor);
         }
 
         if (booksSameCategory != null) {
-            adapterSameCategory = new BookAdapterRelate(getContext(), booksSameCategory);
+            adapterSameCategory = new BookVerticalAdapter(getContext(), booksSameCategory);
             recyclerViewSameCategory.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
             recyclerViewSameCategory.setAdapter(adapterSameCategory);
         }

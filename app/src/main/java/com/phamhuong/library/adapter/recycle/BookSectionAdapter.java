@@ -28,14 +28,22 @@ public class BookSectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         this.sections = new ArrayList<>();
         setupSections();
     }
-
+    public void addSection(String title, List<?> items) {
+        sections.add(new Section(title, items));
+        notifyItemRangeInserted(sections.size() * 2 - 2, 2);
+    }
     private void setupSections() {
         // Add sections
-        sections.add(new Section("For you", getSampleBooks()));
-        sections.add(new Section("Top selling", getSampleBooks()));
-        sections.add(new Section("New releases", getSampleBooks()));
-        sections.add(new Section("Top free", getSampleBooks()));
-        sections.add(new Section("Categories", getSampleBooks()));
+//        addSection("For you", getSampleBooks());
+//        addSection("Top selling", getSampleBooks());
+//        addSection("New releases", getSampleBooks());
+//        addSection("Top free", getSampleBooks());
+//        addSection("Categories", getSampleBooks());
+//        sections.add(new Section("For you", getSampleBooks()));
+//        sections.add(new Section("Top selling", getSampleBooks()));
+//        sections.add(new Section("New releases", getSampleBooks()));
+//        sections.add(new Section("Top free", getSampleBooks()));
+//        sections.add(new Section("Categories", getSampleBooks()));
     }
 
     private List<Book> getSampleBooks() {
@@ -81,6 +89,7 @@ public class BookSectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public int getItemCount() {
         return sections.size() * 2; // Each section has a header and content
     }
+
 
     static class HeaderViewHolder extends RecyclerView.ViewHolder {
         TextView tvTitle;

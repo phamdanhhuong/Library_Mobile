@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -23,16 +25,14 @@ import java.util.List;
 public class BookVerticalAdapter extends RecyclerView.Adapter<BookVerticalAdapter.BookViewHolder> {
     private Context context;
     private List<Book> books;
-    private OnBookClickListener listener;
 
     public interface OnBookClickListener {
         void onBookClick(Book book);
     }
 
-    public BookVerticalAdapter(Context context, List<Book> books, OnBookClickListener listener) {
+    public BookVerticalAdapter(Context context, List<Book> books) {
         this.context = context;
         this.books = books;
-        this.listener = listener;
     }
 
     @NonNull
@@ -46,6 +46,12 @@ public class BookVerticalAdapter extends RecyclerView.Adapter<BookVerticalAdapte
     public void onBindViewHolder(@NonNull BookViewHolder holder, int position) {
         Book book = books.get(position);
         holder.bind(book);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openBookFragment(book);
+            }
+        });
     }
 
     @Override
@@ -66,12 +72,6 @@ public class BookVerticalAdapter extends RecyclerView.Adapter<BookVerticalAdapte
             tvRating = itemView.findViewById(R.id.tvRating);
             tvPrice = itemView.findViewById(R.id.tvPrice);
 
-            itemView.setOnClickListener(v -> {
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION && listener != null) {
-                    listener.onBookClick(books.get(position));
-                }
-            });
         }
         @SuppressLint("DefaultLocale")
         void bind(Book book) {
@@ -94,6 +94,22 @@ public class BookVerticalAdapter extends RecyclerView.Adapter<BookVerticalAdapte
                     .placeholder(R.drawable.book_placeholder)
                     .into(imgBookCover);
         }
+    }
+    private void openBookFragment(Book book) {
+        FragmentActivity activity = (FragmentActivity) context;
+        FragmentManager fragmentManager = activity.getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+        BookFragment bookFragment = new BookFragment();
+
+        // Gửi đối tượng Book qua Bundle
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("book", book);
+        bookFragment.setArguments(bundle);
+
+        transaction.replace(R.id.content_frame, bookFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
     // Method to update data
     public void updateData(List<Book> newBooks) {
