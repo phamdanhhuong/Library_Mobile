@@ -150,11 +150,12 @@ public abstract class FilteredBooksFragment extends Fragment {
                 args.putSerializable("book", book);
                 fragment.setArguments(args);
 
-                getParentFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.content_frame, fragment)
-                    .addToBackStack(null)
-                    .commit();
+                requireActivity()
+                        .getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.content_frame, fragment)
+                        .addToBackStack(null)
+                        .commit();
             });
 
         rvBooks.setAdapter(adapter);
