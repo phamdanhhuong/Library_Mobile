@@ -12,26 +12,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.phamhuong.library.R;
-import com.phamhuong.library.adapter.recycle.GenreAdapter;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class SearchInputFragment extends Fragment {
     private RecyclerView rvGenres;
-    private GenreAdapter genreAdapter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search_input, container, false);
-
-        rvGenres = view.findViewById(R.id.rvGenres);
-        rvGenres.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-
-        List<String> genres = Arrays.asList("Fantasy", "Mystery", "Sci-Fi", "Romance", "Horror", "Non-Fiction");
-        genreAdapter = new GenreAdapter(genres);
-        rvGenres.setAdapter(genreAdapter);
 
         return view;
     }

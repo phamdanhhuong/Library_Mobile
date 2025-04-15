@@ -34,7 +34,7 @@ public class BookAdapterRelate extends RecyclerView.Adapter<BookAdapterRelate.Vi
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_book_relate, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_book_vertical, parent, false);
         return new ViewHolder(view);
     }
 
@@ -72,8 +72,8 @@ public class BookAdapterRelate extends RecyclerView.Adapter<BookAdapterRelate.Vi
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imgBookCover = itemView.findViewById(R.id.imgBookCover);
-            tvBookName = itemView.findViewById(R.id.tvBookName);
-            tvRatingText = itemView.findViewById(R.id.tvRatingText);
+            tvBookName = itemView.findViewById(R.id.tvBookTitle);
+            tvRatingText = itemView.findViewById(R.id.tvRating);
         }
     }
 

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- Filter Section -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:clipToPadding="false"
+        android:paddingHorizontal="16dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <!-- Book Type Filter -->
+            <TextView
+                android:id="@+id/btnBookType"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="Sách điện tử"
+                android:textColor="@android:color/black"
+                android:background="@drawable/filter_button_background"
+                android:gravity="center"
+                android:paddingHorizontal="16dp"
+                android:layout_marginEnd="8dp"/>
+
+            <!-- Category Filter -->
+            <TextView
+                android:id="@+id/btnCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="Tất cả thể loại"
+                android:textColor="@android:color/black"
+                android:background="@drawable/filter_button_background"
+                android:gravity="center"
+                android:paddingHorizontal="16dp"
+                android:layout_marginEnd="8dp"/>
+
+            <!-- Free/Paid Filter -->
+            <TextView
+                android:id="@+id/btnPrice"
+                    android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                    android:text="Miễn phí"
+                android:textColor="@android:color/black"
+                android:background="@drawable/filter_button_background"
+                android:gravity="center"
+                android:paddingHorizontal="16dp"
+                android:layout_marginEnd="8dp"/>
+
+            <!-- Rating Filter -->
+            <TextView
+                android:id="@+id/btnRating"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="Tất cả xếp hạng"
+                android:textColor="@android:color/black"
+                android:background="@drawable/filter_button_background"
+                android:gravity="center"
+                android:paddingHorizontal="16dp"/>
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!-- Books RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvBooks"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp"
+        android:clipToPadding="false"/>
+
+</LinearLayout>

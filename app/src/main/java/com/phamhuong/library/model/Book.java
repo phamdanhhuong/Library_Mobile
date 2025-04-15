@@ -146,4 +146,12 @@ public class Book implements Serializable {
     public void setPrice(int price) {
         this.price = price;
     }
+
+    public boolean isEbook() {
+        return true;
+    }
+
+    public boolean isAudiobook() {
+        return false;
+    }
 }
