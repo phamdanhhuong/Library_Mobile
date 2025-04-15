@@ -20,6 +20,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface APIService {
     @GET("books/categories")
@@ -32,6 +33,8 @@ public interface APIService {
     Call<List<Book>> getBookByCategory(@Path("genre") String genre);
     @GET("books/author/{authorName}")
     Call<List<Book>> getBooksByAuthor(@Path("authorName") String authorName);
+    @GET("books/search")
+    Call<List<Book>> searchBooks(@Query("query") String searchQuery);
     @POST("auth/login")
     Call<LoginResponse> login(@Body LoginRequest loginRequest);
     @GET("info/{username}")

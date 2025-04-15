@@ -30,6 +30,7 @@ import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 import com.phamhuong.library.fragment.profile.FragmentProfile;
 import com.phamhuong.library.fragment.home.HomeFragmentNew;
+import com.phamhuong.library.fragment.search.FragmentSeachedBooks;
 import com.phamhuong.library.fragment.store.FragmentStore;
 import com.phamhuong.library.model.InfoResponse;
 import com.phamhuong.library.model.RetrofitClient;
@@ -69,9 +70,30 @@ public class BaseActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         searchView = findViewById(R.id.search_view);
-        EditText searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
-        searchEditText.setTextColor(getResources().getColor(R.color.black));
-        searchEditText.setHintTextColor(getResources().getColor(R.color.black));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // Khi người dùng nhấn tìm kiếm
+                if (!query.isEmpty()) {
+                    FragmentSeachedBooks fragment = FragmentSeachedBooks.newInstance(query);
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.content_frame, fragment)
+                            .addToBackStack(null)
+                            .commit();
+                    searchView.clearFocus(); // Ẩn bàn phím
+                }
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+//        EditText searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
+//        searchEditText.setTextColor(getResources().getColor(R.color.black));
+//        searchEditText.setHintTextColor(getResources().getColor(R.color.black));
 
         View headerView = navigationView.getHeaderView(0);
         txtFullName = headerView.findViewById(R.id.txtFullName);
@@ -145,10 +167,10 @@ public class BaseActivity extends AppCompatActivity {
         if (id == R.id.nav_home) {
             item.setIcon(R.drawable.ic_bottom_navbar_home_on);
             fragment = new HomeFragmentNew();
-            searchView.setVisibility(View.VISIBLE);
         }else if (id == R.id.nav_save) {
             item.setIcon(R.drawable.ic_bottom_navbar_save_on);
             fragment = new FragmentStore();
+            searchView.setVisibility(View.VISIBLE);
         } else if (id == R.id.nav_notification) {
             item.setIcon(R.drawable.ic_bottom_navbar_setting_on);
             fragment = new NotificationFragment();
