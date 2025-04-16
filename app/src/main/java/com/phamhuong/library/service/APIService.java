@@ -1,15 +1,16 @@
 package com.phamhuong.library.service;
 
 import com.phamhuong.library.model.ApiResponse;
+import com.phamhuong.library.model.ApiResponseT;
 import com.phamhuong.library.model.Book;
 import com.phamhuong.library.model.Category;
 import com.phamhuong.library.model.InfoResponse;
 import com.phamhuong.library.model.LoginRequest;
 import com.phamhuong.library.model.LoginResponse;
-import com.phamhuong.library.model.OtpResetPassRequest;
 import com.phamhuong.library.model.RegisterRequest;
 import com.phamhuong.library.model.ResetPassRequest;
 import com.phamhuong.library.model.Review;
+import com.phamhuong.library.model.Reservation;
 
 import java.util.List;
 import java.util.Map;
@@ -53,4 +54,8 @@ public interface APIService {
     Call<List<Review>> getReviewsByBook(@Path("bookId") int bookId);
     @GET("reviews/book/{bookId}/average")
     Call<Double> getAverageRating(@Path("bookId") int bookId);
+    @GET("reservations/user/{userId}")
+    Call<ApiResponseT<List<Reservation>>> getReservationHistoryByUserId(@Path("userId") int userId);
+    @GET("reservations/{reservationId}/books")
+    Call<ApiResponseT<List<Book>>> getBooksByReservationId(@Path("reservationId") int reservationId);
 }

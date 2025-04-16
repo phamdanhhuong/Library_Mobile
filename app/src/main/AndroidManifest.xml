@@ -32,5 +32,6 @@
         <activity android:name=".OtpRegisterActivity"/>
         <activity android:name=".SendPasswordResetOtpActivity"/>
         <activity android:name=".ResetPasswordActivity"/>
+        <activity android:name=".LibraryActivity"/>
     </application>
 </manifest>

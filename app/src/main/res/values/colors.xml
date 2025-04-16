@@ -11,4 +11,7 @@
     <color name="text_hint">#9E9E9E</color>
     <color name="text_login">#A3470A</color>
     <color name="selected_button">#d7590c</color>
+    <color name="status_borrowed">#2196F3</color>  <!-- Xanh dương - đang mượn -->
+    <color name="status_returned">#4CAF50</color>  <!-- Xanh lá - đã trả -->
+    <color name="status_overdue">#F44336</color>   <!-- Đỏ - quá hạn -->
 </resources>

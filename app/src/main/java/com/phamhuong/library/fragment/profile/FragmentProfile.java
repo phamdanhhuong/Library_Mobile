@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.phamhuong.library.R;
+import com.phamhuong.library.fragment.reservation.ReservationHistoryFragment;
 import com.phamhuong.library.service.APIService;
 
 public class FragmentProfile extends Fragment  {
@@ -29,6 +30,24 @@ public class FragmentProfile extends Fragment  {
         loadFragment(new FragmentBrownTo(), R.id.fragmentBrownTo);
         loadFragment(new FragmentAnalytics(), R.id.fragmentAnalytics);
 
+        view.findViewById(R.id.btnBorrowHistory).setOnClickListener(v -> {
+            Fragment borrowHistoryFragment = new ReservationHistoryFragment();
+            requireActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.content_frame, borrowHistoryFragment)
+                .addToBackStack(null)
+                .commit();
+        });
+
+        view.findViewById(R.id.btnReservationHistory).setOnClickListener(v -> {
+            Fragment reservationHistoryFragment = new ReservationHistoryFragment();
+            requireActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.content_frame, reservationHistoryFragment)
+                .addToBackStack(null)
+                .commit();
+        });
+
         return view;
     }
 
@@ -37,120 +56,4 @@ public class FragmentProfile extends Fragment  {
                 .replace(containerId, fragment)
                 .commit();
     }
-//    @Override
-//    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-//        super.onViewCreated(view, savedInstanceState);
-//        init(view);
-//        fetchCategoty();
-//        fetchAllBook();
-//    }
-//
-//    public void init(View view){
-//        rcCategory = view.findViewById(R.id.rcCategory);
-//        rcBook = view.findViewById(R.id.rcBook);
-//        txtGenre = view.findViewById(R.id.tvNameCategory);
-//
-//        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("LoginPrefs", MODE_PRIVATE);
-//        token = sharedPreferences.getString("token", "");
-//    }
-//    private void fetchCategoty(){
-//        apiService = RetrofitClient.getRetrofit(token).create(APIService.class);
-//        Call<List<Category>> call = apiService.getCategoryAll();
-//        call.enqueue(new Callback<List<Category>>() {
-//            @Override
-//            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
-//                if(response.isSuccessful()){
-//                    ListCategories = response.body();
-//                    adapter = new CategoryAdapter(getContext(), ListCategories, FragmentProfile.this);
-//                    rcCategory.setAdapter(adapter);
-//                    rcCategory.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<Category>> call, Throwable t) {
-//                Log.d("API_ERROR", "Lỗi kết nối: " + t.getMessage(), t);
-//                Toast.makeText(getContext(), "Lỗi kết nối!" + t.getMessage(), Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
-//    public void fetchBookRecent(){
-//        apiService = RetrofitClient.getRetrofit(token).create(APIService.class);
-//        Call<List<Book>> call = apiService.getBookRecent();
-//        call.enqueue(new Callback<List<Book>>() {
-//            @Override
-//            public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
-//                if(response.isSuccessful()){
-//                    ListBooks = response.body();
-//                    bookAdapter = new BookInfoAdapter(getContext(), ListBooks);
-//                    rcBook.setAdapter(bookAdapter);
-//                    GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
-//                    rcBook.setLayoutManager(layoutManager);
-//                    rcBook.setHasFixedSize(true);
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<Book>> call, Throwable t) {
-//                Log.d("API_ERROR", "Lỗi kết nối: " + t.getMessage(), t);
-//                Toast.makeText(getContext(), "Lỗi kết nối!" + t.getMessage(), Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
-//
-//    public void fetchAllBook(){
-//        apiService = RetrofitClient.getRetrofit(token).create(APIService.class);
-//        Call<List<Book>> call = apiService.getAllBooks();
-//        call.enqueue(new Callback<List<Book>>() {
-//            @Override
-//            public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
-//                if(response.isSuccessful()){
-//                    ListBooks = response.body();
-//                    bookAdapter = new BookInfoAdapter(getContext(), ListBooks);
-//                    rcBook.setAdapter(bookAdapter);
-//                    GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
-//                    rcBook.setLayoutManager(layoutManager);
-//                    rcBook.setHasFixedSize(true);
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<Book>> call, Throwable t) {
-//                Log.d("API_ERROR", "Lỗi kết nối: " + t.getMessage(), t);
-//                Toast.makeText(getContext(), "Lỗi kết nối!" + t.getMessage(), Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
-//
-//    public void fetchBookByCategory(String genre){
-//        apiService = RetrofitClient.getRetrofit(token).create(APIService.class);
-//        Call<List<Book>> call = apiService.getBookByCategory(genre);
-//        call.enqueue(new Callback<List<Book>>() {
-//            @Override
-//            public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
-//                if(response.isSuccessful()){
-//                    ListBooks = response.body();
-//                    bookAdapter = new BookInfoAdapter(getContext(), ListBooks);
-//                    rcBook.setAdapter(bookAdapter);
-//                    GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
-//                    rcBook.setLayoutManager(layoutManager);
-//                    rcBook.setHasFixedSize(true);
-//                    txtGenre.setText(genre+"("+ListBooks.size()+")");
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<Book>> call, Throwable t) {
-//                Log.d("API_ERROR", "Lỗi kết nối: " + t.getMessage(), t);
-//                Toast.makeText(getContext(), "Lỗi kết nối!" + t.getMessage(), Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
-
-//
-//    @Override
-//    public void onCategoryClick(String genre) {
-//        fetchBookByCategory(genre);
-//    }
-
 }

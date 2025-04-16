@@ -214,6 +214,10 @@ public class BaseActivity extends AppCompatActivity {
                 if(body!=null){
                     txtFullName.setText(body.getFull_name());
                     txtUserEmail.setText(body.getEmail());
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putInt("userId", body.getId());
+                    editor.apply();
+
                 }
             }
 
