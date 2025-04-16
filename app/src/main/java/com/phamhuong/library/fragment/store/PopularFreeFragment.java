@@ -56,5 +56,11 @@ public class PopularFreeFragment extends FilteredBooksFragment {
 
     @Override
     protected void setupFilters() {
+        isFreeOnly = true;
     }
+    @Override
+    protected void setupView() {
+        btnPrice.setVisibility(View.GONE);
+    }
+
 }

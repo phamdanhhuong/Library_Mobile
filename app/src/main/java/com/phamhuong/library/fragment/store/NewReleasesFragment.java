@@ -55,4 +55,9 @@ public class NewReleasesFragment extends FilteredBooksFragment {
     @Override
     protected void setupFilters() {
     }
+
+    @Override
+    protected void setupView() {
+
+    }
 }

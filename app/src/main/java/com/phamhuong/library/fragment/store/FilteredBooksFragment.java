@@ -207,6 +207,7 @@ public abstract class FilteredBooksFragment extends Fragment {
 
     protected abstract void loadBooks();
     protected abstract void setupFilters();
+    protected abstract void setupView();
     private void animateButtonWidth(View view, int fromDp, int toDp) {
         int fromPx = (int) (fromDp * getResources().getDisplayMetrics().density);
         int toPx = (int) (toDp * getResources().getDisplayMetrics().density);
