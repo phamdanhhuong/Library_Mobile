@@ -1,12 +1,15 @@
 package com.phamhuong.library.fragment.store;
 
+import android.animation.ValueAnimator;
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,10 +23,21 @@ import com.phamhuong.library.R;
 import com.phamhuong.library.adapter.book.BookRankAdapter;
 import com.phamhuong.library.fragment.book.BookFragment;
 import com.phamhuong.library.model.Book;
+import com.phamhuong.library.model.Category;
+import com.phamhuong.library.model.RetrofitClient;
+import com.phamhuong.library.service.APIService;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public abstract class FilteredBooksFragment extends Fragment {
     protected RecyclerView rvBooks;
@@ -50,9 +64,10 @@ public abstract class FilteredBooksFragment extends Fragment {
         
         initViews(view);
         setupFilters();
+        loadCategoriesFromApi();
         setupRecyclerView();
         loadBooks();
-        
+
         return view;
     }
 
@@ -84,30 +99,36 @@ public abstract class FilteredBooksFragment extends Fragment {
         });
 
         // Category Filter
-        btnCategory.setOnClickListener(v -> {
-            PopupMenu popup = new PopupMenu(requireContext(), btnCategory);
-            popup.getMenu().add("Tất cả thể loại");
-            popup.getMenu().add("Văn học");
-            popup.getMenu().add("Kinh tế");
-            popup.getMenu().add("Tâm lý");
-            // Add more categories...
-            
-            popup.setOnMenuItemClickListener(item -> {
-                String category = item.getTitle().toString();
-                selectedCategory = category.equals("Tất cả thể loại") ? null : category;
-                btnCategory.setText(category);
-                btnCategory.setSelected(selectedCategory != null);
-                applyFilters();
-                return true;
-            });
-            
-            popup.show();
-        });
+//        btnCategory.setOnClickListener(v -> {
+//            PopupMenu popup = new PopupMenu(requireContext(), btnCategory);
+//            popup.getMenu().add("Tất cả thể loại");
+//
+//            for (String category : categories) {
+//                popup.getMenu().add(category);
+//            }
+//
+//            popup.setOnMenuItemClickListener(item -> {
+//                String category = item.getTitle().toString();
+//                selectedCategory = category.equals("Tất cả thể loại") ? null : category;
+//                btnCategory.setText(category);
+//                btnCategory.setSelected(selectedCategory != null);
+//                applyFilters();
+//                return true;
+//            });
+//
+//            popup.show();
+//        });
 
         // Price Filter
         btnPrice.setOnClickListener(v -> {
             isFreeOnly = !isFreeOnly;
             btnPrice.setSelected(isFreeOnly);
+//            if (isFreeOnly) {
+//                animateButtonWidth(btnPrice, btnPrice.getWidth(), 50);
+//            }
+//            else {
+//                animateButtonWidth(btnPrice, btnPrice.getWidth(),  50);
+//            }
             applyFilters();
         });
 
@@ -117,7 +138,7 @@ public abstract class FilteredBooksFragment extends Fragment {
             popup.getMenu().add("Tất cả");
             popup.getMenu().add("4.5★ trở lên");
             popup.getMenu().add("4.0★ trở lên");
-            
+
             popup.setOnMenuItemClickListener(item -> {
                 String rating = item.getTitle().toString();
                 switch (rating) {
@@ -130,7 +151,7 @@ public abstract class FilteredBooksFragment extends Fragment {
                     default:
                         minRating = 0f;
                         break;
-    }
+                }
                 btnRating.setText(rating);
                 btnRating.setSelected(minRating > 0);
                 applyFilters();
@@ -139,7 +160,7 @@ public abstract class FilteredBooksFragment extends Fragment {
 
             popup.show();
         });
-}
+    }
 
     private void setupRecyclerView() {
         adapter = new BookRankAdapter(getContext(), filteredBooks, isEbook, 
@@ -186,4 +207,62 @@ public abstract class FilteredBooksFragment extends Fragment {
 
     protected abstract void loadBooks();
     protected abstract void setupFilters();
+    private void animateButtonWidth(View view, int fromDp, int toDp) {
+        int fromPx = (int) (fromDp * getResources().getDisplayMetrics().density);
+        int toPx = (int) (toDp * getResources().getDisplayMetrics().density);
+
+        ValueAnimator animator = ValueAnimator.ofInt(fromPx, toPx);
+        animator.setDuration(300); // thời gian hiệu ứng (ms)
+        animator.addUpdateListener(animation -> {
+            int val = (int) animation.getAnimatedValue();
+            ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+            layoutParams.width = val;
+            view.setLayoutParams(layoutParams);
+        });
+        animator.start();
+    }
+    private void updateCategoryMenu(List<String> categories) {
+        btnCategory.setOnClickListener(v -> {
+            PopupMenu popup = new PopupMenu(requireContext(), btnCategory);
+            popup.getMenu().add("Tất cả thể loại");
+            for (String category : categories) {
+                popup.getMenu().add(category);
+            }
+
+            popup.setOnMenuItemClickListener(item -> {
+                String category = item.getTitle().toString();
+                selectedCategory = category.equals("Tất cả thể loại") ? null : category;
+                btnCategory.setText(category);
+                btnCategory.setSelected(selectedCategory != null);
+                applyFilters();
+                return true;
+            });
+
+            popup.show();
+        });
+    }
+    private void loadCategoriesFromApi() {
+        APIService apiService = RetrofitClient.getRetrofit("").create(APIService.class);
+        Call<List<Category>> call = apiService.getCategoryAll(); // Có thể sửa thành API riêng cho Ebook/Audiobook nếu cần
+
+        call.enqueue(new Callback<List<Category>>() {
+            @Override
+            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<String> categories = response.body().stream()
+                            .map(Category::getGenre)
+                            .collect(Collectors.toList());
+                    updateCategoryMenu(categories);
+                } else {
+                    Toast.makeText(getContext(), "Không thể tải danh sách thể loại", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Category>> call, Throwable t) {
+                Log.e("API_ERROR", "Lỗi kết nối: " + t.getMessage(), t);
+                Toast.makeText(getContext(), "Lỗi kết nối đến server", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }

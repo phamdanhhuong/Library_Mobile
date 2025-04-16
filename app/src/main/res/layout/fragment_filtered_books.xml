@@ -28,7 +28,8 @@
                 android:background="@drawable/filter_button_background"
                 android:gravity="center"
                 android:paddingHorizontal="16dp"
-                android:layout_marginEnd="8dp"/>
+                android:layout_marginEnd="8dp"
+                />
 
             <!-- Category Filter -->
             <TextView

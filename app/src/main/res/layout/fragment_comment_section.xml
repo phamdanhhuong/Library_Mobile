@@ -68,8 +68,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewComments"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
+        android:layout_height="wrap_content"
+        android:maxHeight="300dp"
         android:scrollbars="vertical"/>
 
     <!-- Khung nhập bình luận -->
