@@ -1,5 +1,6 @@
 package com.phamhuong.library.fragment.book;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import android.content.Context;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,6 +22,7 @@ import com.phamhuong.library.R;
 import com.phamhuong.library.adapter.book.ReviewAdapter;
 import com.phamhuong.library.model.RetrofitClient;
 import com.phamhuong.library.model.Review;
+import com.phamhuong.library.model.ReviewRequest;
 import com.phamhuong.library.service.APIService;
 
 import java.util.List;
@@ -72,6 +75,41 @@ public class FragmentCommentSection extends Fragment {
                 loadComments(bookId);
             }
         }
+        btnSendComment.setOnClickListener(v -> {
+            String commentText = edtComment.getText().toString().trim();
+            float userRating = ratingBarUser.getRating();
+//            SharedPreferences sharedPref = requireContext().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE);
+//            int userId = sharedPref.getInt("userId", -1);
+            SharedPreferences sharedPreferences = requireContext().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE);
+            int userId = sharedPreferences.getInt("userId", -1);
+
+
+            if (commentText.isEmpty()) {
+                Toast.makeText(getContext(), "Vui lòng nhập bình luận", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            ReviewRequest review = new ReviewRequest(userId, bookId, userRating, commentText);
+            reviewApiService.createReview(review).enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if (response.isSuccessful()) {
+                        Toast.makeText(getContext(), "Đã gửi bình luận!", Toast.LENGTH_SHORT).show();
+                        edtComment.setText("");
+                        ratingBarUser.setRating(0);
+                        loadComments(bookId); // Reload bình luận
+                    } else {
+                        Toast.makeText(getContext(), "Gửi bình luận thất bại", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Toast.makeText(getContext(), "Lỗi kết nối", Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
+
     }
 
     private void loadComments(int bookId) {
