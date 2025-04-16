@@ -78,8 +78,6 @@ public class FragmentCommentSection extends Fragment {
         btnSendComment.setOnClickListener(v -> {
             String commentText = edtComment.getText().toString().trim();
             float userRating = ratingBarUser.getRating();
-//            SharedPreferences sharedPref = requireContext().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE);
-//            int userId = sharedPref.getInt("userId", -1);
             SharedPreferences sharedPreferences = requireContext().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE);
             int userId = sharedPreferences.getInt("userId", -1);
 

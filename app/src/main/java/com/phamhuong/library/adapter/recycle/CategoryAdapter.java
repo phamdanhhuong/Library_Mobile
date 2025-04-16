@@ -63,7 +63,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
         void bind(Category category) {
             tvCategoryName.setText(category.getGenre());
-            //tvBookCount.setText(category.getBookCount() + " books");
+            tvBookCount.setText(category.getBookCount() + " books");
             
             // Load category image using Glide
             Glide.with(context)

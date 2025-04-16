@@ -11,7 +11,8 @@ public class Category implements Serializable {
     private String genre;
     @SerializedName("url")
     private String images;
-
+    @SerializedName("bookCount") // Thêm dòng này để ánh xạ với JSON
+    private int bookCount;
     public String getImages() {
         return images;
     }
@@ -28,7 +29,13 @@ public class Category implements Serializable {
         this.id = id;
     }
 
+    public int getBookCount() {
+        return bookCount;
+    }
 
+    public void setBookCount(int bookCount) {
+        this.bookCount = bookCount;
+    }
 
     public String getGenre() {
         return genre;
