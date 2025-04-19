@@ -130,12 +130,13 @@
             android:layout_marginEnd="8dp" />
 
         <ImageButton
+            android:id="@+id/btnAddToWishlist"
             android:layout_width="150dp"
             android:layout_height="50dp"
+            android:background="@drawable/rounded_border"
             android:text="Add to Wishlist"
-            android:textSize="14sp"
-            android:textColor="@color/black"
-            android:background="@drawable/rounded_border"/>
+            android:textColor="#d7590c"
+            android:textSize="14sp" />
     </LinearLayout>
 
 </LinearLayout>

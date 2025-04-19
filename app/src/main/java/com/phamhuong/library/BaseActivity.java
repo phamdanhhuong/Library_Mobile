@@ -30,6 +30,7 @@ import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 import com.phamhuong.library.fragment.profile.FragmentProfile;
 import com.phamhuong.library.fragment.home.HomeFragmentNew;
+import com.phamhuong.library.fragment.reservation.BasketFragment;
 import com.phamhuong.library.fragment.search.FragmentSeachedBooks;
 import com.phamhuong.library.fragment.store.FragmentStore;
 import com.phamhuong.library.model.InfoResponse;
@@ -146,6 +147,8 @@ public class BaseActivity extends AppCompatActivity {
             Intent intent = new Intent(BaseActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
+        } else if (id == R.id.nav_basket) {
+            fragment = new BasketFragment();
         }
 
         if (fragment != null) {

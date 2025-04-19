@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.phamhuong.library.R;
+import com.phamhuong.library.fragment.reservation.BasketFragment;
 import com.phamhuong.library.fragment.reservation.ReservationHistoryFragment;
 import com.phamhuong.library.service.APIService;
 
@@ -46,6 +47,15 @@ public class FragmentProfile extends Fragment  {
                 .replace(R.id.content_frame, reservationHistoryFragment)
                 .addToBackStack(null)
                 .commit();
+        });
+
+        view.findViewById(R.id.btnBasket).setOnClickListener(v -> {
+            Fragment basketFragment = new BasketFragment();
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.content_frame, basketFragment)
+                    .addToBackStack(null)
+                    .commit();
         });
 
         return view;

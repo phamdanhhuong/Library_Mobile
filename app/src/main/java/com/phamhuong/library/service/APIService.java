@@ -61,4 +61,6 @@ public interface APIService {
     Call<ApiResponseT<List<Reservation>>> getReservationHistoryByUserId(@Path("userId") int userId);
     @GET("reservations/{reservationId}/books")
     Call<ApiResponseT<List<Book>>> getBooksByReservationId(@Path("reservationId") int reservationId);
+    @GET("wishlist/{userId}")
+    Call<ApiResponseT<List<Book>>> getWishListByUserId(@Path("userId") int userId);
 }

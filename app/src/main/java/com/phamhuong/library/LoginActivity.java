@@ -97,7 +97,7 @@ public class LoginActivity extends AppCompatActivity {
                         saveLoginInfo(txtUsername.getText().toString(), txtPassword.getText().toString(), body.getToken());
                     }
                     if (!cbRememberMe.isChecked()) {
-                        clearLoginInfo();
+                        clearLoginInfo(txtUsername.getText().toString(), body.getToken());
                     }
                     Intent intent = new Intent(LoginActivity.this, BaseActivity.class);
                     startActivity(intent);
@@ -122,10 +122,12 @@ public class LoginActivity extends AppCompatActivity {
         editor.putBoolean("rememberMe", true);
         editor.apply();
     }
-    private void clearLoginInfo() {
+    private void clearLoginInfo(String username, String token) {
         SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear(); // Xóa tất cả dữ liệu đã lưu
+        editor.putString("username", username);
+        editor.putString("token", token);
+        editor.putBoolean("rememberMe", false);
         editor.apply();
     }
 

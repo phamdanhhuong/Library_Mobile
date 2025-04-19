@@ -28,7 +28,7 @@ public class BookFragment extends Fragment {
             view.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
         }
         // Load Fragment con
-        loadFragment(FragmentBookInfo.newInstance(book.getTitle(), book.getAuthor(), book.getSummary(), book.getCoverUrl()), R.id.fragmentBookInfo);
+        loadFragment(FragmentBookInfo.newInstance(book), R.id.fragmentBookInfo);
         loadFragment(FragmentCommentSection.newInstance(book.getId()), R.id.fragmentCommentSection);
         loadFragment(FragmentRelateBook.newInstance(book.getAuthor(), book.getGenre()), R.id.fragmentRelateBook);
 
