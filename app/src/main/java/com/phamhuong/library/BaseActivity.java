@@ -148,6 +148,10 @@ public class BaseActivity extends AppCompatActivity {
         if (id == R.id.nav_home) {
             fragment = new HomeFragmentNew();
         } else if (id == R.id.nav_logout) {
+            SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("rememberMe", false);
+            editor.apply();
             Intent intent = new Intent(BaseActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();

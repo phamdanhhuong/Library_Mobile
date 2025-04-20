@@ -8,6 +8,7 @@ import com.phamhuong.library.model.InfoResponse;
 import com.phamhuong.library.model.LoginRequest;
 import com.phamhuong.library.model.LoginResponse;
 import com.phamhuong.library.model.RegisterRequest;
+import com.phamhuong.library.model.ReservationRequest;
 import com.phamhuong.library.model.ResetPassRequest;
 import com.phamhuong.library.model.Review;
 import com.phamhuong.library.model.Reservation;
@@ -61,6 +62,8 @@ public interface APIService {
     Call<ApiResponseT<List<Reservation>>> getReservationHistoryByUserId(@Path("userId") int userId);
     @GET("reservations/{reservationId}/books")
     Call<ApiResponseT<List<Book>>> getBooksByReservationId(@Path("reservationId") int reservationId);
+    @POST("reservations/reserve")
+    Call<ApiResponse> reserveBook(@Body ReservationRequest requestBody);
     @GET("wishlist/{userId}")
     Call<ApiResponseT<List<Book>>> getWishListByUserId(@Path("userId") int userId);
     @POST("wishlist/add")

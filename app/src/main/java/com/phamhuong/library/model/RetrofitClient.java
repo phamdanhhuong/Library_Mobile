@@ -13,7 +13,7 @@ public class RetrofitClient {
                     .addInterceptor(new AuthInterceptor(currentToken)) // Thêm Interceptor vào Retrofit
                     .build();
             retrofit = new Retrofit.Builder()
-                    .baseUrl("http://192.168.170.232:8080/")
+                    .baseUrl("http://192.168.1.3:8080/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(client)
                     .build();

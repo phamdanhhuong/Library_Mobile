@@ -83,6 +83,7 @@ public class LoginActivity extends AppCompatActivity {
             txtUsername.setText(savedUsername);
             txtPassword.setText(savedPassword);
             cbRememberMe.setChecked(true);
+            Login();
         }
     }
 

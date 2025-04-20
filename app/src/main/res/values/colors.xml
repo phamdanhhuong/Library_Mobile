@@ -14,4 +14,5 @@
     <color name="status_borrowed">#2196F3</color>  <!-- Xanh dương - đang mượn -->
     <color name="status_returned">#4CAF50</color>  <!-- Xanh lá - đã trả -->
     <color name="status_overdue">#F44336</color>   <!-- Đỏ - quá hạn -->
+    <color name="selected_item_background">#FFE0B2</color> <!-- Màu cam nhạt -->
 </resources>
