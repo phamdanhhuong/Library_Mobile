@@ -127,6 +127,6 @@ public class RegisterActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("RegisterPrefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("email", email);
-        editor.apply();
+        editor.commit();
     }
 }

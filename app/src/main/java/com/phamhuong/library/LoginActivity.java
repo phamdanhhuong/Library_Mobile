@@ -20,7 +20,9 @@ import androidx.core.view.WindowInsetsCompat;
 import com.phamhuong.library.model.LoginRequest;
 import com.phamhuong.library.model.LoginResponse;
 import com.phamhuong.library.model.RetrofitClient;
+import com.phamhuong.library.model.UserLoginInfo;
 import com.phamhuong.library.service.APIService;
+import com.phamhuong.library.service.DatabaseHelper;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -72,10 +74,12 @@ public class LoginActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
         boolean isRemembered = sharedPreferences.getBoolean("rememberMe", false);
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        UserLoginInfo userLoginInfo = dbHelper.getLoginInfoSQLite();
 
         if (isRemembered) {
-            String savedUsername = sharedPreferences.getString("username", "");
-            String savedPassword = sharedPreferences.getString("password", "");
+            String savedUsername = userLoginInfo.username;
+            String savedPassword = userLoginInfo.password;
             txtUsername.setText(savedUsername);
             txtPassword.setText(savedPassword);
             cbRememberMe.setChecked(true);
@@ -83,10 +87,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void Login(){
-        SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
-        String token = sharedPreferences.getString("token", "");
 
-        apiService = RetrofitClient.getRetrofit(token).create(APIService.class);
+        apiService = RetrofitClient.getRetrofit("").create(APIService.class);
         Call<LoginResponse> call = apiService.login(new LoginRequest(txtUsername.getText().toString(),txtPassword.getText().toString()));
         call.enqueue(new Callback<LoginResponse>() {
             @Override
@@ -94,11 +96,12 @@ public class LoginActivity extends AppCompatActivity {
                 LoginResponse body = response.body();
                 if (body.getToken()!=null) {
                     if (cbRememberMe.isChecked()) {
-                        saveLoginInfo(txtUsername.getText().toString(), txtPassword.getText().toString(), body.getToken());
+                        setRememberMe(true);
                     }
                     if (!cbRememberMe.isChecked()) {
-                        clearLoginInfo(txtUsername.getText().toString(), body.getToken());
+                        setRememberMe(false);
                     }
+                    saveUserInfo(txtUsername.getText().toString(), txtPassword.getText().toString(), body.getToken());
                     Intent intent = new Intent(LoginActivity.this, BaseActivity.class);
                     startActivity(intent);
                     finish();
@@ -113,21 +116,14 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-    private void saveLoginInfo(String username, String password, String token) {
-        SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("username", username);
-        editor.putString("password", password);
-        editor.putString("token", token);
-        editor.putBoolean("rememberMe", true);
-        editor.apply();
+    private void saveUserInfo(String username, String password, String token) {
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        long rowId = dbHelper.saveLoginInfoSQLite(username, password, token);
     }
-    private void clearLoginInfo(String username, String token) {
+    private void setRememberMe(boolean value) {
         SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("username", username);
-        editor.putString("token", token);
-        editor.putBoolean("rememberMe", false);
+        editor.putBoolean("rememberMe", value);
         editor.apply();
     }
 

@@ -16,7 +16,7 @@ import com.phamhuong.library.service.APIService;
 
 public class FragmentProfile extends Fragment  {
     APIService apiService;
-    String token;
+    String token ="";
 
     @Nullable
     @Override

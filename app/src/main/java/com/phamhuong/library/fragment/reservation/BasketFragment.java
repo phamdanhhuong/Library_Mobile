@@ -22,7 +22,9 @@ import com.phamhuong.library.adapter.recycle.BookHorizontalAdapter;
 import com.phamhuong.library.model.ApiResponseT;
 import com.phamhuong.library.model.Book;
 import com.phamhuong.library.model.RetrofitClient;
+import com.phamhuong.library.model.UserLoginInfo;
 import com.phamhuong.library.service.APIService;
+import com.phamhuong.library.service.DatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,9 +90,10 @@ public class BasketFragment extends Fragment {
 
     private void loadWishListBooks() {
 
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("LoginPrefs", MODE_PRIVATE);
-        int userId = sharedPreferences.getInt("userId", -1);
-        String token = sharedPreferences.getString("token", "");
+        DatabaseHelper dbHelper = new DatabaseHelper(getContext());
+        UserLoginInfo userLoginInfo = dbHelper.getLoginInfoSQLite();
+        int userId = userLoginInfo.getUserId();
+        String token = userLoginInfo.getToken();
 
         APIService apiService = RetrofitClient.getRetrofit(token).create(APIService.class);
         apiService.getWishListByUserId(userId).enqueue(new Callback<ApiResponseT<List<Book>>>() {

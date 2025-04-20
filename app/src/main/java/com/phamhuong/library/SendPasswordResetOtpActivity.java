@@ -80,7 +80,7 @@ public class SendPasswordResetOtpActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("ResetPrefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("email", email);
-        editor.apply();
+        editor.commit();
     }
 
     void navigateToResetPassword() {

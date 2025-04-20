@@ -8,6 +8,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.widget.SearchView;
 
 import androidx.activity.EdgeToEdge;
@@ -35,8 +37,10 @@ import com.phamhuong.library.fragment.search.FragmentSeachedBooks;
 import com.phamhuong.library.fragment.store.FragmentStore;
 import com.phamhuong.library.model.InfoResponse;
 import com.phamhuong.library.model.RetrofitClient;
+import com.phamhuong.library.model.UserLoginInfo;
 import com.phamhuong.library.service.APIService;
 import com.phamhuong.library.fragment.notification.NotificationFragment;
+import com.phamhuong.library.service.DatabaseHelper;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -203,13 +207,15 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void getInfo(){
-        SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
-        String token = sharedPreferences.getString("token", "");
+//        SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
+//        String token = sharedPreferences.getString("token", "");
+//
+//        String username = sharedPreferences.getString("username", "");
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        UserLoginInfo userLoginInfo = dbHelper.getLoginInfoSQLite();
 
-        String username = sharedPreferences.getString("username", "");
-
-        apiService = RetrofitClient.getRetrofit(token).create(APIService.class);
-        Call<InfoResponse> call = apiService.getInfo(username);
+        apiService = RetrofitClient.getRetrofit(userLoginInfo.token).create(APIService.class);
+        Call<InfoResponse> call = apiService.getInfo(userLoginInfo.username);
         call.enqueue(new Callback<InfoResponse>() {
             @Override
             public void onResponse(Call<InfoResponse> call, Response<InfoResponse> response) {
@@ -217,16 +223,13 @@ public class BaseActivity extends AppCompatActivity {
                 if(body!=null){
                     txtFullName.setText(body.getFull_name());
                     txtUserEmail.setText(body.getEmail());
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putInt("userId", body.getId());
-                    editor.apply();
-
+                    dbHelper.updateLoginInfoSQLite(body.getId(), body.getFull_name(), body.getEmail(),userLoginInfo.username);
                 }
             }
 
             @Override
             public void onFailure(Call<InfoResponse> call, Throwable t) {
-
+                Toast.makeText(BaseActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -36,7 +36,7 @@ public class FragmentRecommended extends Fragment {
     private List<Book> bookList;
     private Handler handler = new Handler();
     private Runnable autoScrollRunnable;
-    String token;
+    String token = "";
 
     @Nullable
     @Override

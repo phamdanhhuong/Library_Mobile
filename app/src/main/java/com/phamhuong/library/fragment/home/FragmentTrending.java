@@ -35,7 +35,7 @@ public class FragmentTrending extends Fragment implements BookHorizontalAdapter.
     private RecyclerView rvTrendingBooks;
     private BookVerticalAdapter bookAdapter;
     private List<Book> trendingBooks;
-    private String token;
+    private String token ="";
 
     @Nullable
     @Override

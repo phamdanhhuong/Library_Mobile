@@ -39,7 +39,7 @@ public interface APIService {
     Call<List<Book>> searchBooks(@Query("query") String searchQuery);
     @POST("auth/login")
     Call<LoginResponse> login(@Body LoginRequest loginRequest);
-    @GET("info/{username}")
+    @GET("/info/{username}")
     Call<InfoResponse> getInfo(@Path("username") String username);
     @POST("auth/register")
     Call<ApiResponse> register(@Body RegisterRequest registerRequest);

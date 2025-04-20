@@ -23,7 +23,9 @@ import com.phamhuong.library.adapter.book.ReviewAdapter;
 import com.phamhuong.library.model.RetrofitClient;
 import com.phamhuong.library.model.Review;
 import com.phamhuong.library.model.ReviewRequest;
+import com.phamhuong.library.model.UserLoginInfo;
 import com.phamhuong.library.service.APIService;
+import com.phamhuong.library.service.DatabaseHelper;
 
 import java.util.List;
 
@@ -39,7 +41,7 @@ public class FragmentCommentSection extends Fragment {
     private RecyclerView recyclerViewComments;
     private EditText edtComment;
     private ImageView btnSendComment;
-    String token;
+    String token ="";
 
     public static FragmentCommentSection newInstance(int bookId) {
         FragmentCommentSection fragment = new FragmentCommentSection();
@@ -78,8 +80,11 @@ public class FragmentCommentSection extends Fragment {
         btnSendComment.setOnClickListener(v -> {
             String commentText = edtComment.getText().toString().trim();
             float userRating = ratingBarUser.getRating();
-            SharedPreferences sharedPreferences = requireContext().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE);
-            int userId = sharedPreferences.getInt("userId", -1);
+//            SharedPreferences sharedPreferences = requireContext().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE);
+//            int userId = sharedPreferences.getInt("userId", -1);
+            DatabaseHelper dbHelper = new DatabaseHelper(getParentFragment().getContext());
+            UserLoginInfo userLoginInfo = dbHelper.getLoginInfoSQLite();
+            int userId = userLoginInfo.getUserId();
 
 
             if (commentText.isEmpty()) {

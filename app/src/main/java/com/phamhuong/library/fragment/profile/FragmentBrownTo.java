@@ -20,7 +20,7 @@ public class FragmentBrownTo extends Fragment {
     APIService apiService;
     private RecyclerView rvTrendingBooks;
     private List<Book> trendingBooks;
-    String token;
+    String token ="";
 
     @Nullable
     @Override

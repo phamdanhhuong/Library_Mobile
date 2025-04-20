@@ -22,7 +22,9 @@ import com.phamhuong.library.model.ApiResponse;
 import com.phamhuong.library.model.ApiResponseT;
 import com.phamhuong.library.model.Reservation;
 import com.phamhuong.library.model.RetrofitClient;
+import com.phamhuong.library.model.UserLoginInfo;
 import com.phamhuong.library.service.APIService;
+import com.phamhuong.library.service.DatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,9 +89,12 @@ public class ReservationHistoryFragment extends Fragment {
 
     private void loadBorrowHistory() {
         if (getContext() == null) return;
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE);
-        int userId = sharedPreferences.getInt("userId", -1);
-        Log.d("ReservationHistoryFragment", "User ID: " + userId);
+//        SharedPreferences sharedPreferences = getContext().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE);
+//        int userId = sharedPreferences.getInt("userId", -1);
+        DatabaseHelper dbHelper = new DatabaseHelper(getContext());
+        UserLoginInfo userLoginInfo = dbHelper.getLoginInfoSQLite();
+        int userId = userLoginInfo.getUserId();
+
         apiService = RetrofitClient.getRetrofit("").create(APIService.class);
         apiService.getReservationHistoryByUserId(userId).enqueue(new Callback<ApiResponseT<List<Reservation>>>() {
             @Override

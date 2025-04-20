@@ -31,7 +31,7 @@ import retrofit2.Response;
 
 public class FragmentRelateBook extends Fragment {
     private APIService apiService;
-    String token;
+    String token = "";
     TextView tvByAuthor;
     private RecyclerView recyclerViewSameAuthor, recyclerViewSameCategory;
     private BookVerticalAdapter adapterSameAuthor, adapterSameCategory;
