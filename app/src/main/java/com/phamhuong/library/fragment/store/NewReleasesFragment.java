@@ -35,7 +35,7 @@ public class NewReleasesFragment extends FilteredBooksFragment {
     @Override
     protected void loadBooks() {
         // Load new releases from API
-        APIService apiService = RetrofitClient.getRetrofit("").create(APIService.class);
+        APIService apiService = RetrofitClient.getRetrofit().create(APIService.class);
         apiService.getAllBooks().enqueue(new Callback<List<Book>>() {
             @Override
             public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {

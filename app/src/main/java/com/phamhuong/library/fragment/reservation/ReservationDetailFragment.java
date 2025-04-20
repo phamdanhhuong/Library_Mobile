@@ -88,7 +88,7 @@ public class ReservationDetailFragment extends Fragment {
     }
 
     private void loadReservationBooks() {
-        APIService apiService = RetrofitClient.getRetrofit("").create(APIService.class);
+        APIService apiService = RetrofitClient.getRetrofit().create(APIService.class);
         Log.d("ReservationDetailFragment", "Reservation ID: " + reservationId);
         apiService.getBooksByReservationId(reservationId).enqueue(new Callback<ApiResponseT<List<Book>>>() {
             @Override

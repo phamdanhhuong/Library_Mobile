@@ -81,7 +81,7 @@ public class FragmentRelateBook extends Fragment {
     }
     private void getBooksByAuthor(String author) {
         tvByAuthor.setText("Bởi " + author);
-        apiService = RetrofitClient.getRetrofit(token).create(APIService.class);
+        apiService = RetrofitClient.getRetrofit().create(APIService.class);
         apiService.getBooksByAuthor(author).enqueue(new Callback<List<Book>>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
@@ -103,7 +103,7 @@ public class FragmentRelateBook extends Fragment {
     }
 
     private void getBooksByCategory(String category) {
-        apiService = RetrofitClient.getRetrofit(token).create(APIService.class);
+        apiService = RetrofitClient.getRetrofit().create(APIService.class);
         apiService.getBookByCategory(category).enqueue(new Callback<List<Book>>() {
             @Override
             public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {

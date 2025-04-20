@@ -55,7 +55,7 @@ public class OtpRegisterActivity extends AppCompatActivity {
         String otp = editTextOtp.getText().toString();
         Map<String,String> requestBody = Map.of("email", email, "otp", otp);
 
-        apiService = RetrofitClient.getRetrofit("").create(APIService.class);
+        apiService = RetrofitClient.getRetrofit().create(APIService.class);
         Call<ApiResponse> call = apiService.activeAccount(requestBody);
         call.enqueue(new Callback<ApiResponse>() {
             @Override

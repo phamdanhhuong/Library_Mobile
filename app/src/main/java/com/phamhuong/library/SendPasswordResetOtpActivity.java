@@ -41,7 +41,7 @@ public class SendPasswordResetOtpActivity extends AppCompatActivity {
     void init() {
         editTextEmail = findViewById(R.id.editTextEmail);
         btnSendOtp = findViewById(R.id.btnSendOtp);
-        apiService = RetrofitClient.getRetrofit("").create(APIService.class);
+        apiService = RetrofitClient.getRetrofit().create(APIService.class);
     }
 
     void sendOtp() {

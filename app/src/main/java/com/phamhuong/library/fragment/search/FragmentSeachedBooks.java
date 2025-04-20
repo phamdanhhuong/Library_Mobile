@@ -86,7 +86,7 @@ public class FragmentSeachedBooks extends Fragment {
     }
 
     private void loadFilteredBooks() {
-        APIService apiService = RetrofitClient.getRetrofit("").create(APIService.class);
+        APIService apiService = RetrofitClient.getRetrofit().create(APIService.class);
         apiService.searchBooks(searchQuery).enqueue(new Callback<List<Book>>() {
             @Override
             public void onResponse(@NonNull Call<List<Book>> call, @NonNull Response<List<Book>> response) {

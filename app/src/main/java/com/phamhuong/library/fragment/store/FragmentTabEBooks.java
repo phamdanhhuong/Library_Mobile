@@ -44,7 +44,7 @@ public class FragmentTabEBooks extends Fragment {
 
     private void initViews(View view) {
         rvMainContent = view.findViewById(R.id.rvMainContent);
-        apiService = RetrofitClient.getRetrofit("").create(APIService.class);
+        apiService = RetrofitClient.getRetrofit().create(APIService.class);
     }
 
     private void setupRecyclerView() {

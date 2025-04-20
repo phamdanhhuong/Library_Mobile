@@ -78,7 +78,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     void CallAPI(RegisterRequest registerRequest){
-        apiService = RetrofitClient.getRetrofit("").create(APIService.class);
+        apiService = RetrofitClient.getRetrofit().create(APIService.class);
         Call<ApiResponse> call = apiService.register(registerRequest);
         call.enqueue(new Callback<ApiResponse>() {
             @Override
@@ -100,7 +100,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     void SendOtpActiveAccount(String email){
-        apiService = RetrofitClient.getRetrofit("").create(APIService.class);
+        apiService = RetrofitClient.getRetrofit().create(APIService.class);
         Map<String,String> requestBody = Map.of("email", email);
         Call<ApiResponse> call = apiService.SendOtpActiveAccount(requestBody);
         call.enqueue(new Callback<ApiResponse>() {

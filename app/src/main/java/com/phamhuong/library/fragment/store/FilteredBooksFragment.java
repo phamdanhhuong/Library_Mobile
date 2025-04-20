@@ -243,7 +243,7 @@ public abstract class FilteredBooksFragment extends Fragment {
         });
     }
     private void loadCategoriesFromApi() {
-        APIService apiService = RetrofitClient.getRetrofit("").create(APIService.class);
+        APIService apiService = RetrofitClient.getRetrofit().create(APIService.class);
         Call<List<Category>> call = apiService.getCategoryAll(); // Có thể sửa thành API riêng cho Ebook/Audiobook nếu cần
 
         call.enqueue(new Callback<List<Category>>() {

@@ -5,16 +5,15 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
-    private static Retrofit retrofit;
-    private static String currentToken = "" ;
-    public static Retrofit getRetrofit(String token){
-        OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(new AuthInterceptor(token)) // Thêm Interceptor vào Retrofit
-                .build();
-        if(retrofit == null || currentToken != token){
-            currentToken = token;
+    public static Retrofit retrofit;
+    public static String currentToken = "" ;
+    public static Retrofit getRetrofit(){
+        if(retrofit == null){
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .addInterceptor(new AuthInterceptor(currentToken)) // Thêm Interceptor vào Retrofit
+                    .build();
             retrofit = new Retrofit.Builder()
-                    .baseUrl("http://192.168.1.3:8080/")
+                    .baseUrl("http://192.168.170.232:8080/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(client)
                     .build();

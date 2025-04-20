@@ -1,6 +1,7 @@
 package com.phamhuong.library.fragment.book;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,18 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.phamhuong.library.R;
+import com.phamhuong.library.model.ApiResponse;
 import com.phamhuong.library.model.Book;
+import com.phamhuong.library.model.RetrofitClient;
+import com.phamhuong.library.service.APIService;
+import com.phamhuong.library.service.DatabaseHelper;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class FragmentBookInfo extends Fragment {
     TextView tvBookName, tvBookAuthor, tvBookDescription, tvGenre, tvNumberOfReviews, tvAverageScore;
@@ -36,7 +48,29 @@ public class FragmentBookInfo extends Fragment {
     }
 
     void addToWishlist () {
-        Toast.makeText(getParentFragment().getContext(), "Bạn đã bấm vào wish list", Toast.LENGTH_SHORT).show();
+        APIService apiService = RetrofitClient.getRetrofit().create(APIService.class);
+
+        DatabaseHelper dbHelper = new DatabaseHelper(getContext());
+        int userId = dbHelper.getLoginInfoSQLite().getUserId();
+        Map<String,Integer> requestBody = new HashMap<>();
+        requestBody.put("user_id", userId);
+        requestBody.put("book_id", book.getId());
+
+        apiService.addToWishList(requestBody).enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                if (response.isSuccessful() && response.body().isStatus()){
+                    Toast.makeText(getContext(), "Thêm vào danh sách yêu thích thành công", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "Thêm vào danh sách yêu thích thất bại", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Log.e("", "Error: " + t.getMessage());
+            }
+        });
     }
     void initView(View view) {
         tvBookName = view.findViewById(R.id.tvBookName);

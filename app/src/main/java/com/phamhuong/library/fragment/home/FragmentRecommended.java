@@ -68,7 +68,7 @@ public class FragmentRecommended extends Fragment {
     }
 
     public void fetchAllBook(){
-        apiService = RetrofitClient.getRetrofit(token).create(APIService.class);
+        apiService = RetrofitClient.getRetrofit().create(APIService.class);
         Call<List<Book>> call = apiService.getAllBooks();
         call.enqueue(new Callback<List<Book>>() {
             @Override

@@ -116,7 +116,7 @@ public class FragmentCommentSection extends Fragment {
     }
 
     private void loadComments(int bookId) {
-        reviewApiService = RetrofitClient.getRetrofit(token).create(APIService.class);
+        reviewApiService = RetrofitClient.getRetrofit().create(APIService.class);
         reviewApiService.getReviewsByBook(bookId).enqueue(new Callback<List<Review>>() {
             @Override
             public void onResponse(Call<List<Review>> call, Response<List<Review>> response) {

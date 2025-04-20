@@ -42,7 +42,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
         editTextOtp = findViewById(R.id.editTextOtp);
         editTextNewPassword = findViewById(R.id.editTextNewPassword);
         btnResetPassword = findViewById(R.id.btnResetPassword);
-        apiService = RetrofitClient.getRetrofit("").create(APIService.class);
+        apiService = RetrofitClient.getRetrofit().create(APIService.class);
 
         SharedPreferences sharedPreferences = getSharedPreferences("ResetPrefs", MODE_PRIVATE);
         email = sharedPreferences.getString("email", "");

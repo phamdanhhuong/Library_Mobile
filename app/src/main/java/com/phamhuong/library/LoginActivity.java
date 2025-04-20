@@ -87,8 +87,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void Login(){
-
-        apiService = RetrofitClient.getRetrofit("").create(APIService.class);
+        apiService = RetrofitClient.getRetrofit().create(APIService.class);
         Call<LoginResponse> call = apiService.login(new LoginRequest(txtUsername.getText().toString(),txtPassword.getText().toString()));
         call.enqueue(new Callback<LoginResponse>() {
             @Override
@@ -102,6 +101,7 @@ public class LoginActivity extends AppCompatActivity {
                         setRememberMe(false);
                     }
                     saveUserInfo(txtUsername.getText().toString(), txtPassword.getText().toString(), body.getToken());
+                    RetrofitClient.currentToken = body.getToken();
                     Intent intent = new Intent(LoginActivity.this, BaseActivity.class);
                     startActivity(intent);
                     finish();
@@ -112,9 +112,10 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
-
+                Toast.makeText(LoginActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+        RetrofitClient.retrofit = null;
     }
     private void saveUserInfo(String username, String password, String token) {
         DatabaseHelper dbHelper = new DatabaseHelper(this);

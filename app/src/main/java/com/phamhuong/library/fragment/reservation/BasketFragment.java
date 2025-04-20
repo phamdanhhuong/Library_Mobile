@@ -93,9 +93,8 @@ public class BasketFragment extends Fragment {
         DatabaseHelper dbHelper = new DatabaseHelper(getContext());
         UserLoginInfo userLoginInfo = dbHelper.getLoginInfoSQLite();
         int userId = userLoginInfo.getUserId();
-        String token = userLoginInfo.getToken();
 
-        APIService apiService = RetrofitClient.getRetrofit(token).create(APIService.class);
+        APIService apiService = RetrofitClient.getRetrofit().create(APIService.class);
         apiService.getWishListByUserId(userId).enqueue(new Callback<ApiResponseT<List<Book>>>() {
             @Override
             public void onResponse(@NonNull Call<ApiResponseT<List<Book>>> call, @NonNull Response<ApiResponseT<List<Book>>> response) {

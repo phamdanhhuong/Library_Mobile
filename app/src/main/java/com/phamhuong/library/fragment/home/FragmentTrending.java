@@ -62,7 +62,7 @@ public class FragmentTrending extends Fragment implements BookHorizontalAdapter.
     }
 
     private void fetchAllBooks() {
-        apiService = RetrofitClient.getRetrofit(token).create(APIService.class);
+        apiService = RetrofitClient.getRetrofit().create(APIService.class);
         Call<List<Book>> call = apiService.getAllBooks();
         call.enqueue(new Callback<List<Book>>() {
             @Override

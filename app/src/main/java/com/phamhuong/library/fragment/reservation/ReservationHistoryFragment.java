@@ -95,7 +95,7 @@ public class ReservationHistoryFragment extends Fragment {
         UserLoginInfo userLoginInfo = dbHelper.getLoginInfoSQLite();
         int userId = userLoginInfo.getUserId();
 
-        apiService = RetrofitClient.getRetrofit("").create(APIService.class);
+        apiService = RetrofitClient.getRetrofit().create(APIService.class);
         apiService.getReservationHistoryByUserId(userId).enqueue(new Callback<ApiResponseT<List<Reservation>>>() {
             @Override
             public void onResponse(@NonNull Call<ApiResponseT<List<Reservation>>> call, @NonNull Response<ApiResponseT<List<Reservation>>> response) {

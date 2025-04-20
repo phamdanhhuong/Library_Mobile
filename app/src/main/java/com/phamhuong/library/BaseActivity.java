@@ -214,7 +214,7 @@ public class BaseActivity extends AppCompatActivity {
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         UserLoginInfo userLoginInfo = dbHelper.getLoginInfoSQLite();
 
-        apiService = RetrofitClient.getRetrofit(userLoginInfo.token).create(APIService.class);
+        apiService = RetrofitClient.getRetrofit().create(APIService.class);
         Call<InfoResponse> call = apiService.getInfo(userLoginInfo.username);
         call.enqueue(new Callback<InfoResponse>() {
             @Override
