@@ -33,10 +33,10 @@
                 android:background="@drawable/rounded_edittext"
                 android:drawableStart="@drawable/ic_login_username"
                 android:hint="username"
-                android:textColorHint="@color/text_login"
+                android:textColorHint="@color/onSurfaceVariant"
                 android:paddingStart="10dp"
                 android:textSize="12sp"
-                android:textColor="@color/text_login" />
+                android:textColor="@color/onPrimaryContainer" />
 
             <EditText
                 android:id="@+id/editTextPassword"
@@ -47,11 +47,11 @@
                 android:drawableStart="@drawable/ic_login_password"
                 android:drawableEnd="@drawable/ic_login_hide_on"
                 android:hint="password"
-                android:textColorHint="@color/text_login"
+                android:textColorHint="@color/onSurfaceVariant"
                 android:inputType="textPassword"
                 android:paddingStart="10dp"
                 android:textSize="12sp"
-                android:textColor="@color/text_hint" />
+                android:textColor="@color/onPrimaryContainer" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -65,7 +65,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="remember me"
-                    android:textColor="@color/text_login" />
+                    android:textColor="@color/onSurfaceVariant" />
 
                 <TextView
                     android:id="@+id/tvForgotPassword"
@@ -73,7 +73,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:text="forget password?"
-                    android:textColor="@color/text_login" />
+                    android:textColor="@color/onSurfaceVariant" />
             </LinearLayout>
 
             <androidx.appcompat.widget.AppCompatButton
@@ -85,7 +85,7 @@
                 android:layout_marginTop="50dp"
                 android:background="@drawable/rounded_button"
                 android:text="log in"
-                android:textColor="@color/white"
+                android:textColor="@color/onSurfaceVariant"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
                 tools:layout_editor_absoluteX="30dp" />
             <LinearLayout
@@ -96,7 +96,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="dont have an account?"
-                    android:textColor="@color/text_login"
+                    android:textColor="@color/onSurfaceVariant"
                     tools:layout_editor_absoluteX="111dp"
                     tools:layout_editor_absoluteY="544dp" />
                 <TextView
@@ -105,7 +105,7 @@
                     android:layout_height="wrap_content"
                     android:text="sign up"
                     android:layout_marginStart="3dp"
-                    android:textColor="@color/white"
+                    android:textColor="@color/onSurfaceVariant"
                     tools:layout_editor_absoluteX="111dp"
                     tools:layout_editor_absoluteY="544dp" />
             </LinearLayout>

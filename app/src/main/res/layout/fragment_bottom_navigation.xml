@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_alignParentBottom="true"
-        app:itemIconTint="@color/bottom_nav_icon_color"
-        app:itemTextColor="@color/bottom_nav_text_color"
+        app:itemIconTint="@color/onPrimaryContainer"
+        app:itemTextColor="@color/onSecondaryContainer"
         app:menu="@menu/bottom_nav_menu"/>
 </RelativeLayout>

@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:text="recommended"
         android:textSize="18sp"
-        android:textColor="@color/black"
+        android:textColor="@color/onSurface"
         android:textStyle="bold"
         android:layout_marginBottom="8dp"/>
 

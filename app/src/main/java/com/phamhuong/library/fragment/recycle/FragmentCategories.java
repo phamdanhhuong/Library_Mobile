@@ -80,14 +80,14 @@ public class FragmentCategories extends Fragment {
         tvEbook.setTextColor(isEbook ? 
             Color.WHITE : Color.parseColor("#666666"));
         tvEbook.setBackgroundColor(isEbook ? 
-            getResources().getColor(R.color.selected_button) : 
+            getResources().getColor(R.color.selectedButton) :
             Color.WHITE);
 
         // Update Audiobook button
         tvAudiobook.setTextColor(!isEbook ? 
             Color.WHITE : Color.parseColor("#666666"));
         tvAudiobook.setBackgroundColor(!isEbook ? 
-            getResources().getColor(R.color.selected_button) : 
+            getResources().getColor(R.color.selectedButton) :
             Color.WHITE);
     }
 

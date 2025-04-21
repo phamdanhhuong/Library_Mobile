@@ -55,7 +55,7 @@
                 android:layout_marginStart="16dp"
                 android:text="Lịch sử mượn sách"
                 android:textSize="16sp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/onSurface"/>
 
         </LinearLayout>
 
@@ -81,7 +81,7 @@
                 android:layout_marginStart="16dp"
                 android:text="Lịch sử đặt sách"
                 android:textSize="16sp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/onSurface"/>
 
         </LinearLayout>
 
@@ -107,7 +107,7 @@
                 android:layout_marginStart="16dp"
                 android:text="Giỏ hàng"
                 android:textSize="16sp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/onSurface"/>
 
         </LinearLayout>
 

@@ -1,18 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="bottom_nav_text_color">#808080</color> <!-- Màu xám -->
-    <color name="bottom_nav_icon_color">#f8eeed</color> <!-- Màu xám -->
+    <color name="seed">#6750A4</color>
+    <color name="primary">#6750A4</color>
+    <color name="onPrimary">#FFFFFF</color>
+    <color name="primaryContainer">#EADDFF</color>
+    <color name="onPrimaryContainer">#21005D</color>
+    <color name="secondary">#625B71</color>
+    <color name="onSecondary">#FFFFFF</color>
+    <color name="secondaryContainer">#E8DEF8</color>
+    <color name="onSecondaryContainer">#1D192B</color>
+    <color name="surface">#FEF7FF</color>
     <color name="transparent">#00000000</color>
-    <color name="orange_background">#FFA726</color>
-    <color name="text_primary">#000000</color>
-    <color name="text_secondary">#5D4037</color>
+    <color name="onSurface">#1D1B20</color>
+    <color name="surfaceVariant">#E7E0EC</color>
+    <color name="onSurfaceVariant">#49454F</color>
+    <color name="outline">#79747E</color>
+    <color name="selectedButton">#d7590c</color>
+
     <color name="text_hint">#9E9E9E</color>
     <color name="text_login">#A3470A</color>
-    <color name="selected_button">#d7590c</color>
-    <color name="status_borrowed">#2196F3</color>  <!-- Xanh dương - đang mượn -->
-    <color name="status_returned">#4CAF50</color>  <!-- Xanh lá - đã trả -->
-    <color name="status_overdue">#F44336</color>   <!-- Đỏ - quá hạn -->
-    <color name="selected_item_background">#FFE0B2</color> <!-- Màu cam nhạt -->
+
+    <!-- Status colors -->
+    <color name="status_pending">#FF6D00</color>
+    <color name="status_confirmed">#2196F3</color>
+    <color name="status_completed">#4CAF50</color>
+    <color name="status_cancelled">#F44336</color>
 </resources>

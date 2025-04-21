@@ -54,7 +54,7 @@ public class BookBasketAdapter extends RecyclerView.Adapter<BookBasketAdapter.Bo
         holder.bind(book);
 
         if (selectedPositions.contains(position)) {
-            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.selected_item_background));
+            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.selectedButton));
         } else {
             holder.itemView.setBackgroundColor(Color.TRANSPARENT);
         }

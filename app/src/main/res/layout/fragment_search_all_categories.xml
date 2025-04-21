@@ -29,7 +29,7 @@
                 android:text="Sách điện tử"
                 android:textSize="16sp"
                 android:textColor="@android:color/white"
-                android:background="@color/selected_button"
+                android:background="@color/selectedButton"
                 android:gravity="center"
                 android:padding="12dp"/>
 
