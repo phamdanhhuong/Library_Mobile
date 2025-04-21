@@ -18,9 +18,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.phamhuong.library.R;
 import com.phamhuong.library.adapter.reservation.ReservationHistoryAdapter;
+import com.phamhuong.library.fragment.book.AllBooksFragment;
 import com.phamhuong.library.model.ApiResponse;
 import com.phamhuong.library.model.ApiResponseT;
 import com.phamhuong.library.model.Book;
@@ -45,6 +47,8 @@ public class ReservationHistoryFragment extends Fragment {
     private View loadingView;
     private View errorView;
     private ViewGroup contentView;
+    private View emptyView;
+    private ShimmerFrameLayout shimmerLayout;
     private APIService apiService;
 
     @Nullable
@@ -74,6 +78,13 @@ public class ReservationHistoryFragment extends Fragment {
         
         Button btnRetry = errorView.findViewById(R.id.btnRetry);
         btnRetry.setOnClickListener(v -> loadReservations());
+        emptyView = view.findViewById(R.id.emptyState);
+        shimmerLayout = view.findViewById(R.id.shimmerLayout);
+
+        view.findViewById(R.id.btnBrowseBooks).setOnClickListener(v -> {
+            // Navigate to book browsing screen
+            navigateToBookBrowsing();
+        });
     }
 
     private void setupRecyclerView() {
@@ -133,25 +144,29 @@ public class ReservationHistoryFragment extends Fragment {
     }
 
     private void showLoading() {
-        loadingView.setVisibility(View.VISIBLE);
+        shimmerLayout.setVisibility(View.VISIBLE);
+        shimmerLayout.startShimmer();
         errorView.setVisibility(View.GONE);
+        emptyView.setVisibility(View.GONE);
         contentView.setVisibility(View.GONE);
     }
 
-    private void showError(String message) {
-        loadingView.setVisibility(View.GONE);
-        errorView.setVisibility(View.VISIBLE);
+    private void showEmpty() {
+        shimmerLayout.stopShimmer();
+        shimmerLayout.setVisibility(View.GONE);
+        errorView.setVisibility(View.GONE);
+        emptyView.setVisibility(View.VISIBLE);
         contentView.setVisibility(View.GONE);
-        
-        TextView tvErrorMessage = errorView.findViewById(R.id.tvErrorMessage);
-        tvErrorMessage.setText(message);
     }
 
     private void showContent() {
-        loadingView.setVisibility(View.GONE);
+        shimmerLayout.stopShimmer();
+        shimmerLayout.setVisibility(View.GONE);
         errorView.setVisibility(View.GONE);
+        emptyView.setVisibility(View.GONE);
         contentView.setVisibility(View.VISIBLE);
     }
+
 
     private void loadReservations() {
         showLoading();
@@ -193,4 +208,25 @@ public class ReservationHistoryFragment extends Fragment {
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE);
         return sharedPreferences.getInt("userId", -1);
     }
+    private void navigateToBookBrowsing() {
+        // Implement navigation to book browsing screen
+        // Example:
+        Fragment browseFragment = new AllBooksFragment();
+        requireActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.content_frame, browseFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+    private void showError(String message) {
+        shimmerLayout.stopShimmer();
+        shimmerLayout.setVisibility(View.GONE);
+        errorView.setVisibility(View.VISIBLE);
+        emptyView.setVisibility(View.GONE);
+        contentView.setVisibility(View.GONE);
+
+        TextView tvErrorMessage = errorView.findViewById(R.id.tvErrorMessage);
+        tvErrorMessage.setText(message);
+    }
+
 }

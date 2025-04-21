@@ -32,7 +32,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
@@ -49,4 +48,5 @@ dependencies {
     implementation ("com.google.code.gson:gson:2.10.1")
     implementation ("com.google.android.material:material:1.10.0")
     implementation ("com.google.android.flexbox:flexbox:3.0.0")
+    implementation("com.facebook.shimmer:shimmer:0.5.0")
 }

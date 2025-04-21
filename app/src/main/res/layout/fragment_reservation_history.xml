@@ -23,6 +23,27 @@
             app:titleTextColor="@color/onSurface" />
 
     </com.google.android.material.appbar.AppBarLayout>
+    <!-- Shimmer Layout for loading state -->
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:padding="16dp">
+
+        <!-- Include shimmer item layout -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Shimmer item -->
+            <include layout="@layout/item_reservation_shimmer"/>
+            <include layout="@layout/item_reservation_shimmer"/>
+            <include layout="@layout/item_reservation_shimmer"/>
+
+        </LinearLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
     <!-- Loading State -->
     <include
         android:id="@+id/loadingState"
@@ -34,6 +55,13 @@
         android:id="@+id/errorState"
         layout="@layout/layout_error_state"
         android:visibility="gone"/>
+
+    <!-- Empty State -->
+    <include
+        android:id="@+id/emptyState"
+        layout="@layout/layout_empty_state"
+        android:visibility="gone"/>
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/contentLayout"
         android:layout_width="match_parent"
