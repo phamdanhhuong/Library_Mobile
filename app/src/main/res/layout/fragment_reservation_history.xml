@@ -13,7 +13,7 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
-        android:layout_width="match_parent"
+            android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:navigationIcon="@drawable/ic_navigate"
             app:navigationIconTint="@color/onSurface"
@@ -23,8 +23,19 @@
             app:titleTextColor="@color/onSurface" />
 
     </com.google.android.material.appbar.AppBarLayout>
+    <!-- Loading State -->
+    <include
+        android:id="@+id/loadingState"
+        layout="@layout/layout_loading_state"
+        android:visibility="gone"/>
 
+    <!-- Error State -->
+    <include
+        android:id="@+id/errorState"
+        layout="@layout/layout_error_state"
+        android:visibility="gone"/>
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/contentLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">

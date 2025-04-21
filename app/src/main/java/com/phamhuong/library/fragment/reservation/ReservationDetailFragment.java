@@ -10,10 +10,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.chip.Chip;
 import com.phamhuong.library.R;
 import com.phamhuong.library.adapter.recycle.BookHorizontalAdapter;
 import com.phamhuong.library.model.ApiResponseT;
@@ -22,8 +25,11 @@ import com.phamhuong.library.model.Reservation;
 import com.phamhuong.library.model.RetrofitClient;
 import com.phamhuong.library.service.APIService;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,6 +43,8 @@ public class ReservationDetailFragment extends Fragment {
     private List<Book> books;
     private ImageButton btnBack;
     private TextView tvReservationTitle;
+    private TextView tvReservationInfo;
+    private Chip chipStatus;
 
     public static ReservationDetailFragment newInstance(int reservationId) {
         ReservationDetailFragment fragment = new ReservationDetailFragment();
@@ -67,17 +75,19 @@ public class ReservationDetailFragment extends Fragment {
     }
 
     private void initViews(View view) {
+        MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
         rvReservationBooks = view.findViewById(R.id.rvReservationBooks);
-        btnBack = view.findViewById(R.id.btnBack);
-        tvReservationTitle = view.findViewById(R.id.tvReservationTitle);
+        tvReservationInfo = view.findViewById(R.id.tvReservationInfo);
+        chipStatus = view.findViewById(R.id.chipStatus);
 
-        tvReservationTitle.setText("Chi tiết đặt sách #" + reservationId);
-
-        btnBack.setOnClickListener(v -> {
+        toolbar.setTitle("Chi tiết đặt sách #" + reservationId);
+        toolbar.setNavigationOnClickListener(v -> {
             if (getActivity() != null) {
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         });
+
+        setupRecyclerView();
     }
 
     private void setupRecyclerView() {
@@ -107,4 +117,46 @@ public class ReservationDetailFragment extends Fragment {
             }
         });
     }
+
+    private void updateReservationInfo(Reservation reservation) {
+        tvReservationInfo.setText(String.format("Đặt ngày: %s\nSố lượng sách: %d",
+            formatDate(reservation.getReservationDate().toString()),
+            reservation.getBookCount()));
+
+        chipStatus.setText(reservation.getStatus());
+        
+        int statusColor;
+        switch (reservation.getStatus().toLowerCase()) {
+            case "pending":
+                statusColor = R.color.status_pending;
+                break;
+            case "confirmed":
+                statusColor = R.color.status_confirmed;
+                break;
+            case "completed":
+                statusColor = R.color.status_completed;
+                break;
+            case "cancelled":
+                statusColor = R.color.status_cancelled;
+                break;
+            default:
+                statusColor = R.color.status_pending;
+        }
+
+        chipStatus.setChipBackgroundColorResource(statusColor);
+        chipStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.onPrimary));
+    }
+    private String formatDate(String dateString) {
+        try {
+            SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
+            Date date = originalFormat.parse(dateString);
+
+            SimpleDateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            return targetFormat.format(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return dateString;
+        }
+    }
+
 }
