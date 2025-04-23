@@ -19,6 +19,7 @@
 
     <color name="text_hint">#9E9E9E</color>
     <color name="text_login">#A3470A</color>
+    <color name="teal_700">#018786</color>
 
     <!-- Status colors -->
     <color name="status_pending">#FF6D00</color>

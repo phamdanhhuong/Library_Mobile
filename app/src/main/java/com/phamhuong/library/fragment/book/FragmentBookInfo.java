@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.button.MaterialButton;
 import com.phamhuong.library.R;
 import com.phamhuong.library.model.ApiResponse;
 import com.phamhuong.library.model.Book;
@@ -32,7 +33,7 @@ import retrofit2.Response;
 public class FragmentBookInfo extends Fragment {
     TextView tvBookName, tvBookAuthor, tvBookDescription, tvGenre, tvNumberOfReviews, tvAverageScore;
     ImageView imgBookCover;
-    ImageButton btnAddToWishlist;
+    MaterialButton btnAddToWishlist;
     Book book;
 
     @Nullable

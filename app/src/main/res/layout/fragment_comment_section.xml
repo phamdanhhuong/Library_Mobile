@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="8dp"
-    android:background="@android:color/white">
+    android:background="@android:color/white"
+    android:padding="8dp">
 
     <!-- Tiêu đề -->
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvCommentTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Xếp hạng và đánh giá"
-        android:textSize="18sp"
+        android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="#333333"
+        android:textColor="@color/onSurface"
         android:layout_marginBottom="8dp"/>
 
     <!-- Hiển thị số sao trung bình -->
@@ -25,14 +26,14 @@
         android:gravity="center_vertical"
         android:layout_marginBottom="8dp">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvAverageRating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="4.5"
             android:textSize="48sp"
             android:textStyle="bold"
-            android:textColor="#d7590c"
+            android:textColor="@color/teal_700"
             android:layout_marginEnd="4dp"
             android:layout_marginStart="16dp"/>
 
@@ -40,9 +41,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="8dp"
             android:layout_marginStart="16dp">
+
             <RatingBar
                 android:id="@+id/ratingBarAverage"
                 android:layout_width="wrap_content"
@@ -52,15 +52,14 @@
                 android:isIndicator="true"
                 android:rating="4.5"
                 style="?android:attr/ratingBarStyleSmall"/>
-            <TextView
+
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tvNumberOfComments"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="83"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="#d7590c"
-                android:layout_marginEnd="4dp"/>
+                android:text="83 đánh giá"
+                android:textSize="14sp"
+                android:textColor="@color/teal_700"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -70,72 +69,78 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:maxHeight="300dp"
-        android:scrollbars="vertical"/>
+        android:scrollbars="vertical" />
 
-    <!-- Khung nhập bình luận -->
-    <LinearLayout
+    <!-- Nhập bình luận -->
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="8dp"
-        android:background="@android:color/white"
-        android:elevation="4dp">
+        android:layout_marginTop="8dp"
+        app:cardElevation="4dp"
+        app:cardCornerRadius="16dp"
+        app:cardBackgroundColor="@android:color/white">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingBottom="8dp">
+            android:orientation="vertical"
+            android:padding="12dp">
 
-            <!-- Ảnh đại diện -->
-            <ImageView
-                android:id="@+id/imgUserAvatar"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:src="@drawable/ic_login_hide_on"
-                android:background="@drawable/circle_background"
-                android:scaleType="centerCrop"
-                android:layout_marginEnd="8dp"/>
-
-            <!-- Ô nhập bình luận -->
-            <EditText
-                android:id="@+id/edtComment"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="Viết bình luận..."
-                android:textColor="#333333"
-                android:textSize="14sp"
-                android:background="@drawable/rounded_bg"
-                android:padding="8dp"/>
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
-            <!-- Nút gửi bình luận -->
-            <ImageView
-                android:id="@+id/btnSendComment"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/ic_comment_send"
-                android:contentDescription="Gửi bình luận"
-                android:padding="8dp"/>
-        </LinearLayout>
+                <ImageView
+                    android:id="@+id/imgUserAvatar"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_login_hide_on"
+                    android:background="@drawable/circle_background"
+                    android:scaleType="centerCrop"
+                    android:layout_marginEnd="8dp"/>
 
-        <!-- Rating Bar để chọn số sao -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_horizontal"
-            >
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    app:boxBackgroundMode="filled"
+                    app:boxCornerRadiusTopStart="12dp"
+                    app:boxCornerRadiusBottomEnd="12dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtComment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Viết bình luận..."
+                        android:textColor="@color/onSurface"
+                        android:textSize="14sp"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSendComment"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:icon="@drawable/ic_send_comment"
+                    android:iconTint="@android:color/white"
+                    android:backgroundTint="@color/teal_700"
+                    app:cornerRadius="24dp"
+                    android:contentDescription="Gửi bình luận" />
+
+            </LinearLayout>
+
+            <!-- Rating -->
             <RatingBar
                 android:id="@+id/ratingBarUser"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:numStars="5"
                 android:stepSize="1.0"
-                android:rating="0"
-                android:layout_marginTop="4dp"/>
+                android:layout_marginTop="8dp"/>
         </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
-    </LinearLayout>
 </LinearLayout>

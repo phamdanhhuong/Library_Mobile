@@ -1,83 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="12dp"
-    android:background="@android:color/white">
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    app:strokeColor="?attr/colorOutline"
+    app:strokeWidth="1dp"
+    app:cardBackgroundColor="?attr/colorSurface">
 
-    <!-- Ảnh đại diện -->
-    <ImageView
-        android:id="@+id/imgUserAvatar"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_login_hide_on"
-        android:background="@drawable/circle_background"
-        android:layout_marginEnd="8dp"/>
-
-    <!-- Nội dung bình luận -->
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:background="?attr/colorSurface">
 
-        <!-- Tên người dùng, thời gian và số sao -->
+        <!-- Ảnh đại diện -->
+        <ImageView
+            android:id="@+id/imgUserAvatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_login_hide_on"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/circle_background"
+            android:contentDescription="user_avatar"/>
+
+        <!-- Nội dung bình luận -->
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:orientation="vertical">
 
-            <!-- Tên người dùng và thời gian -->
+            <!-- Tên người dùng, thời gian và số sao -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tvUserName"
+                <!-- Tên người dùng và thời gian -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/tvUserName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tên người dùng"
+                        android:textStyle="bold"
+                        android:textSize="14sp"
+                        android:textColor="?attr/colorOnSurface"
+                        android:layout_marginEnd="8dp"/>
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/tvCommentTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2 giờ trước"
+                        android:textSize="12sp"
+                        android:textColor="?attr/colorOnSurfaceVariant"/>
+                </LinearLayout>
+
+                <RatingBar
+                    android:id="@+id/ratingBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tên người dùng"
-                    android:textStyle="bold"
-                    android:textSize="14sp"
-                    android:textColor="#333333"
-                    android:layout_marginEnd="8dp"/>
+                    android:numStars="5"
+                    android:stepSize="0.5"
+                    android:rating="4.5"
+                    android:isIndicator="true"
+                    android:layout_marginTop="4dp"
+                    style="?android:attr/ratingBarStyleSmall"/>
 
-                <TextView
-                    android:id="@+id/tvCommentTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="2 giờ trước"
-                    android:textSize="12sp"
-                    android:textColor="#888888"/>
             </LinearLayout>
 
-            <!-- Số sao đánh giá -->
-            <RatingBar
-                android:id="@+id/ratingBar"
-                android:layout_width="wrap_content"
+            <!-- Nội dung bình luận -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvCommentText"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:numStars="5"
-                android:stepSize="0.5"
-                android:rating="4.5"
-                android:isIndicator="true"
-                android:layout_marginTop="4dp"
-                style="?android:attr/ratingBarStyleSmall"/>
+                android:text="Đây là một bình luận mẫu."
+                android:textSize="14sp"
+                android:maxLines="3"
+                android:ellipsize="end"
+                android:textColor="?attr/colorOnSurface"
+                android:layout_marginTop="4dp"/>
         </LinearLayout>
-
-        <!-- Nội dung bình luận -->
-        <TextView
-            android:id="@+id/tvCommentText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Đây là một bình luận mẫu."
-            android:textSize="14sp"
-            android:maxLines="3"
-            android:ellipsize="end"
-            android:textColor="#444444"
-            android:layout_marginTop="4dp"/>
     </LinearLayout>
-</LinearLayout>
+</com.google.android.material.card.MaterialCardView>

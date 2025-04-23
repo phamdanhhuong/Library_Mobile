@@ -1,5 +1,6 @@
 package com.phamhuong.library.fragment.reservation;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -118,9 +119,10 @@ public class ReservationDetailFragment extends Fragment {
         });
     }
 
+    @SuppressLint("DefaultLocale")
     private void updateReservationInfo(Reservation reservation) {
         tvReservationInfo.setText(String.format("Đặt ngày: %s\nSố lượng sách: %d",
-            formatDate(reservation.getReservationDate().toString()),
+            formatDate(reservation.getReservationDate()),
             reservation.getBookCount()));
 
         chipStatus.setText(reservation.getStatus());
@@ -146,16 +148,21 @@ public class ReservationDetailFragment extends Fragment {
         chipStatus.setChipBackgroundColorResource(statusColor);
         chipStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.onPrimary));
     }
-    private String formatDate(String dateString) {
-        try {
-            SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
-            Date date = originalFormat.parse(dateString);
-
-            SimpleDateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-            return targetFormat.format(date);
+    public String formatDate(String dateString) {
+        try {Log.d("ReservationAdapter", "Chuỗi ngày nhận được: " + dateString);
+            if (dateString != null) {
+                // Định dạng của chuỗi ngày thực tế
+                SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
+                Date date = originalFormat.parse(dateString);
+                // Định dạng ngày tháng mà bạn muốn hiển thị
+                SimpleDateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                return targetFormat.format(date);
+            } else {
+                return "Không rõ ngày";
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            return dateString;
+            return "Lỗi định dạng"; // Hoặc trả về dateString gốc nếu bạn muốn
         }
     }
 

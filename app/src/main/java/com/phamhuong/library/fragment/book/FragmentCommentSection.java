@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.button.MaterialButton;
 import com.phamhuong.library.R;
 import com.phamhuong.library.adapter.book.ReviewAdapter;
 import com.phamhuong.library.model.RetrofitClient;
@@ -40,7 +41,7 @@ public class FragmentCommentSection extends Fragment {
     private RatingBar ratingBarAverage, ratingBarUser;
     private RecyclerView recyclerViewComments;
     private EditText edtComment;
-    private ImageView btnSendComment;
+    private MaterialButton btnSendComment;
     String token ="";
 
     public static FragmentCommentSection newInstance(int bookId) {

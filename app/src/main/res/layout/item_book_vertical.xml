@@ -1,73 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="120dp"
+    android:layout_width="140dp"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    app:cardCornerRadius="12dp"
+    app:cardElevation="6dp"
+    app:strokeColor="?attr/colorOutline"
+    app:strokeWidth="1dp"
+    app:cardBackgroundColor="?attr/colorSurface">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <!-- Book Cover -->
-            <ImageView
-                android:id="@+id/imgBookCover"
+        <ImageView
+            android:id="@+id/imgBookCover"
             android:layout_width="match_parent"
             android:layout_height="180dp"
-                android:scaleType="centerCrop"
-            android:src="@drawable/book_placeholder"/>
-        <!-- Book Info Container -->
+            android:scaleType="centerCrop"
+            android:contentDescription="book_cover"
+            android:src="@drawable/book_placeholder"
+            android:background="?attr/colorSurfaceContainer" />
+
+        <!-- Book Info -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="8dp">
+            android:padding="12dp">
+
             <!-- Book Title -->
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tvBookTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="2"
                 android:ellipsize="end"
-                android:textColor="@android:color/black"
                 android:textSize="14sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnSurface" />
 
-            <!-- Rating Container -->
+            <!-- Rating + Price -->
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="8dp"
+                android:weightSum="1">
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tvRating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#d7590c"
-                    android:textSize="12sp"/>
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="12sp" />
 
                 <ImageView
-                    android:layout_width="12dp"
-                    android:layout_height="12dp"
-                    android:src="@drawable/ic_book_info_score"
-                    android:layout_marginStart="2dp"/>
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:layout_marginStart="4dp"
+                    android:src="@drawable/ic_book_info_score" />
 
-                <!-- Price -->
-                <TextView
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tvPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/black"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:layout_marginTop="4dp"/>
-            </LinearLayout>
-
-
+                    android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
-</androidx.cardview.widget.CardView>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

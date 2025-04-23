@@ -13,19 +13,28 @@ public class Reservation {
     @SerializedName("user")
     private User user;
 
-    @SerializedName("reservation_date")
-    private LocalDateTime reservationDate;
+    @SerializedName("reservationDate")
+    private String reservationDate;
 
     @SerializedName("expiration_date")
-    private LocalDateTime expirationDate;
+    private String expirationDate;
 
     @SerializedName("status")
     private String status;
 
     @SerializedName("reservation_books")
     private List<ReservationBook> reservationBooks;
+    @SerializedName("bookCount")
+    private Integer bookCount;
 
     // Getters and Setters
+    public Integer getBookCount() {
+        return bookCount;
+    }
+
+    public void setBookCount(Integer bookCount) {
+        this.bookCount = bookCount;
+    }
     public Integer getReservationId() {
         return reservationId;
     }
@@ -42,19 +51,19 @@ public class Reservation {
         this.user = user;
     }
 
-    public LocalDateTime getReservationDate() {
+    public String getReservationDate() {
         return reservationDate;
     }
 
-    public void setReservationDate(LocalDateTime reservationDate) {
+    public void setReservationDate(String reservationDate) {
         this.reservationDate = reservationDate;
     }
 
-    public LocalDateTime getExpirationDate() {
+    public String getExpirationDate() {
         return expirationDate;
     }
 
-    public void setExpirationDate(LocalDateTime expirationDate) {
+    public void setExpirationDate(String expirationDate) {
         this.expirationDate = expirationDate;
     }
 
@@ -72,10 +81,5 @@ public class Reservation {
 
     public void setReservationBooks(List<ReservationBook> reservationBooks) {
         this.reservationBooks = reservationBooks;
-    }
-
-    public int getBookCount() {
-        if (reservationBooks == null) return 0;
-        return reservationBooks.size();
     }
 }
