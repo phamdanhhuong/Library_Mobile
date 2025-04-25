@@ -106,4 +106,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return rowsAffected;
     }
 
+    public void clearAllLoginData() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_LOGIN, null, null);
+        db.close();
+    }
+
 }
