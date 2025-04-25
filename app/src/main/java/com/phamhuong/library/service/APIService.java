@@ -78,4 +78,9 @@ public interface APIService {
     Call<Notification> createNotification(@Body CreateNotificationRequest createNotificationRequest);
     @GET("/api/notifications/user/{userId}")
     Call<List<Notification>> getNotificationsByUser(@Path("userId") Long userId);
+
+    @GET("books/new-in-month")
+    Call<List<Book>> getNewBooksInMonth(@Query("year") int year, @Query("month") int month);
+    @GET("borrowings/user/{userId}/due-soon")
+    Call<List<BorrowingRecord>> getDueSoonBooksByUser(@Query("userId") int userId, @Query("days") int days);
 }

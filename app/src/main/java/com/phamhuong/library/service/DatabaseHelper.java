@@ -22,7 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String SQL_CREATE_LOGIN_TABLE =
             "CREATE TABLE " + TABLE_LOGIN + " (" +
-                    COLUMN_USERID + " INTEGER PRIMARY KEY, " +
+                    COLUMN_USERID + " INTEGER, " +
                     COLUMN_USERNAME + " TEXT, " +
                     COLUMN_PASSWORD + " TEXT, " +
                     COLUMN_FULLNAME + " TEXT, " +

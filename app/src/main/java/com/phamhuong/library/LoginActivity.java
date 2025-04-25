@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -103,6 +104,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     saveUserInfo(txtUsername.getText().toString(), txtPassword.getText().toString(), body.getToken());
                     RetrofitClient.currentToken = body.getToken();
+                    Log.d("LoginActivity", "Token: " + RetrofitClient.currentToken);
                     Intent intent = new Intent(LoginActivity.this, BaseActivity.class);
                     startActivity(intent);
                     finish();
@@ -128,6 +130,4 @@ public class LoginActivity extends AppCompatActivity {
         editor.putBoolean("rememberMe", value);
         editor.apply();
     }
-
-
 }

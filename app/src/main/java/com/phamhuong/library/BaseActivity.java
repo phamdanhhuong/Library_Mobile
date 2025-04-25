@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -41,6 +42,7 @@ import com.phamhuong.library.model.UserLoginInfo;
 import com.phamhuong.library.service.APIService;
 import com.phamhuong.library.fragment.notification.NotificationFragment;
 import com.phamhuong.library.service.DatabaseHelper;
+import com.phamhuong.library.utils.NotificationHelper;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -96,9 +98,6 @@ public class BaseActivity extends AppCompatActivity {
                 return false;
             }
         });
-//        EditText searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
-//        searchEditText.setTextColor(getResources().getColor(R.color.black));
-//        searchEditText.setHintTextColor(getResources().getColor(R.color.black));
 
         View headerView = navigationView.getHeaderView(0);
         txtFullName = headerView.findViewById(R.id.txtFullName);
@@ -223,6 +222,7 @@ public class BaseActivity extends AppCompatActivity {
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         UserLoginInfo userLoginInfo = dbHelper.getLoginInfoSQLite();
 
+        Log.d("BaseActivity", "Token before getInfo: " + RetrofitClient.currentToken);
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
         Call<InfoResponse> call = apiService.getInfo(userLoginInfo.username);
         call.enqueue(new Callback<InfoResponse>() {
@@ -233,6 +233,12 @@ public class BaseActivity extends AppCompatActivity {
                     txtFullName.setText(body.getFull_name());
                     txtUserEmail.setText(body.getEmail());
                     dbHelper.updateLoginInfoSQLite(body.getId(), body.getFull_name(), body.getEmail(),userLoginInfo.username);
+
+                    int userId = body.getId();
+                    NotificationHelper notificationHelper = new NotificationHelper(getApplicationContext());
+                    notificationHelper.checkAndSendInitialNotifications(String.valueOf(userId));
+
+
                 }
             }
 
