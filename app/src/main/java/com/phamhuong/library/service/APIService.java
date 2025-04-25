@@ -49,9 +49,9 @@ public interface APIService {
     @POST("/auth/activate-account")
     Call<ApiResponse> activeAccount(@Body Map<String, String> requestBody);
     @POST("/auth/reset-password")
-    Call<ResponseBody> resetPassword(@Body ResetPassRequest resetPassRequest);
+    Call<ApiResponseT<String>> resetPassword(@Body ResetPassRequest resetPassRequest);
     @POST("/auth/send-password-reset-otp")
-    Call<ResponseBody> sendPasswordResetOtp(@Body Map<String, String> requestBody);
+    Call<ApiResponseT<String>> sendPasswordResetOtp(@Body Map<String, String> requestBody);
     @POST("reviews/create")
     Call<Void> createReview(@Body ReviewRequest review);
     @GET("reviews/book/{bookId}")

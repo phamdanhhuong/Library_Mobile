@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.phamhuong.library.model.ApiResponse;
+import com.phamhuong.library.model.ApiResponseT;
 import com.phamhuong.library.model.RetrofitClient;
 import com.phamhuong.library.service.APIService;
 
@@ -54,22 +55,19 @@ public class SendPasswordResetOtpActivity extends AppCompatActivity {
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("email", email);
 
-        Call<ResponseBody> call = apiService.sendPasswordResetOtp(requestBody);
-        call.enqueue(new Callback<ResponseBody>() {
+        Call<ApiResponseT<String>> call = apiService.sendPasswordResetOtp(requestBody);
+        call.enqueue(new Callback<ApiResponseT<String>>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(Call<ApiResponseT<String>> call, Response<ApiResponseT<String>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     saveResetInfo(email);
                     Toast.makeText(SendPasswordResetOtpActivity.this, "OTP đã gửi, kiểm tra email!", Toast.LENGTH_SHORT).show();
                     navigateToResetPassword();
                 }
-//                else {
-//                    Toast.makeText(SendPasswordResetOtpActivity.this, "Gửi OTP thất bại", Toast.LENGTH_SHORT).show();
-//                }
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<ApiResponseT<String>> call, Throwable t) {
                 Log.e("SendPasswordResetOtp", "Lỗi gửi OTP: " + t.getMessage());
                 Toast.makeText(SendPasswordResetOtpActivity.this, "Lỗi kết nối", Toast.LENGTH_SHORT).show();
             }

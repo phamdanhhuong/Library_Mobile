@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.phamhuong.library.model.ApiResponse;
+import com.phamhuong.library.model.ApiResponseT;
 import com.phamhuong.library.model.ResetPassRequest;
 import com.phamhuong.library.model.RetrofitClient;
 import com.phamhuong.library.service.APIService;
@@ -63,10 +64,10 @@ public class ResetPasswordActivity extends AppCompatActivity {
     }
 
     void CallAPI(ResetPassRequest requestBody) {
-        Call<ResponseBody> call = apiService.resetPassword(requestBody);
-        call.enqueue(new Callback<ResponseBody>() {
+        Call<ApiResponseT<String>> call = apiService.resetPassword(requestBody);
+        call.enqueue(new Callback<ApiResponseT<String>>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(Call<ApiResponseT<String>> call, Response<ApiResponseT<String>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Toast.makeText(ResetPasswordActivity.this, "Đổi mật khẩu thành công", Toast.LENGTH_SHORT).show();
                     navigateToLogin();
@@ -76,7 +77,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<ApiResponseT<String>> call, Throwable t) {
                 Log.e("CallAPI", "Lỗi kết nối: " + t.getMessage());
                 Toast.makeText(ResetPasswordActivity.this, "Lỗi kết nối", Toast.LENGTH_SHORT).show();
             }
