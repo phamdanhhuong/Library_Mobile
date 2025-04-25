@@ -16,7 +16,7 @@ public class Reservation {
     @SerializedName("reservationDate")
     private String reservationDate;
 
-    @SerializedName("expiration_date")
+    @SerializedName("expirationDate")
     private String expirationDate;
 
     @SerializedName("status")

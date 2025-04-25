@@ -18,10 +18,10 @@ public class Notification {
     @SerializedName("type")
     private NotificationType type;
     
-    @SerializedName("timestamp")
+    @SerializedName("createdAt")
     private String timestamp;
     
-    @SerializedName("isRead")
+    @SerializedName("read")
     private boolean isRead;
 
     public Notification(String id, String title, String message, NotificationType type, String timestamp) {

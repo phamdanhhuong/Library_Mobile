@@ -54,7 +54,11 @@ public class ReservationHistoryAdapter extends RecyclerView.Adapter<ReservationH
         } else {
             holder.tvReservationDate.setText("Ngày đặt: Không rõ ngày");
         }
-
+        if (reservation.getExpirationDate() != null) {
+            holder.tvExpirationDate.setText("Hạn trả sách: " + formatDate(reservation.getExpirationDate().toString()));
+        } else {
+            holder.tvExpirationDate.setText("Hạn trả sách: Không rõ ngày");
+        }
         holder.tvBookCount.setText("Số lượng sách: " + reservation.getBookCount());
 
         Chip chipStatus = holder.chipStatus;
@@ -113,7 +117,7 @@ public class ReservationHistoryAdapter extends RecyclerView.Adapter<ReservationH
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvReservationId, tvReservationDate, tvBookCount;
+        TextView tvReservationId, tvReservationDate, tvExpirationDate, tvBookCount;
         Chip chipStatus;
         MaterialButton btnViewDetails;
 
@@ -121,6 +125,7 @@ public class ReservationHistoryAdapter extends RecyclerView.Adapter<ReservationH
             super(itemView);
             tvReservationId = itemView.findViewById(R.id.tvReservationId);
             tvReservationDate = itemView.findViewById(R.id.tvReservationDate);
+            tvExpirationDate = itemView.findViewById(R.id.tvExpirationDate);
             tvBookCount = itemView.findViewById(R.id.tvBookCount);
             chipStatus = itemView.findViewById(R.id.chipStatus);
             btnViewDetails = itemView.findViewById(R.id.btnViewDetails);

@@ -118,14 +118,6 @@ public class NotificationListFragment extends Fragment implements NotificationAd
             adapter.notifyDataSetChanged();
         }
     }
-
-    private List<Notification> getNotifications() {
-        List<Notification> notifications = new ArrayList<>();
-
-
-        return notifications;
-    }
-
     @Override
     public void onNotificationClick(Notification notification) {
         // Mark notification as read
