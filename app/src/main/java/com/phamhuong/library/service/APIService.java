@@ -68,4 +68,5 @@ public interface APIService {
     Call<ApiResponseT<List<Book>>> getWishListByUserId(@Path("userId") int userId);
     @POST("wishlist/add")
     Call<ApiResponse> addToWishList(@Body Map<String, Integer> requestBody);
+
 }

@@ -28,4 +28,6 @@
     <color name="status_cancelled">#F44336</color>
 
     <color name="shimmer_color">#DDDDDD</color>
+
+    <color name="notification_unread_color">#FF4081</color>
 </resources>
