@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import com.phamhuong.library.R;
 import com.phamhuong.library.fragment.reservation.BasketFragment;
+import com.phamhuong.library.fragment.reservation.BorrowHistoryFragment;
 import com.phamhuong.library.fragment.reservation.ReservationHistoryFragment;
 import com.phamhuong.library.service.APIService;
 
@@ -32,7 +33,7 @@ public class FragmentProfile extends Fragment  {
         loadFragment(new FragmentAnalytics(), R.id.fragmentAnalytics);
 
         view.findViewById(R.id.btnBorrowHistory).setOnClickListener(v -> {
-            Fragment borrowHistoryFragment = new ReservationHistoryFragment();
+            Fragment borrowHistoryFragment = new BorrowHistoryFragment();
             requireActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.content_frame, borrowHistoryFragment)

@@ -3,6 +3,7 @@ package com.phamhuong.library.service;
 import com.phamhuong.library.model.ApiResponse;
 import com.phamhuong.library.model.ApiResponseT;
 import com.phamhuong.library.model.Book;
+import com.phamhuong.library.model.BorrowingRecord;
 import com.phamhuong.library.model.Category;
 import com.phamhuong.library.model.CreateNotificationRequest;
 import com.phamhuong.library.model.InfoResponse;
@@ -67,6 +68,8 @@ public interface APIService {
     Call<ApiResponseT<List<Book>>> getBooksByReservationId(@Path("reservationId") int reservationId);
     @POST("reservations/reserve")
     Call<ApiResponse> reserveBook(@Body ReservationRequest requestBody);
+    @GET("borrowings/user/{userId}")
+    Call<List<BorrowingRecord>> getBorrowingRecordsByUser(@Path("userId") Integer userId);
     @GET("wishlist/{userId}")
     Call<ApiResponseT<List<Book>>> getWishListByUserId(@Path("userId") int userId);
     @POST("wishlist/add")

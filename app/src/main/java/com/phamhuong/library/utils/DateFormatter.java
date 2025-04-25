@@ -1,7 +1,10 @@
 package com.phamhuong.library.utils;
 
+import android.os.Build;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 
@@ -22,5 +25,12 @@ public class DateFormatter {
             e.printStackTrace();
         }
         return dateStr;
+    }
+
+    public static DateTimeFormatter getApiDateTimeFormatter() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            return DateTimeFormatter.ofPattern(API_DATE_FORMAT);
+        }
+        return null;
     }
 }

@@ -15,6 +15,7 @@ import com.google.android.material.button.MaterialButton;
 
 import com.phamhuong.library.R;
 import com.phamhuong.library.model.Reservation;
+import com.phamhuong.library.utils.DateFormatter;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -50,12 +51,12 @@ public class ReservationHistoryAdapter extends RecyclerView.Adapter<ReservationH
 
         holder.tvReservationId.setText("Đơn đặt sách #" + reservation.getReservationId());
         if (reservation.getReservationDate() != null) {
-            holder.tvReservationDate.setText("Ngày đặt: " + formatDate(reservation.getReservationDate().toString()));
+            holder.tvReservationDate.setText("Ngày đặt: " + DateFormatter.formatDate(reservation.getReservationDate()));
         } else {
             holder.tvReservationDate.setText("Ngày đặt: Không rõ ngày");
         }
         if (reservation.getExpirationDate() != null) {
-            holder.tvExpirationDate.setText("Hạn trả sách: " + formatDate(reservation.getExpirationDate().toString()));
+            holder.tvExpirationDate.setText("Hạn trả sách: " + DateFormatter.formatDate(reservation.getExpirationDate()));
         } else {
             holder.tvExpirationDate.setText("Hạn trả sách: Không rõ ngày");
         }
