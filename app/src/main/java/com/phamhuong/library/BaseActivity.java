@@ -152,6 +152,11 @@ public class BaseActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean("rememberMe", false);
             editor.apply();
+            DatabaseHelper databaseHelper = new DatabaseHelper(this);
+            databaseHelper.clearAllLoginData();
+            RetrofitClient.currentToken = "";
+            RetrofitClient.retrofit = null;
+
             Intent intent = new Intent(BaseActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
