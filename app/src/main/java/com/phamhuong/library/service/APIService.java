@@ -4,15 +4,18 @@ import com.phamhuong.library.model.ApiResponse;
 import com.phamhuong.library.model.ApiResponseT;
 import com.phamhuong.library.model.Book;
 import com.phamhuong.library.model.Category;
+import com.phamhuong.library.model.CreateNotificationRequest;
 import com.phamhuong.library.model.InfoResponse;
 import com.phamhuong.library.model.LoginRequest;
 import com.phamhuong.library.model.LoginResponse;
+import com.phamhuong.library.model.Notification;
 import com.phamhuong.library.model.RegisterRequest;
 import com.phamhuong.library.model.ReservationRequest;
 import com.phamhuong.library.model.ResetPassRequest;
 import com.phamhuong.library.model.Review;
 import com.phamhuong.library.model.Reservation;
 import com.phamhuong.library.model.ReviewRequest;
+import com.phamhuong.library.model.VoidResponse;
 
 import java.util.List;
 import java.util.Map;
@@ -68,5 +71,8 @@ public interface APIService {
     Call<ApiResponseT<List<Book>>> getWishListByUserId(@Path("userId") int userId);
     @POST("wishlist/add")
     Call<ApiResponse> addToWishList(@Body Map<String, Integer> requestBody);
-
+    @POST("/api/notifications")
+    Call<Notification> createNotification(@Body CreateNotificationRequest createNotificationRequest);
+    @GET("/api/notifications/user/{userId}")
+    Call<List<Notification>> getNotificationsByUser(@Path("userId") Long userId);
 }

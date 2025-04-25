@@ -18,7 +18,7 @@ public class RetrofitClient {
                     .writeTimeout(20, TimeUnit.SECONDS)   // thời gian chờ ghi dữ liệu (nếu có)
                     .build();
             retrofit = new Retrofit.Builder()
-                    .baseUrl("http://192.168.17.232:8080/")
+                    .baseUrl("http://10.0.2.2:8080/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(client)
                     .build();

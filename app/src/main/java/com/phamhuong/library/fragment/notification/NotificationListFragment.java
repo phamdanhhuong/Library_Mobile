@@ -1,6 +1,7 @@
 package com.phamhuong.library.fragment.notification;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,17 +16,25 @@ import com.phamhuong.library.R;
 import com.phamhuong.library.adapter.nofitication.NotificationAdapter;
 import com.phamhuong.library.model.Notification;
 import com.phamhuong.library.model.NotificationType;
+import com.phamhuong.library.model.RetrofitClient;
+import com.phamhuong.library.service.APIService;
+import com.phamhuong.library.service.DatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class NotificationListFragment extends Fragment implements NotificationAdapter.OnNotificationClickListener {
     private static final String ARG_TAB_POSITION = "tab_position";
     private RecyclerView recyclerView;
     private NotificationAdapter adapter;
     private List<Notification> allNotifications; // Giữ toàn bộ danh sách thông báo
-    private List<Notification> displayedNotifications; // Danh sách thông báo sẽ hiển thị
+    private List<Notification> displayedNotifications;
+    private APIService apiService; // Danh sách thông báo sẽ hiển thị
 
     public static NotificationListFragment newInstance(int tabPosition) {
         NotificationListFragment fragment = new NotificationListFragment();
@@ -43,13 +52,14 @@ public class NotificationListFragment extends Fragment implements NotificationAd
         recyclerView = view.findViewById(R.id.rvNotifications);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        allNotifications = getNotifications();
+        allNotifications = new ArrayList<>(); // Khởi tạo rỗng
         displayedNotifications = new ArrayList<>(allNotifications); // Ban đầu hiển thị tất cả
+        apiService = RetrofitClient.getRetrofit().create(APIService.class);
 
         // Lọc danh sách hiển thị dựa trên vị trí tab
         if (getArguments() != null) {
             int tabPosition = getArguments().getInt(ARG_TAB_POSITION);
-            filterNotifications(tabPosition);
+            fetchNotifications(tabPosition);
         }
 
         adapter = new NotificationAdapter(displayedNotifications, this);
@@ -57,26 +67,52 @@ public class NotificationListFragment extends Fragment implements NotificationAd
 
         return view;
     }
+    private void fetchNotifications(final int tabPosition) {
+        DatabaseHelper dbHelper = new DatabaseHelper(getContext());
+        long userId = dbHelper.getLoginInfoSQLite().getUserId(); // Lấy userId kiểu long
 
+        Call<List<Notification>> call = apiService.getNotificationsByUser(userId);
+        call.enqueue(new Callback<List<Notification>>() {
+            @Override
+            public void onResponse(Call<List<Notification>> call, Response<List<Notification>> response) {
+                if (response.isSuccessful()) {
+                    allNotifications = response.body(); // Lấy danh sách thông báo từ response
+                    filterNotifications(tabPosition); // Lọc và hiển thị
+                    adapter.updateNotifications(displayedNotifications); // Cập nhật adapter
+                } else {
+                    Log.e("NotificationListFragment", "Failed to fetch notifications: " + response.code());
+                    // Xử lý lỗi (ví dụ: hiển thị thông báo cho người dùng)
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Notification>> call, Throwable t) {
+                Log.e("NotificationListFragment", "Error fetching notifications: " + t.getMessage());
+                // Xử lý lỗi kết nối
+            }
+        });
+    }
     private void filterNotifications(int tabPosition) {
         displayedNotifications.clear();
-        switch (tabPosition) {
-            case 0: // All
-                displayedNotifications.addAll(allNotifications);
-                break;
-            case 1: // Reserved (Ví dụ: Lọc theo trạng thái hoặc loại thông báo liên quan đến đặt trước)
-                displayedNotifications.addAll(allNotifications.stream()
-                        .filter(notification -> notification.getType() == NotificationType.DUE_REMINDER) // Ví dụ: Thông báo sắp đến hạn trả có thể liên quan đến đặt trước
-                        .collect(Collectors.toList()));
-                break;
-            case 2: // Available (Ví dụ: Lọc theo loại thông báo về sách mới)
-                displayedNotifications.addAll(allNotifications.stream()
-                        .filter(notification -> notification.getType() == NotificationType.NEW_BOOK || notification.getType() == NotificationType.PROMOTION || notification.getType() == NotificationType.RECOMMENDATION)
-                        .collect(Collectors.toList()));
-                break;
-            default:
-                displayedNotifications.addAll(allNotifications);
-                break;
+        if (allNotifications != null) { // Kiểm tra allNotifications khác null
+            switch (tabPosition) {
+                case 0: // All
+                    displayedNotifications.addAll(allNotifications);
+                    break;
+                case 1: // Reserved (Ví dụ: Lọc theo trạng thái hoặc loại thông báo liên quan đến đặt trước)
+                    displayedNotifications.addAll(allNotifications.stream()
+                            .filter(notification -> notification.getType().equals(NotificationType.DUE_REMINDER.name()))
+                            .collect(Collectors.toList()));
+                    break;
+                case 2: // Available (Ví dụ: Lọc theo loại thông báo về sách mới)
+                    displayedNotifications.addAll(allNotifications.stream()
+                            .filter(notification -> notification.getType().equals(NotificationType.NEW_BOOK.name()) || notification.getType().equals(NotificationType.PROMOTION.name()) || notification.getType().equals(NotificationType.RECOMMENDATION.name()))
+                            .collect(Collectors.toList()));
+                    break;
+                default:
+                    displayedNotifications.addAll(allNotifications);
+                    break;
+            }
         }
         if (adapter != null) {
             adapter.notifyDataSetChanged();
@@ -145,11 +181,13 @@ public class NotificationListFragment extends Fragment implements NotificationAd
         // TODO: Implement system message dialog
     }
     public void addNotification(Notification notification) {
-        allNotifications.add(0, notification); // Thêm lên đầu danh sách
+        allNotifications.add(0, notification);
         if (getArguments() != null) {
             int tabPosition = getArguments().getInt(ARG_TAB_POSITION);
             filterNotifications(tabPosition);
+            if (adapter != null) {
+                adapter.notifyDataSetChanged();
+            }
         }
     }
-
 }
