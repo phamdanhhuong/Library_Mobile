@@ -1,12 +1,17 @@
 package com.phamhuong.library.fragment.reservation;
 
+import android.app.DatePickerDialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -17,24 +22,28 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.phamhuong.library.R;
 import com.phamhuong.library.adapter.reservation.BorrowHistoryAdapter;
+import com.phamhuong.library.model.ApiReponseWithNoData;
 import com.phamhuong.library.model.ApiResponse;
-import com.phamhuong.library.model.ApiResponseT;
 import com.phamhuong.library.model.BorrowingRecord;
-import com.phamhuong.library.model.Reservation;
 import com.phamhuong.library.model.RetrofitClient;
 import com.phamhuong.library.model.UserLoginInfo;
 import com.phamhuong.library.service.APIService;
 import com.phamhuong.library.service.DatabaseHelper;
+import com.phamhuong.library.utils.DateFormatter;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class BorrowHistoryFragment extends Fragment {
+public class BorrowHistoryFragment extends Fragment implements BorrowHistoryAdapter.OnRenewButtonClickListener {
     private RecyclerView recyclerView;
     private BorrowHistoryAdapter adapter;
     private List<BorrowingRecord> histories;
@@ -67,7 +76,7 @@ public class BorrowHistoryFragment extends Fragment {
 
         // Setup RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new BorrowHistoryAdapter(getContext(), new ArrayList<>());
+        adapter = new BorrowHistoryAdapter(getContext(), new ArrayList<>(), this);
         recyclerView.setAdapter(adapter);
 
         // Setup SwipeRefreshLayout
@@ -94,19 +103,17 @@ public class BorrowHistoryFragment extends Fragment {
             public void onResponse(@NonNull Call<List<BorrowingRecord>> call, @NonNull Response<List<BorrowingRecord>> response) {
                 progressBar.setVisibility(View.GONE);
                 swipeRefreshLayout.setRefreshing(false);
-                Log.d("BorrowHistoryFragment", "Response received"); // Thêm log này
+                Log.d("BorrowHistoryFragment", "Response received");
 
                 if (response.isSuccessful() && response.body() != null) {
                     List<BorrowingRecord> records = response.body();
                     Log.d("BorrowHistoryFragment", "Records received: " + records.toString());
 
                     if (records != null) {
-                        List<BorrowingRecord>borrowingRecords = response.body();
                         histories.clear();
-                        histories.addAll(borrowingRecords);
-                        adapter.notifyDataSetChanged();
+                        histories.addAll(records);
                         adapter.updateData(records);
-                        recyclerView.setVisibility(View.VISIBLE); // Đảm bảo dòng này được gọi
+                        recyclerView.setVisibility(View.VISIBLE);
                         emptyView.setVisibility(View.GONE);
                     } else {
                         recyclerView.setVisibility(View.GONE);
@@ -114,21 +121,108 @@ public class BorrowHistoryFragment extends Fragment {
                     }
                 }
             }
+
             @Override
             public void onFailure(Call<List<BorrowingRecord>> call, Throwable t) {
                 progressBar.setVisibility(View.GONE);
                 swipeRefreshLayout.setRefreshing(false);
-                Log.e("BorrowHistoryFragment", "API call failed: " + t.getMessage(), t); // In message và stack trace
+                Log.e("BorrowHistoryFragment", "API call failed: " + t.getMessage(), t);
                 showError("Network error");
+            }
+        });
+    }
+
+    @Override
+    public void onRenewButtonClick(BorrowingRecord record) {
+        if (getContext() != null && record.getRecordId() != null) {
+            Calendar calendar = Calendar.getInstance();
+            LocalDate dueDate = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                dueDate = LocalDate.parse(record.getDueDate(), DateFormatter.getApiDateTimeFormatter());
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                calendar.set(dueDate.getYear(), dueDate.getMonthValue() - 1, dueDate.getDayOfMonth());
+            }
+
+            DatePickerDialog datePickerDialog = new DatePickerDialog(
+                    getContext(),
+                    (view, year, month, dayOfMonth) -> {
+                        LocalDate selectedDate = null;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            selectedDate = LocalDate.of(year, month + 1, dayOfMonth);
+                        }
+                        LocalDate maxRenewDate = null;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            maxRenewDate = LocalDate.parse(record.getDueDate(), DateFormatter.getApiDateTimeFormatter()).plusDays(7);
+                        }
+                        LocalDate now = null;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            now = LocalDate.now();
+                        }
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            if (selectedDate.isBefore(now)) {
+                                Toast.makeText(getContext(), "Ngày gia hạn không hợp lệ (trước ngày hiện tại)", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        }
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            if (selectedDate.isAfter(maxRenewDate)) {
+                                Toast.makeText(getContext(), "Ngày gia hạn không được quá 7 ngày sau ngày hết hạn", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        }
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            Log.d("BorrowHistoryFragment", "Renew date: " + selectedDate.format(DateTimeFormatter.ISO_DATE) + " recordId: " + record.getRecordId());
+                            renewBook(record.getRecordId(), selectedDate);
+                        }
+                    },
+                    calendar.get(Calendar.YEAR),
+                    calendar.get(Calendar.MONTH),
+                    calendar.get(Calendar.DAY_OF_MONTH)
+            );
+            datePickerDialog.show();
+        } else if (getContext() != null) {
+            Toast.makeText(getContext(), "Không thể gia hạn", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void renewBook(int recordId, LocalDate renewalDate) {
+        Log.d("BorrowHistoryFragment", "Renew request: recordId=" + recordId + ", selectedDate=" + renewalDate);
+        progressBar.setVisibility(View.VISIBLE);
+        apiService = RetrofitClient.getRetrofit().create(APIService.class);
+        apiService.renewBorrowingRecord(recordId, renewalDate).enqueue(new Callback<ApiReponseWithNoData>() {
+            @Override
+            public void onResponse(@NonNull Call<ApiReponseWithNoData> call, @NonNull Response<ApiReponseWithNoData> response) {
+                Log.d("BorrowHistoryFragment", "Response renew: " + response);
+                progressBar.setVisibility(View.GONE);
+
+                if (response.isSuccessful() && response.body() != null && response.body().isStatus()) {
+                    Toast.makeText(getContext(), "Gia hạn thành công", Toast.LENGTH_SHORT).show();
+                    loadBorrowHistory();
+                } else {
+                    String errorMessage = "Gia hạn thất bại";
+                    if (response.body() != null) {
+                        errorMessage = response.body().getMessage();
+                        Log.e("BorrowHistoryFragment", "Renew API failed: " + errorMessage);
+                    }
+                    Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ApiReponseWithNoData> call, @NonNull Throwable t) {
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(getContext(), "Lỗi kết nối khi gia hạn", Toast.LENGTH_SHORT).show();
+                Log.e("BorrowHistoryFragment", "Renew API call failed: " + t.getMessage(), t);
             }
         });
     }
 
     private void showError(String message) {
         if (getContext() != null) {
-            // Show error message (you can implement this according to your app's UI/UX)
-            //TextView errorText = emptyView.findViewById(R.id.emptyText);
-            //errorText.setText(message);
             recyclerView.setVisibility(View.GONE);
             emptyView.setVisibility(View.VISIBLE);
         }

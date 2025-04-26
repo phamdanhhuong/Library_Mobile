@@ -26,6 +26,11 @@ public class BorrowingRecord {
     @SerializedName("status")
     private String status;
 
+    @SerializedName("renewalCount")
+    private Integer renewalCount;
+
+    @SerializedName("penaltyFee")
+    private Double penaltyFee;
     // Getters và Setters
 
     public Integer getRecordId() {
@@ -82,5 +87,21 @@ public class BorrowingRecord {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Integer getRenewalCount() {
+        return renewalCount;
+    }
+
+    public void setRenewalCount(Integer renewalCount) {
+        this.renewalCount = renewalCount;
+    }
+
+    public Double getPenaltyFee() {
+        return penaltyFee;
+    }
+
+    public void setPenaltyFee(Double penaltyFee) {
+        this.penaltyFee = penaltyFee;
     }
 }

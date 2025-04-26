@@ -5,6 +5,7 @@ import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,14 +21,22 @@ import com.phamhuong.library.utils.DateFormatter;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Locale;
 
 public class BorrowHistoryAdapter extends RecyclerView.Adapter<BorrowHistoryAdapter.ViewHolder> {
     private List<BorrowingRecord> borrowingRecords;
     private Context context;
+    private OnRenewButtonClickListener renewButtonClickListener;
 
-    public BorrowHistoryAdapter(Context context, List<BorrowingRecord> borrowingRecords) {
+    // Interface để xử lý click nút Gia hạn
+    public interface OnRenewButtonClickListener {
+        void onRenewButtonClick(BorrowingRecord record);
+    }
+
+    public BorrowHistoryAdapter(Context context, List<BorrowingRecord> borrowingRecords, OnRenewButtonClickListener listener) {
         this.context = context;
         this.borrowingRecords = borrowingRecords;
+        this.renewButtonClickListener = listener;
     }
 
     @NonNull
@@ -83,17 +92,14 @@ public class BorrowHistoryAdapter extends RecyclerView.Adapter<BorrowHistoryAdap
                 holder.remainingDays.setVisibility(View.VISIBLE);
             } catch (Exception e) {
                 holder.remainingDays.setVisibility(View.GONE);
-                // Log lỗi nếu không parse được ngày
                 e.printStackTrace();
             }
         } else {
-            holder.remainingDays.setVisibility(View.GONE); // Ẩn nếu đã trả hoặc không có due date
+            holder.remainingDays.setVisibility(View.GONE);
         }
 
         // Set status
         holder.status.setText(record.getStatus());
-
-        // Set status color based on the status
         int statusColor;
         switch (record.getStatus()) {
             case "Returned":
@@ -107,6 +113,21 @@ public class BorrowHistoryAdapter extends RecyclerView.Adapter<BorrowHistoryAdap
                 break;
         }
         holder.status.setTextColor(ContextCompat.getColor(context, statusColor));
+
+        // Display penalty fee if it's greater than 0
+        if (record.getPenaltyFee() != null && record.getPenaltyFee() > 0) {
+            holder.penaltyFee.setText(String.format(Locale.getDefault(), "Phí phạt: %.2f", record.getPenaltyFee()));
+            holder.penaltyFee.setVisibility(View.VISIBLE);
+        } else {
+            holder.penaltyFee.setVisibility(View.GONE);
+        }
+
+        // Set OnClickListener for the Renew button
+        holder.btnRenew.setOnClickListener(v -> {
+            if (renewButtonClickListener != null) {
+                renewButtonClickListener.onRenewButtonClick(record);
+            }
+        });
     }
 
     @Override
@@ -125,7 +146,9 @@ public class BorrowHistoryAdapter extends RecyclerView.Adapter<BorrowHistoryAdap
         TextView borrowDate;
         TextView dueDate;
         TextView status;
-        TextView remainingDays; // Thêm TextView cho số ngày còn lại
+        TextView remainingDays;
+        Button btnRenew;
+        TextView penaltyFee; // Add TextView for penalty fee
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -134,7 +157,13 @@ public class BorrowHistoryAdapter extends RecyclerView.Adapter<BorrowHistoryAdap
             borrowDate = itemView.findViewById(R.id.borrowDate);
             dueDate = itemView.findViewById(R.id.dueDate);
             status = itemView.findViewById(R.id.status);
-            remainingDays = itemView.findViewById(R.id.remainingDays); // Ánh xạ ID từ item layout
+            remainingDays = itemView.findViewById(R.id.remainingDays);
+            btnRenew = itemView.findViewById(R.id.btnRenew);
+            penaltyFee = itemView.findViewById(R.id.penaltyFee); // Initialize penaltyFee TextView
         }
+    }
+
+    public void setOnRenewButtonClickListener(OnRenewButtonClickListener listener) {
+        this.renewButtonClickListener = listener;
     }
 }
