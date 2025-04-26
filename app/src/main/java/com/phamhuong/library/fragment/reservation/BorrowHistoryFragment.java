@@ -136,9 +136,11 @@ public class BorrowHistoryFragment extends Fragment implements BorrowHistoryAdap
     public void onRenewButtonClick(BorrowingRecord record) {
         if (getContext() != null && record.getRecordId() != null) {
             Calendar calendar = Calendar.getInstance();
-            LocalDate dueDate = null;
+            LocalDate dueDate;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 dueDate = LocalDate.parse(record.getDueDate(), DateFormatter.getApiDateTimeFormatter());
+            } else {
+                dueDate = null;
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 calendar.set(dueDate.getYear(), dueDate.getMonthValue() - 1, dueDate.getDayOfMonth());
@@ -167,6 +169,12 @@ public class BorrowHistoryFragment extends Fragment implements BorrowHistoryAdap
                             }
                         }
 
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            if (selectedDate.isBefore(dueDate)) {
+                                Toast.makeText(getContext(), "Ngày gia hạn không được sớm hơn ngày hết hạn", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        }
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             if (selectedDate.isAfter(maxRenewDate)) {
                                 Toast.makeText(getContext(), "Ngày gia hạn không được quá 7 ngày sau ngày hết hạn", Toast.LENGTH_SHORT).show();
