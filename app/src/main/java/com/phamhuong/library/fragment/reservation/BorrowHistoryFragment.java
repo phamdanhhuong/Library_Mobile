@@ -153,34 +153,34 @@ public class BorrowHistoryFragment extends Fragment implements BorrowHistoryAdap
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             selectedDate = LocalDate.of(year, month + 1, dayOfMonth);
                         }
-                        LocalDate maxRenewDate = null;
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            maxRenewDate = LocalDate.parse(record.getDueDate(), DateFormatter.getApiDateTimeFormatter()).plusDays(7);
-                        }
-                        LocalDate now = null;
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            now = LocalDate.now();
-                        }
-
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            if (selectedDate.isBefore(now)) {
-                                Toast.makeText(getContext(), "Ngày gia hạn không hợp lệ (trước ngày hiện tại)", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                        }
-
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            if (selectedDate.isBefore(dueDate)) {
-                                Toast.makeText(getContext(), "Ngày gia hạn không được sớm hơn ngày hết hạn", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                        }
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            if (selectedDate.isAfter(maxRenewDate)) {
-                                Toast.makeText(getContext(), "Ngày gia hạn không được quá 7 ngày sau ngày hết hạn", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                        }
+//                        LocalDate maxRenewDate = null;
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                            maxRenewDate = LocalDate.parse(record.getDueDate(), DateFormatter.getApiDateTimeFormatter()).plusDays(7);
+//                        }
+//                        LocalDate now = null;
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                            now = LocalDate.now();
+//                        }
+//
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                            if (selectedDate.isBefore(now)) {
+//                                Toast.makeText(getContext(), "Ngày gia hạn không hợp lệ (trước ngày hiện tại)", Toast.LENGTH_SHORT).show();
+//                                return;
+//                            }
+//                        }
+//
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                            if (selectedDate.isBefore(dueDate)) {
+//                                Toast.makeText(getContext(), "Ngày gia hạn không được sớm hơn ngày hết hạn", Toast.LENGTH_SHORT).show();
+//                                return;
+//                            }
+//                        }
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                            if (selectedDate.isAfter(maxRenewDate)) {
+//                                Toast.makeText(getContext(), "Ngày gia hạn không được quá 7 ngày sau ngày hết hạn", Toast.LENGTH_SHORT).show();
+//                                return;
+//                            }
+//                        }
 
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             Log.d("BorrowHistoryFragment", "Renew date: " + selectedDate.format(DateTimeFormatter.ISO_DATE) + " recordId: " + record.getRecordId());
@@ -211,7 +211,7 @@ public class BorrowHistoryFragment extends Fragment implements BorrowHistoryAdap
                     Toast.makeText(getContext(), "Gia hạn thành công", Toast.LENGTH_SHORT).show();
                     loadBorrowHistory();
                 } else {
-                    String errorMessage = "Gia hạn thất bại";
+                    String errorMessage = response.body().getMessage();
                     if (response.body() != null) {
                         errorMessage = response.body().getMessage();
                         Log.e("BorrowHistoryFragment", "Renew API failed: " + errorMessage);
