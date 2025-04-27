@@ -25,11 +25,13 @@ import com.phamhuong.library.adapter.reservation.BorrowHistoryAdapter;
 import com.phamhuong.library.model.ApiReponseWithNoData;
 import com.phamhuong.library.model.ApiResponse;
 import com.phamhuong.library.model.BorrowingRecord;
+import com.phamhuong.library.model.NotificationType;
 import com.phamhuong.library.model.RetrofitClient;
 import com.phamhuong.library.model.UserLoginInfo;
 import com.phamhuong.library.service.APIService;
 import com.phamhuong.library.service.DatabaseHelper;
 import com.phamhuong.library.utils.DateFormatter;
+import com.phamhuong.library.utils.NotificationHelper;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -51,6 +53,7 @@ public class BorrowHistoryFragment extends Fragment implements BorrowHistoryAdap
     private View emptyView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private APIService apiService;
+    private NotificationHelper notificationHelper;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,6 +77,7 @@ public class BorrowHistoryFragment extends Fragment implements BorrowHistoryAdap
             requireActivity().getSupportFragmentManager().popBackStack();
         });
 
+        notificationHelper = new NotificationHelper(getContext());
         // Setup RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new BorrowHistoryAdapter(getContext(), new ArrayList<>(), this);
@@ -153,38 +157,10 @@ public class BorrowHistoryFragment extends Fragment implements BorrowHistoryAdap
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             selectedDate = LocalDate.of(year, month + 1, dayOfMonth);
                         }
-//                        LocalDate maxRenewDate = null;
-//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//                            maxRenewDate = LocalDate.parse(record.getDueDate(), DateFormatter.getApiDateTimeFormatter()).plusDays(7);
-//                        }
-//                        LocalDate now = null;
-//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//                            now = LocalDate.now();
-//                        }
-//
-//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//                            if (selectedDate.isBefore(now)) {
-//                                Toast.makeText(getContext(), "Ngày gia hạn không hợp lệ (trước ngày hiện tại)", Toast.LENGTH_SHORT).show();
-//                                return;
-//                            }
-//                        }
-//
-//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//                            if (selectedDate.isBefore(dueDate)) {
-//                                Toast.makeText(getContext(), "Ngày gia hạn không được sớm hơn ngày hết hạn", Toast.LENGTH_SHORT).show();
-//                                return;
-//                            }
-//                        }
-//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//                            if (selectedDate.isAfter(maxRenewDate)) {
-//                                Toast.makeText(getContext(), "Ngày gia hạn không được quá 7 ngày sau ngày hết hạn", Toast.LENGTH_SHORT).show();
-//                                return;
-//                            }
-//                        }
 
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             Log.d("BorrowHistoryFragment", "Renew date: " + selectedDate.format(DateTimeFormatter.ISO_DATE) + " recordId: " + record.getRecordId());
-                            renewBook(record.getRecordId(), selectedDate);
+                            renewBook(record.getRecordId(), selectedDate, record.getBook().getTitle());
                         }
                     },
                     calendar.get(Calendar.YEAR),
@@ -197,7 +173,7 @@ public class BorrowHistoryFragment extends Fragment implements BorrowHistoryAdap
         }
     }
 
-    private void renewBook(int recordId, LocalDate renewalDate) {
+    private void renewBook(int recordId, LocalDate renewalDate, String bookTitle) {
         Log.d("BorrowHistoryFragment", "Renew request: recordId=" + recordId + ", selectedDate=" + renewalDate);
         progressBar.setVisibility(View.VISIBLE);
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
@@ -210,6 +186,18 @@ public class BorrowHistoryFragment extends Fragment implements BorrowHistoryAdap
                 if (response.isSuccessful() && response.body() != null && response.body().isStatus()) {
                     Toast.makeText(getContext(), "Gia hạn thành công", Toast.LENGTH_SHORT).show();
                     loadBorrowHistory();
+                    // Send notification on successful renewal
+                    DatabaseHelper dbHelper = new DatabaseHelper(getContext());
+                    UserLoginInfo userLoginInfo = dbHelper.getLoginInfoSQLite();
+                    if (userLoginInfo != null) {
+                        String userId = String.valueOf(userLoginInfo.getUserId());
+                        String title = "Gia hạn thành công";
+                        String message = null;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            message = "Bạn đã gia hạn thành công cuốn sách '" + bookTitle + "' đến ngày " + renewalDate.format(DateTimeFormatter.ISO_DATE) + ".";
+                        }
+                        notificationHelper.createNotification(userId, title, message, NotificationType.RENEWAL_SUCCESS.name());
+                    }
                 } else {
                     String errorMessage = response.body().getMessage();
                     if (response.body() != null) {

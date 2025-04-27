@@ -4,6 +4,7 @@ public enum NotificationType {
     NEW_BOOK("📚"),
     DUE_REMINDER("🔁"),
     PROMOTION("💥"),
+    RENEWAL_SUCCESS("✅"),
     RECOMMENDATION("❤️"),
     ORDER_STATUS("📦"),
     SYSTEM("🕐");

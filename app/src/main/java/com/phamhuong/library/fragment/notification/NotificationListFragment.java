@@ -94,19 +94,23 @@ public class NotificationListFragment extends Fragment implements NotificationAd
     }
     private void filterNotifications(int tabPosition) {
         displayedNotifications.clear();
-        if (allNotifications != null) { // Kiểm tra allNotifications khác null
+        if (allNotifications != null) {
             switch (tabPosition) {
                 case 0: // All
                     displayedNotifications.addAll(allNotifications);
                     break;
-                case 1: // Reserved (Ví dụ: Lọc theo trạng thái hoặc loại thông báo liên quan đến đặt trước)
+                case 1:
                     displayedNotifications.addAll(allNotifications.stream()
-                            .filter(notification -> notification.getType().equals(NotificationType.DUE_REMINDER.name()))
+                            .filter(notification -> notification.getType() == NotificationType.DUE_REMINDER ||
+                                    notification.getType() == NotificationType.RENEWAL_SUCCESS ||
+                                    notification.getType() == NotificationType.ORDER_STATUS)
                             .collect(Collectors.toList()));
                     break;
-                case 2: // Available (Ví dụ: Lọc theo loại thông báo về sách mới)
+                case 2:
                     displayedNotifications.addAll(allNotifications.stream()
-                            .filter(notification -> notification.getType().equals(NotificationType.NEW_BOOK.name()) || notification.getType().equals(NotificationType.PROMOTION.name()) || notification.getType().equals(NotificationType.RECOMMENDATION.name()))
+                            .filter(notification -> notification.getType() == NotificationType.NEW_BOOK ||
+                                    notification.getType() == NotificationType.PROMOTION ||
+                                    notification.getType() == NotificationType.RECOMMENDATION)
                             .collect(Collectors.toList()));
                     break;
                 default:
