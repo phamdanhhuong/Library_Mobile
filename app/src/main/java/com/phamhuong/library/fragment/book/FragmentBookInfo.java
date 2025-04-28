@@ -26,6 +26,7 @@ import com.phamhuong.library.model.RetrofitClient;
 import com.phamhuong.library.model.VoidResponse;
 import com.phamhuong.library.service.APIService;
 import com.phamhuong.library.service.DatabaseHelper;
+import com.phamhuong.library.utils.CustomDialogHelper;
 import com.phamhuong.library.utils.DateFormatter;
 import com.phamhuong.library.utils.NotificationHelper;
 
@@ -71,8 +72,7 @@ public class FragmentBookInfo extends Fragment {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 if (response.isSuccessful() && response.body().isStatus()) {
-                    Toast.makeText(getContext(), "Thêm vào danh sách yêu thích thành công", Toast.LENGTH_SHORT).show();
-
+                    CustomDialogHelper.showWishlistSuccessPopup(getActivity());
                     // Gọi hàm tạo thông báo từ NotificationHelper
                     notificationHelper.createNotification(
                             String.valueOf(userId),
@@ -82,6 +82,7 @@ public class FragmentBookInfo extends Fragment {
                     );
 
                 } else {
+                    CustomDialogHelper.showWishlistFailurePopup(getActivity());
                     Toast.makeText(getContext(), "Thêm vào danh sách yêu thích thất bại", Toast.LENGTH_SHORT).show();
                 }
             }

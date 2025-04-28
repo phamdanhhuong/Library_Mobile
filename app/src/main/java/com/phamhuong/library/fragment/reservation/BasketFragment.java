@@ -31,6 +31,7 @@ import com.phamhuong.library.model.RetrofitClient;
 import com.phamhuong.library.model.UserLoginInfo;
 import com.phamhuong.library.service.APIService;
 import com.phamhuong.library.service.DatabaseHelper;
+import com.phamhuong.library.utils.CustomDialogHelper;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -98,7 +99,7 @@ public class BasketFragment extends Fragment {
                     // Mở DatePickerDialog nếu có sách được chọn
                     showDatePickerDialog();
                 } else {
-                    Toast.makeText(getActivity(), "Làm ơn hãy chọn sách muốn đặt lịch", Toast.LENGTH_SHORT).show();
+                    CustomDialogHelper.showNoBookSelectedForReservationPopup(getActivity());
                 }
             } else {
                 Toast.makeText(getActivity(), "Adapter chưa được khởi tạo", Toast.LENGTH_SHORT).show();
@@ -147,14 +148,21 @@ public class BasketFragment extends Fragment {
                         @Override
                         public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                             if(response.isSuccessful() && response.body() != null){
-                                Toast.makeText(getActivity(), "Đặt lịch thành công", Toast.LENGTH_SHORT).show();
+                                CustomDialogHelper.showReservationSuccessPopup(getActivity());
                                 loadWishListBooks();
+                            }
+                            else {
+                                String errorMessage = "Đặt lịch thất bại!";
+                                if (response.body() != null && response.body().getMessage() != null) {
+                                    errorMessage = response.body().getMessage();
+                                }
+                                CustomDialogHelper.showReservationFailurePopup(getActivity(), errorMessage);
                             }
                         }
 
                         @Override
                         public void onFailure(Call<ApiResponse> call, Throwable t) {
-                            Toast.makeText(getActivity(), "Đặt lịch thất bại", Toast.LENGTH_SHORT).show();
+                            CustomDialogHelper.showReservationFailurePopup(getActivity(), "Lỗi kết nối khi đặt lịch");
                         }
                     });
 

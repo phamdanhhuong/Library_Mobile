@@ -30,6 +30,7 @@ import com.phamhuong.library.model.RetrofitClient;
 import com.phamhuong.library.model.UserLoginInfo;
 import com.phamhuong.library.service.APIService;
 import com.phamhuong.library.service.DatabaseHelper;
+import com.phamhuong.library.utils.CustomDialogHelper;
 import com.phamhuong.library.utils.DateFormatter;
 import com.phamhuong.library.utils.NotificationHelper;
 
@@ -196,6 +197,7 @@ public class BorrowHistoryFragment extends Fragment implements BorrowHistoryAdap
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             message = "Bạn đã gia hạn thành công cuốn sách '" + bookTitle + "' đến ngày " + renewalDate.format(DateTimeFormatter.ISO_DATE) + ".";
                         }
+                        CustomDialogHelper.showRenewSuccessPopup(getContext(), message);
                         notificationHelper.createNotification(userId, title, message, NotificationType.RENEWAL_SUCCESS.name());
                     }
                 } else {
@@ -204,14 +206,14 @@ public class BorrowHistoryFragment extends Fragment implements BorrowHistoryAdap
                         errorMessage = response.body().getMessage();
                         Log.e("BorrowHistoryFragment", "Renew API failed: " + errorMessage);
                     }
-                    Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
+                    CustomDialogHelper.showRenewFailurePopup(getContext(), errorMessage);
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<ApiReponseWithNoData> call, @NonNull Throwable t) {
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(getContext(), "Lỗi kết nối khi gia hạn", Toast.LENGTH_SHORT).show();
+                CustomDialogHelper.showRenewFailurePopup(getContext(), "Lỗi kết nối khi gia hạn");
                 Log.e("BorrowHistoryFragment", "Renew API call failed: " + t.getMessage(), t);
             }
         });
