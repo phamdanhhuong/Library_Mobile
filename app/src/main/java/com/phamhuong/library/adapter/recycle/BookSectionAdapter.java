@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,29 +37,6 @@ public class BookSectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         notifyItemRangeInserted(sections.size() * 2 - 2, 2);
     }
     private void setupSections() {
-        // Add sections
-//        addSection("For you", getSampleBooks());
-//        addSection("Top selling", getSampleBooks());
-//        addSection("New releases", getSampleBooks());
-//        addSection("Top free", getSampleBooks());
-//        addSection("Categories", getSampleBooks());
-//        sections.add(new Section("For you", getSampleBooks()));
-//        sections.add(new Section("Top selling", getSampleBooks()));
-//        sections.add(new Section("New releases", getSampleBooks()));
-//        sections.add(new Section("Top free", getSampleBooks()));
-//        sections.add(new Section("Categories", getSampleBooks()));
-    }
-
-    private List<Book> getSampleBooks() {
-        List<Book> sampleBooks = new ArrayList<>();
-        for (int i = 1; i <= 5; i++) {
-            Book book = new Book();
-            book.setTitle("Book Title " + i);
-            book.setAuthor("Author " + i);
-            // Set other necessary properties of the book here
-            sampleBooks.add(book);
-        }
-        return sampleBooks;
     }
 
     @Override
@@ -97,18 +75,20 @@ public class BookSectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     static class HeaderViewHolder extends RecyclerView.ViewHolder {
         TextView tvTitle;
+        TextView tvViewAllText;
         ImageButton btnViewAll;
 
         HeaderViewHolder(View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tvSectionTitle);
+            tvViewAllText = itemView.findViewById(R.id.tvViewAllText);
             btnViewAll = itemView.findViewById(R.id.btnViewAll);
         }
 
         void bind(String title, Section section, Context context) {
             tvTitle.setText(title);
 
-            btnViewAll.setOnClickListener(v -> {
+            View.OnClickListener viewAllClickListener = v -> {
                 ArrayList<Book> sectionBooks = new ArrayList<>((List<Book>) section.items);
                 AllBooksFragment fragment = AllBooksFragment.newInstance(section.title, sectionBooks);
 
@@ -118,25 +98,72 @@ public class BookSectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                         .replace(R.id.content_frame, fragment)
                         .addToBackStack(null)
                         .commit();
-            });
+            };
+            btnViewAll.setOnClickListener(viewAllClickListener);
+            tvViewAllText.setOnClickListener(viewAllClickListener);
         }
     }
 
 
     static class BooksViewHolder extends RecyclerView.ViewHolder {
         RecyclerView rvBooks;
-
+        ImageButton btnPrevious;
+        ImageButton btnNext;
+        LinearLayoutManager layoutManager;
         BooksViewHolder(View itemView) {
             super(itemView);
             rvBooks = itemView.findViewById(R.id.rvSectionBooks);
             rvBooks.setLayoutManager(new LinearLayoutManager(
                 itemView.getContext(), LinearLayoutManager.HORIZONTAL, false));
+            layoutManager = new LinearLayoutManager(
+                    itemView.getContext(), LinearLayoutManager.HORIZONTAL, false);
+            rvBooks.setLayoutManager(layoutManager);
+            btnPrevious = itemView.findViewById(R.id.btnPrevious); // Tìm nút trong item_book_section.xml
+            btnNext = itemView.findViewById(R.id.btnNext);       // Tìm nút trong item_book_section.xml
+
+            rvBooks.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+                    int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+                    int itemCount = recyclerView.getAdapter() != null ? recyclerView.getAdapter().getItemCount() : 0;
+
+                    if (firstVisibleItemPosition == 0) {
+                        btnPrevious.setVisibility(View.GONE);
+                    } else {
+                        btnPrevious.setVisibility(View.VISIBLE);
+                    }
+
+                    if (lastVisibleItemPosition == itemCount - 1 || itemCount == 0) {
+                        btnNext.setVisibility(View.GONE);
+                    } else {
+                        btnNext.setVisibility(View.VISIBLE);
+                    }
+                }
+            });
+
+            // Thiết lập OnClickListener cho các nút
+            btnPrevious.setOnClickListener(v -> {
+                int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+                if (firstVisibleItemPosition > 0) {
+                    rvBooks.smoothScrollToPosition(firstVisibleItemPosition - 1);
+                }
+            });
+
+            btnNext.setOnClickListener(v -> {
+                int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+                int itemCount = rvBooks.getAdapter().getItemCount();
+                if (lastVisibleItemPosition < itemCount - 1) {
+                    rvBooks.smoothScrollToPosition(lastVisibleItemPosition + 1);
+                }
+            });
         }
 
         void bind(List<?> items) {
             // Set adapter based on item type (books or categories)
             if (items.get(0) instanceof Book) {
-                rvBooks.setAdapter(new BookAdapterRelate(itemView.getContext(), (List<Book>)items));
+                rvBooks.setAdapter(new BookVerticalAdapter(itemView.getContext(), (List<Book>)items));
             } else {
                 // Handle categories
                 //rvBooks.setAdapter(new CategoryAdapter(itemView.getContext(), (List<Category>)items, ));
@@ -153,5 +180,4 @@ public class BookSectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             this.items = items;
         }
     }
-
 }

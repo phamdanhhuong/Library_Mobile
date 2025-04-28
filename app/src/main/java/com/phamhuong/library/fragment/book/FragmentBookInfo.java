@@ -26,6 +26,7 @@ import com.phamhuong.library.model.RetrofitClient;
 import com.phamhuong.library.model.VoidResponse;
 import com.phamhuong.library.service.APIService;
 import com.phamhuong.library.service.DatabaseHelper;
+import com.phamhuong.library.utils.DateFormatter;
 import com.phamhuong.library.utils.NotificationHelper;
 
 import java.io.IOException;
@@ -41,6 +42,7 @@ public class FragmentBookInfo extends Fragment {
     ImageView imgBookCover;
     MaterialButton btnAddToWishlist;
     Book book;
+    TextView tvPublisher, tvPublicationDate, tvQuantity, tvBorrowedCount, tvPrice;
 
     @Nullable
     @Override
@@ -99,6 +101,11 @@ public class FragmentBookInfo extends Fragment {
         tvNumberOfReviews = view.findViewById(R.id.tvNumberOfReviews);
         tvAverageScore = view.findViewById(R.id.tvAverageScore);
         btnAddToWishlist = view.findViewById(R.id.btnAddToWishlist);
+        tvPublisher = view.findViewById(R.id.tvPublisher);
+        tvPublicationDate = view.findViewById(R.id.tvPublicationDate);
+        tvQuantity = view.findViewById(R.id.tvQuantity);
+        tvBorrowedCount = view.findViewById(R.id.tvBorrowedCount);
+        tvPrice = view.findViewById(R.id.tvPrice);
     }
 
     void initData() {
@@ -107,6 +114,21 @@ public class FragmentBookInfo extends Fragment {
             tvBookName.setText(book.getTitle());
             tvBookAuthor.setText(book.getAuthor());
             tvBookDescription.setText(book.getSummary());
+            tvGenre.setText(book.getGenre());
+            //tvNumberOfReviews.setText(book.getNumberOfReviews() + " reviews");
+            tvAverageScore.setText(book.getRating() + " ");
+
+            tvPublisher.setText("Nhà xuất bản: " + book.getPublisher());
+            tvPublicationDate.setText("Ngày xuất bản: " + DateFormatter.formatDate(book.getPublicationDate()));
+            tvQuantity.setText("Còn lại: " + book.getAvailableQuantity() + " / Tổng: " + book.getTotalQuantity());
+            tvBorrowedCount.setText("Đã mượn: " + book.getBorrowedCount());
+
+            if (book.getPrice() > 0) {
+                tvPrice.setText(String.format("%,d₫", book.getPrice()));
+            } else {
+                tvPrice.setText("Free");
+            }
+
             String imageUrl = book.getCoverUrl();
             Glide.with(this).load(imageUrl).into(imgBookCover);
         }

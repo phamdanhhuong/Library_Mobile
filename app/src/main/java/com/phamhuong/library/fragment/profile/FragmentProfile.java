@@ -29,8 +29,6 @@ public class FragmentProfile extends Fragment  {
 
         // Load các Fragment con
         loadFragment(new FragmentUserInfo(), R.id.fragmentUserInfo);
-        loadFragment(new FragmentBrownTo(), R.id.fragmentBrownTo);
-        loadFragment(new FragmentAnalytics(), R.id.fragmentAnalytics);
 
         view.findViewById(R.id.btnBorrowHistory).setOnClickListener(v -> {
             Fragment borrowHistoryFragment = new BorrowHistoryFragment();
