@@ -170,7 +170,7 @@ public class Book implements Serializable {
     }
 
     public boolean isEbook() {
-        return true;
+        return audioUrl == null || audioUrl.isEmpty();
     }
 
     public boolean isAudiobook() {

@@ -23,7 +23,7 @@
                 android:id="@+id/btnBookType"
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
-                android:text="Sách điện tử"
+                android:text="Tất cả"
                 android:textColor="@android:color/black"
                 android:background="@drawable/filter_button_background"
                 android:gravity="center"

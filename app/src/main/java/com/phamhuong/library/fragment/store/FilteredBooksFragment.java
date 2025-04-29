@@ -50,6 +50,11 @@ public abstract class FilteredBooksFragment extends Fragment implements Category
     protected String selectedCategory = null;
     protected boolean isFreeOnly = false;
     protected float minRating = 0f;
+    private static final int BOOK_TYPE_ALL = 0;
+    private static final int BOOK_TYPE_EBOOK = 1;
+    private static final int BOOK_TYPE_AUDIOBOOK = 2;
+
+    private int selectedBookType = BOOK_TYPE_ALL;
 
     @Nullable
     @Override
@@ -147,7 +152,9 @@ public abstract class FilteredBooksFragment extends Fragment implements Category
         filteredBooks = allBooks.stream()
                 .filter(book -> {
                     // Book type filter
-                    if (isEbook != book.isEbook()) return false;
+                    if (selectedBookType == BOOK_TYPE_EBOOK && !book.isEbook()) return false;
+                    if (selectedBookType == BOOK_TYPE_AUDIOBOOK && !book.isAudiobook()) return false;
+
 
                     // Category filter
                     if (selectedCategory != null && !book.getGenre().equals(selectedCategory)) return false;
@@ -191,31 +198,53 @@ public abstract class FilteredBooksFragment extends Fragment implements Category
         CategoryBottomSheetFragment bottomSheetFragment = new CategoryBottomSheetFragment();
         Bundle bundle = new Bundle();
         ArrayList<String> bookTypes = new ArrayList<>();
+        bookTypes.add("Tất cả");
         bookTypes.add("Sách điện tử");
         bookTypes.add("Sách nói");
+
         bundle.putStringArrayList("category_names", bookTypes);
         bundle.putString("title", "Chọn loại sách");
-        bundle.putString("selected_item", isEbook ? "Sách điện tử" : "Sách nói"); // Truyền loại sách đã chọn
+
+        // Xác định tên item đang chọn
+        String selectedTypeText = "Tất cả";
+        if (selectedBookType == BOOK_TYPE_EBOOK) selectedTypeText = "Sách điện tử";
+        else if (selectedBookType == BOOK_TYPE_AUDIOBOOK) selectedTypeText = "Sách nói";
+
+        bundle.putString("selected_item", selectedTypeText);
         bottomSheetFragment.setArguments(bundle);
+
         bottomSheetFragment.setOnCategorySelectedListener(categoryName -> {
-            isEbook = categoryName.equals("Sách điện tử");
+            switch (categoryName) {
+                case "Sách điện tử":
+                    selectedBookType = BOOK_TYPE_EBOOK;
+                    break;
+                case "Sách nói":
+                    selectedBookType = BOOK_TYPE_AUDIOBOOK;
+                    break;
+                default:
+                    selectedBookType = BOOK_TYPE_ALL;
+                    break;
+            }
             btnBookType.setText(categoryName);
-            btnBookType.setSelected(true);
+            btnBookType.setSelected(!categoryName.equals("Tất cả"));
             applyFilters();
         });
+
         bottomSheetFragment.show(getChildFragmentManager(), bottomSheetFragment.getTag());
     }
+
 
     private void showRatingBottomSheet() {
         CategoryBottomSheetFragment bottomSheetFragment = new CategoryBottomSheetFragment();
         Bundle bundle = new Bundle();
         ArrayList<String> ratings = new ArrayList<>();
-        ratings.add("Tất cả");
+        ratings.add("Tất cả xếp hạng");
         ratings.add("4.5★ trở lên");
         ratings.add("4.0★ trở lên");
         bundle.putStringArrayList("category_names", ratings);
         bundle.putString("title", "Chọn xếp hạng");
-        String selectedRatingText = "Tất cả";
+
+        String selectedRatingText = "Tất cả xếp hạng";
         if (minRating == 4.5f) selectedRatingText = "4.5★ trở lên";
         else if (minRating == 4.0f) selectedRatingText = "4.0★ trở lên";
         bundle.putString("selected_item", selectedRatingText); // Truyền xếp hạng đã chọn
@@ -225,7 +254,7 @@ public abstract class FilteredBooksFragment extends Fragment implements Category
                 minRating = 4.5f;
             } else if (rating.equals("4.0★ trở lên")) {
                 minRating = 4.0f;
-            } else {
+            } else { // "Tất cả xếp hạng"
                 minRating = 0f;
             }
             btnRating.setText(rating);
@@ -238,21 +267,33 @@ public abstract class FilteredBooksFragment extends Fragment implements Category
     private void showCategoryBottomSheet(List<Category> categories) {
         CategoryBottomSheetFragment bottomSheetFragment = new CategoryBottomSheetFragment();
         Bundle bundle = new Bundle();
-        ArrayList<String> categoryNames = (ArrayList<String>) categories.stream().map(Category::getGenre).collect(Collectors.toList());
+
+        ArrayList<String> categoryNames = new ArrayList<>();
+        categoryNames.add("Tất cả thể loại");
+        categoryNames.addAll(categories.stream().map(Category::getGenre).collect(Collectors.toList()));
+
         bundle.putStringArrayList("category_names", categoryNames);
         bundle.putString("title", "Chọn thể loại");
-        bundle.putString("selected_item", selectedCategory); // Truyền category đã chọn
 
-        Log.d("CategoryBottomSheet", "selectedCategoryName: " + selectedCategory);
+        String selectedText = selectedCategory != null ? selectedCategory : "Tất cả thể loại";
+        bundle.putString("selected_item", selectedText);
+
         bottomSheetFragment.setArguments(bundle);
         bottomSheetFragment.setOnCategorySelectedListener(categoryName -> {
-            selectedCategory = categoryName;
-            btnCategory.setText(selectedCategory);
-            btnCategory.setSelected(true);
+            if (categoryName.equals("Tất cả thể loại")) {
+                selectedCategory = null;
+                btnCategory.setSelected(false);
+            } else {
+                selectedCategory = categoryName;
+                btnCategory.setSelected(true);
+            }
+            btnCategory.setText(categoryName);
             applyFilters();
         });
+
         bottomSheetFragment.show(getChildFragmentManager(), bottomSheetFragment.getTag());
     }
+
     private int getSelectedCategoryId(String selectedCategoryName, List<Category> categories) {
         if (selectedCategoryName != null) {
             for (Category category : categories) {
