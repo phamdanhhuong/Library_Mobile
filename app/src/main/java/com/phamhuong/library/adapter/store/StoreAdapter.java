@@ -5,7 +5,8 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.phamhuong.library.fragment.recycle.FragmentCategories;
-import com.phamhuong.library.fragment.store.AudiobookFragment;
+import com.phamhuong.library.fragment.book.AudioBookFragment;
+import com.phamhuong.library.fragment.store.AudioBookListFragment;
 import com.phamhuong.library.fragment.store.BestSellerFragment;
 import com.phamhuong.library.fragment.store.FragmentTabEBooks;
 import com.phamhuong.library.fragment.store.NewReleasesFragment;
@@ -24,7 +25,7 @@ public class StoreAdapter extends FragmentStateAdapter {
             case 0:
                 return new FragmentTabEBooks();
             case 1:
-                return new AudiobookFragment();
+                return new AudioBookListFragment();
             case 2:
                 return new FragmentCategories();
             case 3:

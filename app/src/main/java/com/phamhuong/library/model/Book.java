@@ -43,6 +43,12 @@ public class Book implements Serializable {
     @SerializedName("price")
     private int price;
 
+    @SerializedName("audioUrl")
+    private String audioUrl; // Add this field
+
+    @SerializedName("audioDuration")
+    private Integer audioDuration;
+
     public int getId() {
         return id;
     }
@@ -147,11 +153,27 @@ public class Book implements Serializable {
         this.price = price;
     }
 
+    public String getAudioUrl() {
+        return audioUrl;
+    }
+
+    public void setAudioUrl(String audioUrl) {
+        this.audioUrl = audioUrl;
+    }
+
+    public Integer getAudioDuration() {
+        return audioDuration;
+    }
+
+    public void setAudioDuration(Integer audioDuration) {
+        this.audioDuration = audioDuration;
+    }
+
     public boolean isEbook() {
         return true;
     }
 
     public boolean isAudiobook() {
-        return false;
+        return audioUrl != null && !audioUrl.isEmpty(); // Check if audioUrl is present
     }
 }

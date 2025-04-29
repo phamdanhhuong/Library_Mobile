@@ -26,7 +26,7 @@ public class CustomDialogHelper {
         ImageView imgIcon = customView.findViewById(R.id.imgPopup);
         TextView dialogTitle = customView.findViewById(R.id.dialogTitle);
         TextView dialogMessage = customView.findViewById(R.id.dialogMessage);
-        Button positiveButton = customView.findViewById(R.id.dialogPositiveButton);
+        Button positiveButton = customView.findViewById(R.id.okButton);
 
         // Thiết lập dữ liệu cho các view
         dialogTitle.setText(title);
@@ -50,7 +50,7 @@ public class CustomDialogHelper {
         ImageView imgIcon = view.findViewById(R.id.imgPopup);
         TextView dialogTitle = view.findViewById(R.id.dialogTitle);
         TextView dialogMessage = view.findViewById(R.id.dialogMessage);
-        Button positiveButton = view.findViewById(R.id.dialogPositiveButton);
+        Button positiveButton = view.findViewById(R.id.okButton);
 
         imgIcon.setImageResource(R.drawable.ic_wishlist_added); // Thay thế bằng icon wishlist thành công
         dialogTitle.setText("Đã thêm vào Yêu thích!");
@@ -70,7 +70,7 @@ public class CustomDialogHelper {
         ImageView imgIcon = view.findViewById(R.id.imgPopup);
         TextView dialogTitle = view.findViewById(R.id.dialogTitle);
         TextView dialogMessage = view.findViewById(R.id.dialogMessage);
-        Button positiveButton = view.findViewById(R.id.dialogPositiveButton);
+        Button positiveButton = view.findViewById(R.id.okButton);
 
         imgIcon.setImageResource(R.drawable.ic_wishlist_failed); // Thay thế bằng icon wishlist thất bại
         dialogTitle.setText("Thêm thất bại!");
@@ -91,7 +91,7 @@ public class CustomDialogHelper {
         ImageView imgIcon = view.findViewById(R.id.imgPopup);
         TextView dialogTitle = view.findViewById(R.id.dialogTitle);
         TextView dialogMessage = view.findViewById(R.id.dialogMessage);
-        Button positiveButton = view.findViewById(R.id.dialogPositiveButton);
+        Button positiveButton = view.findViewById(R.id.okButton);
 
         imgIcon.setImageResource(R.drawable.ic_renew_success);
         dialogTitle.setText("Gia hạn thành công!");
@@ -111,7 +111,7 @@ public class CustomDialogHelper {
         ImageView imgIcon = view.findViewById(R.id.imgPopup);
         TextView dialogTitle = view.findViewById(R.id.dialogTitle);
         TextView dialogMessage = view.findViewById(R.id.dialogMessage);
-        Button positiveButton = view.findViewById(R.id.dialogPositiveButton);
+        Button positiveButton = view.findViewById(R.id.okButton);
 
         imgIcon.setImageResource(R.drawable.ic_renew_failure);
         dialogTitle.setText("Gia hạn thất bại!");
@@ -130,7 +130,7 @@ public class CustomDialogHelper {
         ImageView imgIcon = view.findViewById(R.id.imgPopup);
         TextView dialogTitle = view.findViewById(R.id.dialogTitle);
         TextView dialogMessage = view.findViewById(R.id.dialogMessage);
-        Button dialogButton = view.findViewById(R.id.dialogPositiveButton);
+        Button dialogButton = view.findViewById(R.id.okButton);
 
         imgIcon.setImageResource(R.drawable.ic_reservation_success);
         dialogTitle.setText("Đặt lịch thành công!");
@@ -150,7 +150,7 @@ public class CustomDialogHelper {
         ImageView imgIcon = view.findViewById(R.id.imgPopup);
         TextView dialogTitle = view.findViewById(R.id.dialogTitle);
         TextView dialogMessage = view.findViewById(R.id.dialogMessage);
-        Button dialogButton = view.findViewById(R.id.dialogPositiveButton);
+        Button dialogButton = view.findViewById(R.id.okButton);
 
         imgIcon.setImageResource(R.drawable.ic_reservation_failed);
         dialogTitle.setText("Đặt lịch thất bại!");
@@ -169,7 +169,7 @@ public class CustomDialogHelper {
         ImageView imgIcon = view.findViewById(R.id.imgPopup);
         TextView dialogTitle = view.findViewById(R.id.dialogTitle);
         TextView dialogMessage = view.findViewById(R.id.dialogMessage);
-        Button dialogButton = view.findViewById(R.id.dialogPositiveButton);
+        Button dialogButton = view.findViewById(R.id.okButton);
 
         imgIcon.setImageResource(R.drawable.ic_warning); // Cần tạo icon warning
         dialogTitle.setText("Chưa chọn sách!");

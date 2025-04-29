@@ -4,4 +4,12 @@
     <string name="navigation_drawer_close">Đóng menu</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="speed_options">
+        <item>0.5x</item>
+        <item>1x</item>
+        <item>1.25x</item>
+        <item>1.5x</item>
+        <item>2x</item>
+    </string-array>
+
 </resources>

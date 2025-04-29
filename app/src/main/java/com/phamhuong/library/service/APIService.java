@@ -3,6 +3,7 @@ package com.phamhuong.library.service;
 import com.phamhuong.library.model.ApiReponseWithNoData;
 import com.phamhuong.library.model.ApiResponse;
 import com.phamhuong.library.model.ApiResponseT;
+import com.phamhuong.library.model.AudioUrlResponse;
 import com.phamhuong.library.model.Book;
 import com.phamhuong.library.model.BorrowingRecord;
 import com.phamhuong.library.model.Category;
@@ -112,4 +113,16 @@ public interface APIService {
 
     @POST("borrowings/{recordId}/renew")
     Call<ApiReponseWithNoData> renewBorrowingRecord(@Path("recordId") Integer recordId, @Query("renewalDate") LocalDate renewalDate);
+
+    @GET("/books/audiobooks")
+    Call<ApiResponseT<List<Book>>> getAllAudioBooks();
+
+    @GET("/books/audiobooks/categories/{genre}")
+    Call<ApiResponse> getAudioBooksByGenre(@Path("genre") String genre);
+
+    @GET("/books/audiobooks/recent")
+    Call<ApiResponse> getRecentAudioBooks();
+
+    @GET("/books/{bookId}/audio-url")
+    Call<AudioUrlResponse> getAudioUrl(@Path("bookId") int bookId);
 }
