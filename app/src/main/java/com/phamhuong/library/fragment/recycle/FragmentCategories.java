@@ -101,8 +101,14 @@ public class FragmentCategories extends Fragment {
 
     private void loadCategories(boolean isEbook) {
         APIService apiService = RetrofitClient.getRetrofit().create(APIService.class);
-        Call<List<Category>> call = apiService.getCategoryAll(); // Có thể sửa thành API riêng cho Ebook/Audiobook nếu cần
+        Call<List<Category>> call;
 
+        // Nếu isEbook là true, gọi API dành cho Ebook, ngược lại gọi API dành cho Audiobook
+        if (isEbook) {
+            call = apiService.getEbookCategories(); // API riêng cho Ebook
+        } else {
+            call = apiService.getAudiobookCategories(); // API riêng cho Audiobook
+        }
         call.enqueue(new Callback<List<Category>>() {
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
@@ -122,7 +128,10 @@ public class FragmentCategories extends Fragment {
     }
     private void fetchBooksByCategory(Category category) {
         APIService apiService = RetrofitClient.getRetrofit().create(APIService.class);
-        Call<List<Book>> call = apiService.getBookByCategory(category.getGenre());
+
+        // Gửi type tương ứng: "ebook" hoặc "audiobook"
+        String type = isEbookSelected ? "ebook" : "audiobook";
+        Call<List<Book>> call = apiService.getBooksByCategoryAndType(category.getGenre(), type);
 
         call.enqueue(new Callback<List<Book>>() {
             @Override

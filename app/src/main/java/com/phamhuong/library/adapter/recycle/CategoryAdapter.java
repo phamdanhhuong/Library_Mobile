@@ -1,5 +1,6 @@
 package com.phamhuong.library.adapter.recycle;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,7 +45,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         holder.bind(category);
     }
 
-            @Override
+    @Override
     public int getItemCount() {
         return categories.size();
     }
@@ -61,6 +62,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             tvBookCount = itemView.findViewById(R.id.tvBookCount);
         }
 
+        @SuppressLint("SetTextI18n")
         void bind(Category category) {
             tvCategoryName.setText(category.getGenre());
             tvBookCount.setText(category.getBookCount() + " books");

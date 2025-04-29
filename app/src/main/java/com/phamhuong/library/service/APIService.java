@@ -125,4 +125,13 @@ public interface APIService {
 
     @GET("/books/{bookId}/audio-url")
     Call<AudioUrlResponse> getAudioUrl(@Path("bookId") int bookId);
+
+    @GET("/books/audiobooks/categories")
+    Call<List<Category>> getAudiobookCategories();
+
+    @GET("/books/ebooks/categories")
+    Call<List<Category>> getEbookCategories();
+
+    @GET("/books/by-category-and-type")
+    Call<List<Book>> getBooksByCategoryAndType(@Query("category") String category, @Query("type") String type);
 }
