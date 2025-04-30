@@ -23,7 +23,11 @@
             android:name="com.phamhuong.library.fragment.home.FragmentExplore"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragmentAnalyticsPage"
+            android:name="com.phamhuong.library.fragment.analytics.FragmentAnalytics"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
         <!-- Fragment Recommended -->
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentRecommended"

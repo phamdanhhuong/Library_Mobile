@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp"
+    android:padding="8dp"
+    android:layout_margin="8dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Tiêu đề -->
+        <TextView
+            android:id="@+id/tvNewBooksTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sách Mới Nhất"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Bảng sách mới -->
+        <TableLayout
+            android:id="@+id/tableNewBooks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="1">
+
+            <!-- Hàng tiêu đề -->
+            <TableRow>
+                <TextView
+                    android:text="STT"
+                    android:textStyle="bold"
+                    android:padding="8dp" />
+                <TextView
+                    android:text="Tên sách"
+                    android:textStyle="bold"
+                    android:padding="8dp" />
+                <TextView
+                    android:text="Ngày thêm"
+                    android:textStyle="bold"
+                    android:padding="8dp" />
+            </TableRow>
+
+            <!-- Các hàng sách mới (ví dụ tĩnh) -->
+            <TableRow>
+                <TextView android:text="1" android:padding="8dp" />
+                <TextView android:text="Sách A" android:padding="8dp" />
+                <TextView android:text="28/04" android:padding="8dp" />
+            </TableRow>
+            <TableRow>
+                <TextView android:text="2" android:padding="8dp" />
+                <TextView android:text="Sách B" android:padding="8dp" />
+                <TextView android:text="27/04" android:padding="8dp" />
+            </TableRow>
+            <TableRow>
+                <TextView android:text="3" android:padding="8dp" />
+                <TextView android:text="Sách C" android:padding="8dp" />
+                <TextView android:text="27/04" android:padding="8dp" />
+            </TableRow>
+            <TableRow>
+                <TextView android:text="4" android:padding="8dp" />
+                <TextView android:text="Sách D" android:padding="8dp" />
+                <TextView android:text="26/04" android:padding="8dp" />
+            </TableRow>
+            <TableRow>
+                <TextView android:text="5" android:padding="8dp" />
+                <TextView android:text="Sách E" android:padding="8dp" />
+                <TextView android:text="25/04" android:padding="8dp" />
+            </TableRow>
+        </TableLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.phamhuong.library.R;
+import com.phamhuong.library.fragment.analytics.FragmentAnalytics;
 
 public class HomeFragmentNew extends Fragment {
 
@@ -23,6 +24,7 @@ public class HomeFragmentNew extends Fragment {
         // Load các Fragment con
         loadFragment(new FragmentAds(), R.id.fragmentAds);
         loadFragment(new FragmentExplore(), R.id.fragmentExplore);
+        loadFragment(new FragmentAnalytics(), R.id.fragmentAnalyticsPage);
         loadFragment(new FragmentRecommended(), R.id.fragmentRecommended);
         loadFragment(new FragmentTrending(), R.id.fragmentTrending);
 

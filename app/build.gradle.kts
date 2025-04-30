@@ -56,5 +56,6 @@ dependencies {
     implementation ("com.google.android.exoplayer:exoplayer-hls:2.18.7")
     implementation ("com.google.android.exoplayer:exoplayer-dash:2.18.7")
     implementation ("androidx.lifecycle:lifecycle-viewmodel:2.8.7")
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
 }

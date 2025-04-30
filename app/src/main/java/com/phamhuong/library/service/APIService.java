@@ -4,6 +4,7 @@ import com.phamhuong.library.model.ApiReponseWithNoData;
 import com.phamhuong.library.model.ApiResponse;
 import com.phamhuong.library.model.ApiResponseT;
 import com.phamhuong.library.model.AudioUrlResponse;
+import com.phamhuong.library.model.AvailableTotalBooks;
 import com.phamhuong.library.model.Book;
 import com.phamhuong.library.model.BorrowingRecord;
 import com.phamhuong.library.model.Category;
@@ -12,6 +13,7 @@ import com.phamhuong.library.model.InfoResponse;
 import com.phamhuong.library.model.LoginRequest;
 import com.phamhuong.library.model.LoginResponse;
 import com.phamhuong.library.model.Notification;
+import com.phamhuong.library.model.PopularGenre;
 import com.phamhuong.library.model.RegisterRequest;
 import com.phamhuong.library.model.ReservationRequest;
 import com.phamhuong.library.model.ResetPassRequest;
@@ -23,6 +25,7 @@ import com.phamhuong.library.model.VoidResponse;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -134,4 +137,16 @@ public interface APIService {
 
     @GET("/books/by-category-and-type")
     Call<List<Book>> getBooksByCategoryAndType(@Query("category") String category, @Query("type") String type);
+
+    @GET("/info/total")
+    Call<Integer> getTotalUsers();
+
+    @GET("/books/top-borrowed/monthly")
+    Call<ApiResponseT<List<Book>>> getTopBorrowedMonthly(@Query("type") String type);
+
+    @GET("/books/analytics/popular-genres")
+    Call<ApiResponseT<List<PopularGenre>>> getPopularGenres();
+
+    @GET("/books/analytics/available-total-books")
+    Call<ApiResponseT<AvailableTotalBooks>> getAvailableTotalBooks();
 }
