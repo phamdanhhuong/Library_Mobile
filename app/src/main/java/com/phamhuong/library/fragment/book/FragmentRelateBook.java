@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.phamhuong.library.R;
 import com.phamhuong.library.adapter.home.BookAdapterRelate;
 import com.phamhuong.library.adapter.recycle.BookHorizontalAdapter;
+import com.phamhuong.library.adapter.recycle.BookSectionAdapter;
 import com.phamhuong.library.adapter.recycle.BookVerticalAdapter;
 import com.phamhuong.library.model.Book;
 import com.phamhuong.library.model.RetrofitClient;
@@ -33,10 +34,8 @@ public class FragmentRelateBook extends Fragment {
     private APIService apiService;
     String token = "";
     TextView tvByAuthor;
-    private RecyclerView recyclerViewSameAuthor, recyclerViewSameCategory;
-    private BookVerticalAdapter adapterSameAuthor, adapterSameCategory;
-    private List<Book> booksSameAuthor= new ArrayList<>(), booksSameCategory = new ArrayList<>();
-    ;
+    private RecyclerView recyclerViewRelate;
+    private BookSectionAdapter sectionAdapter;
 
     public static FragmentRelateBook newInstance(String sameAuthor, String sameCategory) {
         FragmentRelateBook fragment = new FragmentRelateBook();
@@ -53,43 +52,34 @@ public class FragmentRelateBook extends Fragment {
         View view = inflater.inflate(R.layout.fragment_relate_book, container, false);
         initView(view);
         initData();
-
-        if (booksSameAuthor != null) {
-            adapterSameAuthor = new BookVerticalAdapter(getContext(), booksSameAuthor);
-            recyclerViewSameAuthor.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-            recyclerViewSameAuthor.setAdapter(adapterSameAuthor);
-        }
-
-        if (booksSameCategory != null) {
-            adapterSameCategory = new BookVerticalAdapter(getContext(), booksSameCategory);
-            recyclerViewSameCategory.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-            recyclerViewSameCategory.setAdapter(adapterSameCategory);
-        }
+        setupRecyclerView();
         return view;
     }
 
     private void initView(View view) {
-        tvByAuthor = view.findViewById(R.id.tvByAuthor);
-        recyclerViewSameAuthor = view.findViewById(R.id.recyclerViewSameAuthor);
-        recyclerViewSameCategory = view.findViewById(R.id.recyclerViewSameCategory);
+        recyclerViewRelate = view.findViewById(R.id.recyclerViewRelate);
     }
 
     private void initData() {
+        apiService = RetrofitClient.getRetrofit().create(APIService.class);
         getBooksByCategory(getArguments().getString("sameCategory"));
         getBooksByAuthor(getArguments().getString("sameAuthor"));
 
     }
+    private void setupRecyclerView() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerViewRelate.setLayoutManager(layoutManager);
+
+        sectionAdapter = new BookSectionAdapter(getContext());
+        recyclerViewRelate.setAdapter(sectionAdapter);
+    }
     private void getBooksByAuthor(String author) {
-        tvByAuthor.setText("Bởi " + author);
-        apiService = RetrofitClient.getRetrofit().create(APIService.class);
         apiService.getBooksByAuthor(author).enqueue(new Callback<List<Book>>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    booksSameAuthor.clear();
-                    booksSameAuthor.addAll(response.body());
-                    adapterSameAuthor.notifyDataSetChanged();
+                    sectionAdapter.addSection("Bởi " + author, response.body());
                 } else {
                     Toast.makeText(getContext(), "Không thể tải danh sách sách", Toast.LENGTH_SHORT).show();
                 }
@@ -103,14 +93,11 @@ public class FragmentRelateBook extends Fragment {
     }
 
     private void getBooksByCategory(String category) {
-        apiService = RetrofitClient.getRetrofit().create(APIService.class);
         apiService.getBookByCategory(category).enqueue(new Callback<List<Book>>() {
             @Override
             public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    booksSameCategory.clear();
-                    booksSameCategory.addAll(response.body());
-                    adapterSameCategory.notifyDataSetChanged();
+                    sectionAdapter.addSection("Sách tương tự", response.body());
                 } else {
                     Toast.makeText(getContext(), "Không thể tải danh sách sách", Toast.LENGTH_SHORT).show();
                 }

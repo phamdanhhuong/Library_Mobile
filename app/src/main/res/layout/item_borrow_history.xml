@@ -100,7 +100,10 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="8dp"
                     android:text="Gia hạn"
-                    android:textSize="12sp" />
+                    android:textColor="@color/onSurface"
+                    app:backgroundTint="@null"
+                    android:background="@drawable/bg_category_chip_selected"
+                    android:textSize="10sp" />
             </LinearLayout>
 
             <TextView

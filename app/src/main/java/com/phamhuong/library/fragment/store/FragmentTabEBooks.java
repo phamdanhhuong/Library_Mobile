@@ -70,7 +70,7 @@ public class FragmentTabEBooks extends Fragment {
     }
 
     private void fetchNewReleases() {
-        Call<List<Book>> call = apiService.getAllBooks();
+        Call<List<Book>> call = apiService.getNewReleases();
         call.enqueue(new Callback<List<Book>>() {
             @Override
             public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
@@ -87,7 +87,7 @@ public class FragmentTabEBooks extends Fragment {
     }
 
     private void fetchTopSelling() {
-        Call<List<Book>> call = apiService.getAllBooks();
+        Call<List<Book>> call = apiService.getTopSellingBooks();
         call.enqueue(new Callback<List<Book>>() {
             @Override
             public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
@@ -104,7 +104,7 @@ public class FragmentTabEBooks extends Fragment {
     }
 
     private void fetchForYou() {
-        Call<List<Book>> call = apiService.getAllBooks();
+        Call<List<Book>> call = apiService.getRecommendedBooks();
         call.enqueue(new Callback<List<Book>>() {
             @Override
             public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
@@ -121,7 +121,7 @@ public class FragmentTabEBooks extends Fragment {
     }
 
     private void fetchFreeBooks() {
-        Call<List<Book>> call = apiService.getAllBooks();
+        Call<List<Book>> call = apiService.getFreeBooks();
         call.enqueue(new Callback<List<Book>>() {
             @Override
             public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {

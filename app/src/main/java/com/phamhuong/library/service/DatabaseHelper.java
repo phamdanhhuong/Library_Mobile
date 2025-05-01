@@ -10,7 +10,7 @@ import com.phamhuong.library.model.UserLoginInfo;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "login_info.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public static final String TABLE_LOGIN = "login";
     public static final String COLUMN_USERNAME = "username";
@@ -19,6 +19,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_EMAIL = "email";
     public static final String COLUMN_PASSWORD = "password";
     public static final String COLUMN_TOKEN = "token";
+    public static final String COLUMN_AVATAR_URL = "avatar_url";
 
     private static final String SQL_CREATE_LOGIN_TABLE =
             "CREATE TABLE " + TABLE_LOGIN + " (" +
@@ -27,7 +28,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COLUMN_PASSWORD + " TEXT, " +
                     COLUMN_FULLNAME + " TEXT, " +
                     COLUMN_EMAIL + " TEXT, " +
-                    COLUMN_TOKEN + " TEXT)";
+                    COLUMN_TOKEN + " TEXT, " +
+                    COLUMN_AVATAR_URL + " TEXT)";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -40,6 +42,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (oldVersion < 2) {
+            db.execSQL("ALTER TABLE " + TABLE_LOGIN + " ADD COLUMN " + COLUMN_AVATAR_URL + " TEXT");
+        }
         // Xử lý nâng cấp cơ sở dữ liệu nếu cần
         // Trong trường hợp đơn giản này, chúng ta có thể xóa bảng cũ và tạo lại
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_LOGIN);
@@ -81,19 +86,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String fullName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_FULLNAME));
             String email = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_EMAIL));
             String token = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TOKEN));
-            loginInfo = new UserLoginInfo(userId, username, password, fullName, email, token);
+            String avatarUrl = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_AVATAR_URL)); // Lấy avatarUrl
+            loginInfo = new UserLoginInfo(userId, username, password, fullName, email, token, avatarUrl);
             cursor.close();
             db.close();
         }
         return loginInfo;
     }
 
-    public int updateLoginInfoSQLite(int userId, String fullName, String email, String usernameToUpdate) {
+    public int updateLoginInfoSQLite(int userId, String fullName, String email, String usernameToUpdate, String avatarUrl) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_FULLNAME, fullName);
         values.put(COLUMN_EMAIL, email);
         values.put(COLUMN_USERID, userId);
+        values.put(COLUMN_AVATAR_URL, avatarUrl);
 
         // Cập nhật hàng trong bảng login dựa trên username
         int rowsAffected = db.update(

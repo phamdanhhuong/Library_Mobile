@@ -4,15 +4,17 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp"
-    android:layout_marginTop="80dp">
+    android:layout_marginTop="80dp"
+    android:background="@color/onPrimary">
 
     <!-- Avatar -->
     <ImageView
         android:id="@+id/imgUserAvatar"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/ic_avatar"
+        android:src="@drawable/avatar1"
+        android:background="@drawable/circle_background"
         android:scaleType="centerCrop"/>
 
     <!-- Tên người dùng -->
@@ -22,7 +24,7 @@
         android:layout_height="wrap_content"
         android:text="User Name"
         android:textSize="18sp"
-        android:textColor="@android:color/white"
+        android:textColor="@color/onSurface"
         android:textStyle="bold"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="8dp"/>
@@ -34,6 +36,6 @@
         android:layout_height="wrap_content"
         android:text="user@example.com"
         android:textSize="14sp"
-        android:textColor="@android:color/white"
+        android:textColor="@color/onSurface"
         android:layout_gravity="center_horizontal"/>
 </LinearLayout>

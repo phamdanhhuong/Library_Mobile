@@ -78,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         UserLoginInfo userLoginInfo = dbHelper.getLoginInfoSQLite();
 
-        if (isRemembered) {
+        if (isRemembered && userLoginInfo != null) {
             String savedUsername = userLoginInfo.username;
             String savedPassword = userLoginInfo.password;
             txtUsername.setText(savedUsername);

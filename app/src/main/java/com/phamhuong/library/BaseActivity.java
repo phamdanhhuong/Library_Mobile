@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
@@ -57,6 +59,7 @@ public class BaseActivity extends AppCompatActivity {
     SearchView searchView;
     TextView txtFullName;
     TextView txtUserEmail;
+    ImageView imgAvatarHeader;
     APIService apiService;
 
     @SuppressLint("MissingInflatedId")
@@ -102,6 +105,7 @@ public class BaseActivity extends AppCompatActivity {
         View headerView = navigationView.getHeaderView(0);
         txtFullName = headerView.findViewById(R.id.txtFullName);
         txtUserEmail = headerView.findViewById(R.id.txtUserEmail);
+        imgAvatarHeader = headerView.findViewById(R.id.imgUserAvatar);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar,
@@ -232,7 +236,9 @@ public class BaseActivity extends AppCompatActivity {
                 if(body!=null){
                     txtFullName.setText(body.getFull_name());
                     txtUserEmail.setText(body.getEmail());
-                    dbHelper.updateLoginInfoSQLite(body.getId(), body.getFull_name(), body.getEmail(),userLoginInfo.username);
+                    String avatarUrl = body.getAvatar();
+                    dbHelper.updateLoginInfoSQLite(body.getId(), body.getFull_name(), body.getEmail(),userLoginInfo.username,avatarUrl);
+                    updateAvatarHeader(avatarUrl);
 
                     int userId = body.getId();
                     NotificationHelper notificationHelper = new NotificationHelper(getApplicationContext());
@@ -247,5 +253,16 @@ public class BaseActivity extends AppCompatActivity {
                 Toast.makeText(BaseActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+    private void updateAvatarHeader(String avatarUrl) {
+        if (imgAvatarHeader != null && avatarUrl != null && !avatarUrl.isEmpty()) {
+            Glide.with(this)
+                    .load(avatarUrl)
+                    .placeholder(R.drawable.avatar1) // Placeholder image
+                    .error(R.drawable.avatar1)       // Error image
+                    .into(imgAvatarHeader);
+        } else if (imgAvatarHeader != null) {
+            imgAvatarHeader.setImageResource(R.drawable.avatar1); // Set default avatar if URL is null or empty
+        }
     }
 }

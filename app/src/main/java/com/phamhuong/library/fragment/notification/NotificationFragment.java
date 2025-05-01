@@ -47,13 +47,13 @@ public class NotificationFragment extends Fragment {
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
             switch (position) {
                 case 0:
-                    tab.setText("All");
+                    tab.setText("Tất cả");
                     break;
                 case 1:
-                    tab.setText("Reserved");
+                    tab.setText("Đặt lịch");
                     break;
                 case 2:
-                    tab.setText("Available");
+                    tab.setText("Của bạn");
                     break;
             }
         }).attach();

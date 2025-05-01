@@ -4,45 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp"
     android:background="@android:color/white"
     android:clipToPadding="false">
 
-    <!-- Danh sách sách cùng tác giả -->
-    <TextView
-        android:id="@+id/tvByAuthor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Bởi"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textColor="@android:color/black"
-        android:layout_marginBottom="8dp"/>
-
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewSameAuthor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:overScrollMode="never"
-        android:scrollbars="none"
-        android:nestedScrollingEnabled="false"
-        android:paddingBottom="8dp"
-        android:clipToPadding="false"/>
-
-    <!-- Danh sách sách cùng thể loại -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sách tương tự"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textColor="@android:color/black"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="8dp"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewSameCategory"
+        android:id="@+id/recyclerViewRelate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"

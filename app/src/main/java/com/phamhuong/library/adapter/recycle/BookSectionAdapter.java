@@ -162,11 +162,17 @@ public class BookSectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         void bind(List<?> items) {
             // Set adapter based on item type (books or categories)
-            if (items.get(0) instanceof Book) {
-                rvBooks.setAdapter(new BookVerticalAdapter(itemView.getContext(), (List<Book>)items));
+            if (items != null && !items.isEmpty()) { // Check if the list is not null and not empty
+                if (items.get(0) instanceof Book) {
+                    rvBooks.setAdapter(new BookVerticalAdapter(itemView.getContext(), (List<Book>)items));
+                } else {
+                    // Handle categories
+                    //rvBooks.setAdapter(new CategoryAdapter(itemView.getContext(), (List<Category>)items, ));
+                }
             } else {
-                // Handle categories
-                //rvBooks.setAdapter(new CategoryAdapter(itemView.getContext(), (List<Category>)items, ));
+                // Handle the case where the items list is empty
+                // You might want to set a default adapter or hide the RecyclerView
+                rvBooks.setAdapter(null); // Or set an empty adapter
             }
         }
     }

@@ -73,14 +73,6 @@ public class FragmentAnalytics extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Get references to TextViews
-        totalBooksTextView = view.findViewById(R.id.analyticsTotalBooksTextView);
-        totalUsersTextView = view.findViewById(R.id.analyticsTotalUsersTextView);
-        totalGenresTextView = view.findViewById(R.id.analyticsTotalGenresTextView);
-        imgTop1 = view.findViewById(R.id.imgTop1);
-        imgTop2 = view.findViewById(R.id.imgTop2);
-        imgTop3 = view.findViewById(R.id.imgTop3);
-        popularGenresPieChart = view.findViewById(R.id.analyticsPopularGenresPieChart);
-        availableTotalPieChart = view.findViewById(R.id.analyticsAvailableTotalPieChart);
         btnEbook = view.findViewById(R.id.btnEbook);
         btnAudiobook = view.findViewById(R.id.btnAudiobook);
 
@@ -221,65 +213,70 @@ public class FragmentAnalytics extends Fragment {
         call.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<ApiResponseT<List<PopularGenre>>> call, @NonNull Response<ApiResponseT<List<PopularGenre>>> response) {
-                if (response.isSuccessful() && response.body() != null && response.body().isStatus()) {
-                    List<PopularGenre> popularGenresList = response.body().getData();
-                    if (popularGenresList != null && !popularGenresList.isEmpty()) {
-                        displayPopularGenresChart(popularGenresList);
+                if (isAdded()) { // Check if Fragment is attached
+                    if (response.isSuccessful() && response.body() != null && response.body().isStatus()) {
+                        List<PopularGenre> popularGenresList = response.body().getData();
+                        if (popularGenresList != null && !popularGenresList.isEmpty()) {
+                            displayPopularGenresChart(popularGenresList);
+                        } else {
+                            Log.w("FragmentAnalytics", "No popular genres data received.");
+                        }
                     } else {
-                        Log.w("FragmentAnalytics", "No popular genres data received.");
+                        Log.e("FragmentAnalytics", "Failed to load popular genres: " + response.message());
+                        Toast.makeText(requireContext(), "Không thể tải thể loại phổ biến", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Log.e("FragmentAnalytics", "Failed to load popular genres: " + response.message());
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<ApiResponseT<List<PopularGenre>>> call, @NonNull Throwable t) {
-                Log.e("FragmentAnalytics", "Error loading popular genres: " + t.getMessage());
+                if (isAdded()) { // Check if Fragment is attached
+                    Log.e("FragmentAnalytics", "Error loading popular genres: " + t.getMessage());
+                    Toast.makeText(requireContext(), "Lỗi mạng khi tải thể loại phổ biến", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
 
     private void displayPopularGenresChart(List<PopularGenre> popularGenresList) {
-        ArrayList<PieEntry> entries = new ArrayList<>();
-        ArrayList<String> labels = new ArrayList<>();
+        if (isAdded()) { // Check if Fragment is attached
+            ArrayList<PieEntry> entries = new ArrayList<>();
+            ArrayList<String> labels = new ArrayList<>();
 
-        for (PopularGenre popularGenre : popularGenresList) {
-            entries.add(new PieEntry(popularGenre.getCount(), popularGenre.getGenre()));
+            for (PopularGenre popularGenre : popularGenresList) {
+                entries.add(new PieEntry(popularGenre.getCount(), popularGenre.getGenre()));
+            }
+
+            PieDataSet dataSet = new PieDataSet(entries, "Thể loại");
+            dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+            dataSet.setValueTextSize(12f);
+            dataSet.setValueTextColor(Color.WHITE);
+            dataSet.setSliceSpace(3f);
+            dataSet.setSelectionShift(5f);
+
+            PieData pieData = new PieData(dataSet);
+            pieData.setValueFormatter(new PercentFormatter(popularGenresPieChart));
+
+            popularGenresPieChart.setData(pieData);
+            popularGenresPieChart.getDescription().setEnabled(false);
+            popularGenresPieChart.setDrawHoleEnabled(true);
+            popularGenresPieChart.setHoleColor(Color.WHITE);
+            popularGenresPieChart.setHoleRadius(58f);
+            popularGenresPieChart.setTransparentCircleRadius(61f);
+            popularGenresPieChart.setDrawEntryLabels(true);
+            popularGenresPieChart.setEntryLabelColor(Color.BLACK);
+            popularGenresPieChart.setEntryLabelTextSize(12f);
+            popularGenresPieChart.animateY(1000, Easing.EaseInOutQuad);
+            popularGenresPieChart.getLegend().setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+            popularGenresPieChart.getLegend().setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
+            popularGenresPieChart.getLegend().setOrientation(Legend.LegendOrientation.HORIZONTAL);
+            popularGenresPieChart.getLegend().setDrawInside(false);
+            popularGenresPieChart.invalidate();
         }
-
-        PieDataSet dataSet = new PieDataSet(entries, "");
-        dataSet.setColors(ColorTemplate.MATERIAL_COLORS); // Use predefined color template
-        dataSet.setValueTextSize(12f);
-        dataSet.setValueTextColor(Color.WHITE);
-        dataSet.setSliceSpace(3f);
-        dataSet.setSelectionShift(5f);
-
-        PieData pieData = new PieData(dataSet);
-        pieData.setValueFormatter(new PercentFormatter(popularGenresPieChart)); // Use the BarChart for formatting as it's available
-
-        popularGenresPieChart.setData(pieData);
-
-        // Customize the chart's appearance (optional)
-        popularGenresPieChart.getDescription().setEnabled(false);
-        popularGenresPieChart.setDrawHoleEnabled(true);
-        popularGenresPieChart.setHoleColor(Color.WHITE);
-        popularGenresPieChart.setHoleRadius(58f);
-        popularGenresPieChart.setTransparentCircleRadius(61f);
-
-        popularGenresPieChart.setDrawEntryLabels(true);
-        popularGenresPieChart.setEntryLabelColor(Color.BLACK);
-        popularGenresPieChart.setEntryLabelTextSize(12f);
-
-        popularGenresPieChart.animateY(1000, Easing.EaseInOutQuad);
-
-        popularGenresPieChart.getLegend().setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-        popularGenresPieChart.getLegend().setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
-        popularGenresPieChart.getLegend().setOrientation(Legend.LegendOrientation.HORIZONTAL);
-        popularGenresPieChart.getLegend().setDrawInside(false);
-
-        popularGenresPieChart.invalidate(); // Refresh the chart
     }
+
+    // Apply the isAdded() check to all your other Retrofit onResponse and any UI-related code
+// in FragmentAnalytics.java (e.g., in loadTotalBooks(), loadTotalUsers(), etc.).
     private void loadAvailableTotal() {
         APIService service = RetrofitClient.getRetrofit().create(APIService.class);
         Call<ApiResponseT<AvailableTotalBooks>> call = service.getAvailableTotalBooks();

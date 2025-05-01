@@ -149,4 +149,16 @@ public interface APIService {
 
     @GET("/books/analytics/available-total-books")
     Call<ApiResponseT<AvailableTotalBooks>> getAvailableTotalBooks();
+
+    @GET("/books/new-releases")
+    Call<List<Book>> getNewReleases();
+
+    @GET("/books/top-selling")
+    Call<List<Book>> getTopSellingBooks();
+
+    @GET("/books/recommended")
+    Call<List<Book>> getRecommendedBooks();
+
+    @GET("/books/free")
+    Call<List<Book>> getFreeBooks();
 }

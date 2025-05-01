@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.phamhuong.library.R;
 import com.phamhuong.library.adapter.recycle.BookHorizontalAdapter;
+import com.phamhuong.library.adapter.recycle.BookSectionAdapter;
 import com.phamhuong.library.adapter.recycle.BookVerticalAdapter;
 import com.phamhuong.library.fragment.book.BookFragment;
 import com.phamhuong.library.model.Book;
@@ -34,6 +35,7 @@ public class FragmentTrending extends Fragment implements BookHorizontalAdapter.
     private APIService apiService;
     private RecyclerView rvTrendingBooks;
     private BookVerticalAdapter bookAdapter;
+    private BookSectionAdapter sectionAdapter;
     private List<Book> trendingBooks;
     private String token ="";
 
@@ -44,26 +46,28 @@ public class FragmentTrending extends Fragment implements BookHorizontalAdapter.
 
         initViews(view);
         setupRecyclerView();
-        fetchAllBooks();
+        fetchTopSelling();
+        fetchForYou();
 
         return view;
     }
 
     private void initViews(View view) {
         rvTrendingBooks = view.findViewById(R.id.recyclerViewTrending);
-        trendingBooks = new ArrayList<>();
+        apiService = RetrofitClient.getRetrofit().create(APIService.class);
     }
 
     private void setupRecyclerView() {
-        bookAdapter = new BookVerticalAdapter(getContext(), trendingBooks);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvTrendingBooks.setLayoutManager(layoutManager);
-        rvTrendingBooks.setAdapter(bookAdapter);
+
+        sectionAdapter = new BookSectionAdapter(getContext());
+        rvTrendingBooks.setAdapter(sectionAdapter);
     }
 
     private void fetchAllBooks() {
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
-        Call<List<Book>> call = apiService.getAllBooks();
+        Call<List<Book>> call = apiService.getTopSellingBooks();
         call.enqueue(new Callback<List<Book>>() {
             @Override
             public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
@@ -83,7 +87,39 @@ public class FragmentTrending extends Fragment implements BookHorizontalAdapter.
             }
         });
     }
+    private void fetchTopSelling() {
+        Call<List<Book>> call = apiService.getTopSellingBooks();
+        call.enqueue(new Callback<List<Book>>() {
+            @Override
+            public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    sectionAdapter.addSection("New Releases", response.body());
+                }
+            }
 
+            @Override
+            public void onFailure(Call<List<Book>> call, Throwable t) {
+                showError("Failed to load new releases");
+            }
+        });
+    }
+
+    private void fetchForYou() {
+        Call<List<Book>> call = apiService.getRecommendedBooks();
+        call.enqueue(new Callback<List<Book>>() {
+            @Override
+            public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    sectionAdapter.addSection("For You", response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Book>> call, Throwable t) {
+                showError("Failed to load recommended books");
+            }
+        });
+    }
     private void showError(String message) {
         if (getContext() != null) {
             Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();

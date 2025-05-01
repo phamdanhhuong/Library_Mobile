@@ -5,15 +5,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!-- TabLayout để chọn danh mục thông báo -->
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        app:tabIndicatorColor="@android:color/white"
-        app:tabTextColor="@android:color/white"
-        app:tabSelectedTextColor="@android:color/black"/>
+        app:tabTextColor="#666666"
+        app:tabSelectedTextColor="#d7590c"
+        app:tabIndicatorColor="#d7590c"
+        android:background="@android:color/white"
+        app:tabTextAppearance="@style/CustomTabTextAppearance"/> ```
 
     <!-- ViewPager2 chứa danh sách thông báo theo từng tab -->
     <androidx.viewpager2.widget.ViewPager2
