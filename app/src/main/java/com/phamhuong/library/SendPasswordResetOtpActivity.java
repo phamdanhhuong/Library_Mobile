@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import com.phamhuong.library.model.ApiResponse;
 import com.phamhuong.library.model.ApiResponseT;
 import com.phamhuong.library.model.RetrofitClient;
 import com.phamhuong.library.service.APIService;
+import com.phamhuong.library.utils.CustomDialogHelper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +29,7 @@ public class SendPasswordResetOtpActivity extends AppCompatActivity {
 
     EditText editTextEmail;
     Button btnSendOtp;
+    TextView tvBackToLogin;
     APIService apiService;
 
     @Override
@@ -37,11 +40,13 @@ public class SendPasswordResetOtpActivity extends AppCompatActivity {
         init();
 
         btnSendOtp.setOnClickListener(view -> sendOtp());
+        tvBackToLogin.setOnClickListener(view -> navigateToLogin());
     }
 
     void init() {
         editTextEmail = findViewById(R.id.editTextEmail);
         btnSendOtp = findViewById(R.id.btnSendOtp);
+        tvBackToLogin = findViewById(R.id.tvBackToLogin);
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
     }
 
@@ -61,7 +66,13 @@ public class SendPasswordResetOtpActivity extends AppCompatActivity {
             public void onResponse(Call<ApiResponseT<String>> call, Response<ApiResponseT<String>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     saveResetInfo(email);
-                    Toast.makeText(SendPasswordResetOtpActivity.this, "OTP đã gửi, kiểm tra email!", Toast.LENGTH_SHORT).show();
+                    CustomDialogHelper.showCustomDialogSuccess(
+                            SendPasswordResetOtpActivity.this,
+                            "Email đã được gửi!",
+                            "Hãy kiểm tra hộp thư của bạn.",
+                            (dialog, which) -> {
+                            }
+                    );
                     navigateToResetPassword();
                 }
             }
@@ -83,6 +94,11 @@ public class SendPasswordResetOtpActivity extends AppCompatActivity {
 
     void navigateToResetPassword() {
         Intent intent = new Intent(SendPasswordResetOtpActivity.this, ResetPasswordActivity.class);
+        startActivity(intent);
+        finish();
+    }
+    void navigateToLogin() {
+        Intent intent = new Intent(SendPasswordResetOtpActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
     }

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import com.phamhuong.library.model.ApiResponseT;
 import com.phamhuong.library.model.ResetPassRequest;
 import com.phamhuong.library.model.RetrofitClient;
 import com.phamhuong.library.service.APIService;
+import com.phamhuong.library.utils.CustomDialogHelper;
 
 
 import okhttp3.ResponseBody;
@@ -26,6 +28,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
     EditText editTextOtp, editTextNewPassword;
     Button btnResetPassword;
+    TextView tvBackToLogin;
     APIService apiService;
     String email;
 
@@ -37,12 +40,14 @@ public class ResetPasswordActivity extends AppCompatActivity {
         init();
 
         btnResetPassword.setOnClickListener(view -> resetPassword());
+        tvBackToLogin.setOnClickListener(view -> navigateToLogin());
     }
 
     void init() {
         editTextOtp = findViewById(R.id.editTextOtp);
         editTextNewPassword = findViewById(R.id.editTextNewPassword);
         btnResetPassword = findViewById(R.id.btnResetPassword);
+        tvBackToLogin = findViewById(R.id.tvBackToLogin);
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
 
         SharedPreferences sharedPreferences = getSharedPreferences("ResetPrefs", MODE_PRIVATE);
@@ -69,10 +74,24 @@ public class ResetPasswordActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ApiResponseT<String>> call, Response<ApiResponseT<String>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Toast.makeText(ResetPasswordActivity.this, "Đổi mật khẩu thành công", Toast.LENGTH_SHORT).show();
+                    CustomDialogHelper.showCustomDialogSuccess(
+                            ResetPasswordActivity.this,
+                            "Đổi mật khẩu thành công!",
+                            "Hãy tiến hành đăng nhập lại.",
+                            (dialog, which) -> {
+                            }
+                    );
+//                    Toast.makeText(ResetPasswordActivity.this, "Đổi mật khẩu thành công", Toast.LENGTH_SHORT).show();
                     navigateToLogin();
                 } else {
-                    Toast.makeText(ResetPasswordActivity.this, "Đổi mật khẩu thất bại", Toast.LENGTH_SHORT).show();
+                    CustomDialogHelper.showCustomDialogFail(
+                        ResetPasswordActivity.this,
+                        "Đổi mật khẩu thất bại!",
+                        "Sai OTP!",
+                        (dialog, which) -> {
+                        }
+                    );
+//                    Toast.makeText(ResetPasswordActivity.this, "Đổi mật khẩu thất bại", Toast.LENGTH_SHORT).show();
                 }
             }
 

@@ -13,7 +13,7 @@ import com.phamhuong.library.R;
 
 public class CustomDialogHelper {
 
-    public static void showCustomDialog(Context context, String title, String message,
+    public static void showCustomDialogSuccess(Context context, String title, String message,
                                         DialogInterface.OnClickListener positiveClickListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
@@ -28,17 +28,43 @@ public class CustomDialogHelper {
         TextView dialogMessage = customView.findViewById(R.id.dialogMessage);
         Button positiveButton = customView.findViewById(R.id.okButton);
 
+        imgIcon.setImageResource(R.drawable.ic_success);
         // Thiết lập dữ liệu cho các view
         dialogTitle.setText(title);
         dialogMessage.setText(message);
 
+        // Tạo và hiển thị Dialog
+        AlertDialog alertDialog = builder.create();
         // Thiết lập OnClickListener cho các nút
-        positiveButton.setOnClickListener(v -> {
-            positiveClickListener.onClick(null, DialogInterface.BUTTON_POSITIVE);
-        });
+        positiveButton.setOnClickListener(v -> alertDialog.dismiss());
+
+        alertDialog.show();
+    }
+    public static void showCustomDialogFail(Context context, String title, String message,
+                                         DialogInterface.OnClickListener positiveClickListener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        // Inflate layout tùy chỉnh
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View customView = inflater.inflate(R.layout.custom_dialog_layout, null);
+        builder.setView(customView);
+
+        // Tìm các view trong layout tùy chỉnh
+        ImageView imgIcon = customView.findViewById(R.id.imgPopup);
+        TextView dialogTitle = customView.findViewById(R.id.dialogTitle);
+        TextView dialogMessage = customView.findViewById(R.id.dialogMessage);
+        Button positiveButton = customView.findViewById(R.id.okButton);
+
+        imgIcon.setImageResource(R.drawable.ic_warning);
+        // Thiết lập dữ liệu cho các view
+        dialogTitle.setText(title);
+        dialogMessage.setText(message);
 
         // Tạo và hiển thị Dialog
         AlertDialog alertDialog = builder.create();
+        // Thiết lập OnClickListener cho các nút
+        positiveButton.setOnClickListener(v -> alertDialog.dismiss());
+
         alertDialog.show();
     }
     public static void showWishlistSuccessPopup(Context context) {
@@ -52,7 +78,7 @@ public class CustomDialogHelper {
         TextView dialogMessage = view.findViewById(R.id.dialogMessage);
         Button positiveButton = view.findViewById(R.id.okButton);
 
-        imgIcon.setImageResource(R.drawable.ic_wishlist_added); // Thay thế bằng icon wishlist thành công
+        imgIcon.setImageResource(R.drawable.ic_wishlist_added);
         dialogTitle.setText("Đã thêm vào Yêu thích!");
         dialogMessage.setText("Cuốn sách đã được thêm vào danh sách yêu thích của bạn.");
 

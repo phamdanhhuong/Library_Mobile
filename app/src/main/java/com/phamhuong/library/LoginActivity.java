@@ -25,6 +25,7 @@ import com.phamhuong.library.model.RetrofitClient;
 import com.phamhuong.library.model.UserLoginInfo;
 import com.phamhuong.library.service.APIService;
 import com.phamhuong.library.service.DatabaseHelper;
+import com.phamhuong.library.utils.CustomDialogHelper;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -118,11 +119,22 @@ public class LoginActivity extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                     } else {
-                        Toast.makeText(LoginActivity.this, "Đăng nhập thất bại", Toast.LENGTH_SHORT).show();
+                        CustomDialogHelper.showCustomDialogFail(
+                                LoginActivity.this,
+                                "Đăng nhập thất bại",
+                                "Sai mật khẩu hoặc tên đăng nhập. Vui lòng thử lại.",
+                                (dialog, which) -> {
+                                }
+                        );
                     }
                 } else {
-                    Toast.makeText(LoginActivity.this, "Đăng nhập thất bại: Lỗi phản hồi từ server", Toast.LENGTH_SHORT).show();
-                    Log.e("LoginActivity", "Login failed: Response body is null");
+                    CustomDialogHelper.showCustomDialogFail(
+                        LoginActivity.this,
+                        "Đăng nhập thất bại",
+                        "Sai mật khẩu hoặc tên đăng nhập. Vui lòng thử lại.",
+                        (dialog, which) -> {
+                        }
+                    );
                 }
             }
             @Override
