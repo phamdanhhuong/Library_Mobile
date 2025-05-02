@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,6 +53,9 @@ public class BorrowHistoryFragment extends Fragment implements BorrowHistoryAdap
     private List<BorrowingRecord> histories;
     private ProgressBar progressBar;
     private View emptyView;
+    private View layoutNoHistory;
+    private ImageView imgNoHistory;
+    private TextView tvNoHistory;
     private SwipeRefreshLayout swipeRefreshLayout;
     private APIService apiService;
     private NotificationHelper notificationHelper;
@@ -68,9 +72,11 @@ public class BorrowHistoryFragment extends Fragment implements BorrowHistoryAdap
         // Initialize views
         recyclerView = view.findViewById(R.id.recyclerView);
         progressBar = view.findViewById(R.id.progressBar);
-        emptyView = view.findViewById(R.id.emptyView);
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
 
+        layoutNoHistory = view.findViewById(R.id.layoutNoHistory);
+        imgNoHistory = view.findViewById(R.id.imgNoHistory);
+        tvNoHistory = view.findViewById(R.id.tvNoHistory);
         // Initialize histories here
         histories = new ArrayList<>();
         MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
@@ -94,7 +100,7 @@ public class BorrowHistoryFragment extends Fragment implements BorrowHistoryAdap
     private void loadBorrowHistory() {
         progressBar.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.GONE);
-        emptyView.setVisibility(View.GONE);
+        layoutNoHistory.setVisibility(View.GONE);
 
         if (getContext() == null) return;
         DatabaseHelper dbHelper = new DatabaseHelper(getContext());
@@ -119,12 +125,14 @@ public class BorrowHistoryFragment extends Fragment implements BorrowHistoryAdap
                         histories.addAll(records);
                         adapter.updateData(records);
                         recyclerView.setVisibility(View.VISIBLE);
-                        emptyView.setVisibility(View.GONE);
+                        layoutNoHistory.setVisibility(View.GONE);
                     } else {
                         recyclerView.setVisibility(View.GONE);
-                        emptyView.setVisibility(View.VISIBLE);
+                        layoutNoHistory.setVisibility(View.VISIBLE);
                     }
                 }
+                recyclerView.setVisibility(View.GONE);
+                layoutNoHistory.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -132,7 +140,8 @@ public class BorrowHistoryFragment extends Fragment implements BorrowHistoryAdap
                 progressBar.setVisibility(View.GONE);
                 swipeRefreshLayout.setRefreshing(false);
                 Log.e("BorrowHistoryFragment", "API call failed: " + t.getMessage(), t);
-                showError("Network error");
+                recyclerView.setVisibility(View.GONE);
+                layoutNoHistory.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -221,8 +230,9 @@ public class BorrowHistoryFragment extends Fragment implements BorrowHistoryAdap
 
     private void showError(String message) {
         if (getContext() != null) {
+            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
             recyclerView.setVisibility(View.GONE);
-            emptyView.setVisibility(View.VISIBLE);
+            layoutNoHistory.setVisibility(View.VISIBLE); // Use layoutNoHistory instead of emptyView
         }
     }
 }

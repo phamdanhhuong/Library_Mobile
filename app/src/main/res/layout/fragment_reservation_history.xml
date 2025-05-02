@@ -22,59 +22,75 @@
             app:titleTextColor="@color/onSurface" />
 
     </com.google.android.material.appbar.AppBarLayout>
-    <!-- Shimmer Layout for loading state -->
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/shimmerLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        android:padding="16dp">
-
-        <!-- Include shimmer item layout -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <!-- Shimmer item -->
-            <include layout="@layout/item_reservation_shimmer"/>
-            <include layout="@layout/item_reservation_shimmer"/>
-            <include layout="@layout/item_reservation_shimmer"/>
-
-        </LinearLayout>
-    </com.facebook.shimmer.ShimmerFrameLayout>
-    <!-- Loading State -->
-    <include
-        android:id="@+id/loadingState"
-        layout="@layout/layout_loading_state"
-        android:visibility="gone"/>
-
-    <!-- Error State -->
-    <include
-        android:id="@+id/errorState"
-        layout="@layout/layout_error_state"
-        android:visibility="gone"/>
-
-    <!-- Empty State -->
-    <include
-        android:id="@+id/emptyState"
-        layout="@layout/layout_empty_state"
-        android:visibility="gone"/>
-
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/contentLayout"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvReservations"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/contentLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="8dp" />
+            android:layout_height="match_parent">
 
-    </androidx.core.widget.NestedScrollView>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvReservations"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:visibility="gone" /> </androidx.core.widget.NestedScrollView>
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/item_reservation_shimmer" />
+                <include layout="@layout/item_reservation_shimmer" />
+                <include layout="@layout/item_reservation_shimmer" />
+
+            </LinearLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <include
+            android:id="@+id/errorState"
+            layout="@layout/layout_error_state"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/layoutNoReservations"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="visible">
+            <ImageView
+            android:id="@+id/imgNoReservations"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:src="@drawable/img_no_reservation" />
+
+            <TextView
+                android:id="@+id/tvNoReservations"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Không có gì ở đây!"
+                android:textSize="16sp"
+                android:textColor="@android:color/darker_gray" />
+
+
+        </LinearLayout>
+
+    </FrameLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

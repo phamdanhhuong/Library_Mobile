@@ -32,6 +32,7 @@
     <color name="notification_unread_color">#FF4081</color>
     <!--Category-->
     <color name="yellow">#FFFFE082</color>
+    <color name="my_yellow">#f9be48</color>
     <color name="selected_text_color">#FFFFFF</color>
 
     <color name="available_color">#4CAF50</color>

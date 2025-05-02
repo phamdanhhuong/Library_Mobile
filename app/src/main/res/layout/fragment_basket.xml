@@ -57,17 +57,49 @@
         </LinearLayout>
 
     </LinearLayout>
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefreshLayout"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvReservationBooks"
+        android:layout_height="match_parent">
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:padding="8dp"/>
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvReservationBooks"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:padding="8dp"
+                android:visibility="visible"/>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+        <LinearLayout
+            android:id="@+id/layoutNoWishlist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/imgNoWishlist"
+                android:layout_width="280dp"
+                android:layout_height="180dp"
+                android:src="@drawable/img_no_wishlist" />
+
+            <TextView
+                android:id="@+id/tvNoWishlist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Không có sách nào trong danh sách yêu thích"
+                android:textSize="16sp"
+                android:textColor="@android:color/darker_gray" />
+
+        </LinearLayout>
+
+    </FrameLayout>
 </LinearLayout>

@@ -65,7 +65,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close(); // Đóng kết nối cơ sở dữ liệu sau khi hoàn tất
         return newRowId;
     }
+    public void saveGuestLoginInfo() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_LOGIN, null, null);
 
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_USERNAME, "guest");
+        values.put(COLUMN_PASSWORD, "");
+        values.put(COLUMN_TOKEN, "");
+
+        db.insert(TABLE_LOGIN, null, values);
+        db.close();
+    }
     public UserLoginInfo getLoginInfoSQLite() {
         SQLiteDatabase db = this.getReadableDatabase();
         UserLoginInfo loginInfo = null;

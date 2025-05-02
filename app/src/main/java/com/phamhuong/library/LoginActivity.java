@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -31,7 +32,7 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
     TextView txtUsername, txtPassword, btnForgotPassword, btnDontHaveAccount;
-    Button btnLogin;
+    Button btnLogin, btnGuest;
     CheckBox cbRememberMe;
     APIService apiService;
     @SuppressLint("MissingInflatedId")
@@ -60,6 +61,13 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Login();
+            }
+        });
+        btnGuest = findViewById(R.id.btnGuest); // Initialize btnGuest
+        btnGuest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                continueAsGuest();
             }
         });
 
@@ -93,9 +101,9 @@ public class LoginActivity extends AppCompatActivity {
         Call<LoginResponse> call = apiService.login(new LoginRequest(txtUsername.getText().toString(),txtPassword.getText().toString()));
         call.enqueue(new Callback<LoginResponse>() {
             @Override
-            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+            public void onResponse(@NonNull Call<LoginResponse> call, @NonNull Response<LoginResponse> response) {
                 LoginResponse body = response.body();
-                if (body.getToken()!=null) {
+                if (body.getToken() != null) {
                     if (cbRememberMe.isChecked()) {
                         setRememberMe(true);
                     }
@@ -119,6 +127,22 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
         RetrofitClient.retrofit = null;
+    }
+    private void continueAsGuest() {
+        SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("isGuest", true);
+        editor.apply();
+
+        // Optionally, you can save a special guest user ID or username in DatabaseHelper
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        dbHelper.clearAllLoginData(); // Clear any previous login info
+        dbHelper.saveGuestLoginInfo(); // Implement this method in DatabaseHelper
+
+        Intent intent = new Intent(LoginActivity.this, BaseActivity.class);
+        intent.putExtra("isGuest", true); // Indicate guest user
+        startActivity(intent);
+        finish();
     }
     private void saveUserInfo(String username, String password, String token) {
         DatabaseHelper dbHelper = new DatabaseHelper(this);

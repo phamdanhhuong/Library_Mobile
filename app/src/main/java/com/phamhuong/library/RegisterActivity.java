@@ -3,6 +3,7 @@ package com.phamhuong.library;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -72,6 +73,26 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     void Register(){
+        String username = editTextUsername.getText().toString();
+        String password = editTextPassword.getText().toString();
+        String fullName = editTextFullname.getText().toString();
+        String email = editTextEmail.getText().toString();
+        String phoneNumberStr = editTextPhonenumber.getText().toString();
+        if (username.isEmpty() || password.isEmpty() || fullName.isEmpty() || email.isEmpty()) {
+            Toast.makeText(this, "Vui lòng điền đầy đủ thông tin.", Toast.LENGTH_SHORT).show();
+            return; // Stop the registration process if any required field is empty
+        }
+        Long phoneNumber = null;
+        if (!phoneNumberStr.isEmpty()) {
+            try {
+                phoneNumber = Long.parseLong(phoneNumberStr);
+            } catch (NumberFormatException e) {
+                Toast.makeText(this, "Số điện thoại không hợp lệ.", Toast.LENGTH_SHORT).show();
+                return; // Stop the registration process if the phone number format is invalid
+            }
+        } else {
+            Log.w("RegisterActivity", "Phone number field is empty.");
+        }
         RegisterRequest registerRequest = new RegisterRequest(editTextUsername.getText().toString(), editTextPassword.getText().toString(),
                 editTextFullname.getText().toString(), Long.parseLong(editTextPhonenumber.getText().toString()), editTextEmail.getText().toString());
         CallAPI(registerRequest);

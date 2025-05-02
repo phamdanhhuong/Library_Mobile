@@ -5,6 +5,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,6 +38,9 @@ public class NotificationListFragment extends Fragment implements NotificationAd
     private List<Notification> allNotifications; // Giữ toàn bộ danh sách thông báo
     private List<Notification> displayedNotifications;
     private APIService apiService; // Danh sách thông báo sẽ hiển thị
+    private LinearLayout layoutNoNotifications;
+    private ImageView imgNoNotifications;
+    private TextView tvNoNotifications;
 
     public static NotificationListFragment newInstance(int tabPosition) {
         NotificationListFragment fragment = new NotificationListFragment();
@@ -49,6 +55,7 @@ public class NotificationListFragment extends Fragment implements NotificationAd
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_notification_list, container, false);
 
+        layoutNoNotifications = view.findViewById(R.id.layoutNoNotifications);
         recyclerView = view.findViewById(R.id.rvNotifications);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -64,6 +71,8 @@ public class NotificationListFragment extends Fragment implements NotificationAd
 
         adapter = new NotificationAdapter(displayedNotifications, this);
         recyclerView.setAdapter(adapter);
+
+        updateNoNotificationsVisibility();
 
         return view;
     }
@@ -120,6 +129,16 @@ public class NotificationListFragment extends Fragment implements NotificationAd
         }
         if (adapter != null) {
             adapter.notifyDataSetChanged();
+        }
+        updateNoNotificationsVisibility();
+    }
+    private void updateNoNotificationsVisibility() {
+        if (displayedNotifications.isEmpty()) {
+            recyclerView.setVisibility(View.GONE);
+            layoutNoNotifications.setVisibility(View.VISIBLE);
+        } else {
+            recyclerView.setVisibility(View.VISIBLE);
+            layoutNoNotifications.setVisibility(View.GONE);
         }
     }
     @Override
@@ -184,6 +203,7 @@ public class NotificationListFragment extends Fragment implements NotificationAd
             if (adapter != null) {
                 adapter.notifyDataSetChanged();
             }
+            updateNoNotificationsVisibility();
         }
     }
 }

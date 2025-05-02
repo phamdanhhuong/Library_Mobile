@@ -42,9 +42,8 @@
                     android:id="@+id/imgBook"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/img_explore_book"
+                    android:src="@drawable/img_ebooks"
                     android:scaleType="centerCrop"
-                    android:contentDescription="Explore Books"
                     android:clickable="true"
                     android:focusable="true"/>
             </androidx.cardview.widget.CardView>
@@ -78,7 +77,7 @@
                     android:id="@+id/imgAudioBook"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/img_explore_audio_book"
+                    android:src="@drawable/img_audiobooks"
                     android:scaleType="centerCrop"
                     android:contentDescription="Explore Audio Books"
                     android:clickable="true"

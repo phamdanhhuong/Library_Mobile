@@ -73,7 +73,7 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:background="@drawable/rounded_edittext"
-        android:hint="email"
+        android:hint="phone"
         android:drawableStart="@drawable/ic_register_phone"
         android:paddingStart="10dp"
         android:textColor="@color/text_login"

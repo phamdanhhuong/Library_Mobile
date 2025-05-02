@@ -113,11 +113,11 @@ public class FragmentUserInfo extends Fragment {
             if (avatarUrl != null && !avatarUrl.isEmpty()) {
                 Glide.with(this)
                         .load(avatarUrl)
-                        .placeholder(R.drawable.bg_button_read)
-                        .error(R.drawable.bg_button_read)
+                        .placeholder(R.drawable.avatar1)
+                        .error(R.drawable.avatar1)
                         .into(imgAvatar);
             } else {
-                imgAvatar.setImageResource(R.drawable.bg_button_read);
+                imgAvatar.setImageResource(R.drawable.avatar1);
             }
         }
     }

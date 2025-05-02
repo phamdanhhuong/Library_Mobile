@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -47,9 +49,11 @@ public class ReservationHistoryFragment extends Fragment {
     private View loadingView;
     private View errorView;
     private ViewGroup contentView;
-    private View emptyView;
     private ShimmerFrameLayout shimmerLayout;
     private APIService apiService;
+    private LinearLayout layoutNoReservations;
+    private ImageView imgNoReservations;
+    private TextView tvNoReservations;
 
     @Nullable
     @Override
@@ -58,7 +62,7 @@ public class ReservationHistoryFragment extends Fragment {
 
         initViews(view);
         setupRecyclerView();
-        loadBorrowHistory();
+        loadReservations();
 
         return view;
     }
@@ -72,19 +76,18 @@ public class ReservationHistoryFragment extends Fragment {
             requireActivity().getSupportFragmentManager().popBackStack();
         });
 
-        loadingView = view.findViewById(R.id.loadingState);
         errorView = view.findViewById(R.id.errorState);
         contentView = view.findViewById(R.id.contentLayout);
-        
+
+        layoutNoReservations = view.findViewById(R.id.layoutNoReservations);
+        imgNoReservations = view.findViewById(R.id.imgNoReservations);
+        tvNoReservations = view.findViewById(R.id.tvNoReservations);
+
         Button btnRetry = errorView.findViewById(R.id.btnRetry);
         btnRetry.setOnClickListener(v -> loadReservations());
-        emptyView = view.findViewById(R.id.emptyState);
         shimmerLayout = view.findViewById(R.id.shimmerLayout);
 
-        view.findViewById(R.id.btnBrowseBooks).setOnClickListener(v -> {
-            // Navigate to book browsing screen
-            navigateToBookBrowsing();
-        });
+        showLoading();
     }
 
     private void setupRecyclerView() {
@@ -133,6 +136,11 @@ public class ReservationHistoryFragment extends Fragment {
                     histories.addAll(reservationList);
                     Log.d("ReservationHistoryFragment", "Histories size: " + histories.size());
                     adapter.notifyDataSetChanged();
+                    if (histories.isEmpty()) {
+                        showEmpty();
+                    } else {
+                        showContent();
+                    }
                 }
             }
 
@@ -147,7 +155,7 @@ public class ReservationHistoryFragment extends Fragment {
         shimmerLayout.setVisibility(View.VISIBLE);
         shimmerLayout.startShimmer();
         errorView.setVisibility(View.GONE);
-        emptyView.setVisibility(View.GONE);
+        layoutNoReservations.setVisibility(View.GONE);
         contentView.setVisibility(View.GONE);
     }
 
@@ -155,7 +163,7 @@ public class ReservationHistoryFragment extends Fragment {
         shimmerLayout.stopShimmer();
         shimmerLayout.setVisibility(View.GONE);
         errorView.setVisibility(View.GONE);
-        emptyView.setVisibility(View.VISIBLE);
+        layoutNoReservations.setVisibility(View.VISIBLE);
         contentView.setVisibility(View.GONE);
     }
 
@@ -163,43 +171,42 @@ public class ReservationHistoryFragment extends Fragment {
         shimmerLayout.stopShimmer();
         shimmerLayout.setVisibility(View.GONE);
         errorView.setVisibility(View.GONE);
-        emptyView.setVisibility(View.GONE);
+        layoutNoReservations.setVisibility(View.GONE);
         contentView.setVisibility(View.VISIBLE);
     }
 
-
     private void loadReservations() {
         showLoading();
-        
-        int userId = getUserId();
-        if (userId == -1) {
-            showError("Vui lòng đăng nhập để xem lịch sử đặt sách");
-            return;
-        }
 
-        APIService apiService = RetrofitClient.getRetrofit().create(APIService.class);
+        if (getContext() == null) return;
+        DatabaseHelper dbHelper = new DatabaseHelper(getContext());
+        UserLoginInfo userLoginInfo = dbHelper.getLoginInfoSQLite();
+        int userId = userLoginInfo.getUserId();
+
+        apiService = RetrofitClient.getRetrofit().create(APIService.class);
         apiService.getReservationHistoryByUserId(userId).enqueue(new Callback<ApiResponseT<List<Reservation>>>() {
             @Override
             public void onResponse(@NonNull Call<ApiResponseT<List<Reservation>>> call, @NonNull Response<ApiResponseT<List<Reservation>>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    List<Reservation> reservationsList = response.body().getData();
+                if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
+                    List<Reservation> reservationList = response.body().getData();
                     histories.clear();
-                    histories.addAll(reservationsList);
+                    histories.addAll(reservationList);
+                    Log.d("ReservationHistoryFragment", "Histories size: " + histories.size());
                     adapter.notifyDataSetChanged();
-                    
                     if (histories.isEmpty()) {
-                        showError("Bạn chưa có đơn đặt sách nào");
+                        showEmpty();
                     } else {
                         showContent();
                     }
-                } else {
-                    showError("Không thể tải lịch sử đặt sách");
+                }
+                if (response.code() == 404 && response.body() == null ){
+                    showEmpty();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<ApiResponseT<List<Reservation>>> call, @NonNull Throwable t) {
-                showError("Đã có lỗi xảy ra. Vui lòng thử lại");
+                Log.e("ReservationHistoryFragment", "Error: " + t.getMessage());
             }
         });
     }
@@ -222,7 +229,6 @@ public class ReservationHistoryFragment extends Fragment {
         shimmerLayout.stopShimmer();
         shimmerLayout.setVisibility(View.GONE);
         errorView.setVisibility(View.VISIBLE);
-        emptyView.setVisibility(View.GONE);
         contentView.setVisibility(View.GONE);
 
         TextView tvErrorMessage = errorView.findViewById(R.id.tvErrorMessage);

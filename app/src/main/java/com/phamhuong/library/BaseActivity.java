@@ -60,8 +60,9 @@ public class BaseActivity extends AppCompatActivity {
     TextView txtFullName;
     TextView txtUserEmail;
     ImageView imgAvatarHeader;
+    TextView toolbarTitle;
+    ImageView toolbarEndIcon;
     APIService apiService;
-
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,7 +84,6 @@ public class BaseActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                // Khi người dùng nhấn tìm kiếm
                 if (!query.isEmpty()) {
                     FragmentSeachedBooks fragment = FragmentSeachedBooks.newInstance(query);
                     getSupportFragmentManager()
@@ -91,7 +91,7 @@ public class BaseActivity extends AppCompatActivity {
                             .replace(R.id.content_frame, fragment)
                             .addToBackStack(null)
                             .commit();
-                    searchView.clearFocus(); // Ẩn bàn phím
+                    searchView.clearFocus();
                 }
                 return true;
             }
@@ -106,6 +106,8 @@ public class BaseActivity extends AppCompatActivity {
         txtFullName = headerView.findViewById(R.id.txtFullName);
         txtUserEmail = headerView.findViewById(R.id.txtUserEmail);
         imgAvatarHeader = headerView.findViewById(R.id.imgUserAvatar);
+        toolbarTitle = findViewById(R.id.toolbar_title);
+        toolbarEndIcon = findViewById(R.id.toolbar_end_icon);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar,
@@ -115,6 +117,7 @@ public class BaseActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             loadFragment(new HomeFragmentNew());
+            updateUiForFragment(R.id.nav_home);
         }
 
 
@@ -128,17 +131,11 @@ public class BaseActivity extends AppCompatActivity {
         });
         bottomNavigationView.setItemIconTintList(null);
 
-//        bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//                onBottomNavigationViewItemSelectedCustom(item);
-//                return true;
-//            }
-//        });
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 onBottomNavigationViewItemSelectedCustom(item);
+                updateUiForFragment(item.getItemId());
                 return true;
             }
         });
@@ -183,22 +180,40 @@ public class BaseActivity extends AppCompatActivity {
         bottomNavigationView.getMenu().findItem(R.id.nav_profile).setIcon(R.drawable.ic_bottom_navbar_user_off);
 
         searchView.setVisibility(View.GONE);
+        toolbarTitle.setVisibility(View.GONE);
+        toolbarEndIcon.setVisibility(View.GONE);
+
+
         if (id == R.id.nav_home) {
             item.setIcon(R.drawable.ic_bottom_navbar_home_on);
             fragment = new HomeFragmentNew();
-        }else if (id == R.id.nav_save) {
+            toolbarTitle.setVisibility(View.VISIBLE);
+            toolbarTitle.setText("Home");
+            toolbarEndIcon.setVisibility(View.VISIBLE);
+            toolbarEndIcon.setImageResource(R.drawable.ic_book_info_score);
+        } else if (id == R.id.nav_save) {
             item.setIcon(R.drawable.ic_bottom_navbar_save_on);
             fragment = new FragmentStore();
             searchView.setVisibility(View.VISIBLE);
         } else if (id == R.id.nav_notification) {
             item.setIcon(R.drawable.ic_bottom_navbar_setting_on);
             fragment = new NotificationFragment();
+            toolbarTitle.setVisibility(View.VISIBLE);
+            toolbarTitle.setText("Notification");
+            toolbarEndIcon.setVisibility(View.VISIBLE);
+            toolbarEndIcon.setImageResource(R.drawable.ic_book_info_score);
         } else if (id == R.id.nav_profile) {
             item.setIcon(R.drawable.ic_bottom_navbar_user_on);
             fragment = new FragmentProfile();
+            toolbarTitle.setVisibility(View.VISIBLE);
+            toolbarTitle.setText("Profile");
+            toolbarEndIcon.setVisibility(View.VISIBLE);
+            toolbarEndIcon.setImageResource(R.drawable.ic_book_info_score);
         }
         if (fragment != null) {
+
             loadFragment(fragment);
+
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
@@ -219,50 +234,76 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void getInfo(){
-//        SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
-//        String token = sharedPreferences.getString("token", "");
-//
-//        String username = sharedPreferences.getString("username", "");
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         UserLoginInfo userLoginInfo = dbHelper.getLoginInfoSQLite();
+        if (userLoginInfo != null && !userLoginInfo.getUsername().equals("guest")) {
+            Log.d("BaseActivity", "Token before getInfo: " + RetrofitClient.currentToken);
+            apiService = RetrofitClient.getRetrofit().create(APIService.class);
+            Call<InfoResponse> call = apiService.getInfo(userLoginInfo.username);
+            call.enqueue(new Callback<InfoResponse>() {
+                @Override
+                public void onResponse(Call<InfoResponse> call, Response<InfoResponse> response) {
+                    InfoResponse body = response.body();
+                    if (body != null) {
+                        txtFullName.setText(body.getFull_name());
+                        txtUserEmail.setText(body.getEmail());
+                        String avatarUrl = body.getAvatar();
+                        dbHelper.updateLoginInfoSQLite(body.getId(), body.getFull_name(), body.getEmail(), userLoginInfo.username, avatarUrl);
+                        updateAvatarHeader(avatarUrl);
 
-        Log.d("BaseActivity", "Token before getInfo: " + RetrofitClient.currentToken);
-        apiService = RetrofitClient.getRetrofit().create(APIService.class);
-        Call<InfoResponse> call = apiService.getInfo(userLoginInfo.username);
-        call.enqueue(new Callback<InfoResponse>() {
-            @Override
-            public void onResponse(Call<InfoResponse> call, Response<InfoResponse> response) {
-                InfoResponse body = response.body();
-                if(body!=null){
-                    txtFullName.setText(body.getFull_name());
-                    txtUserEmail.setText(body.getEmail());
-                    String avatarUrl = body.getAvatar();
-                    dbHelper.updateLoginInfoSQLite(body.getId(), body.getFull_name(), body.getEmail(),userLoginInfo.username,avatarUrl);
-                    updateAvatarHeader(avatarUrl);
-
-                    int userId = body.getId();
-                    NotificationHelper notificationHelper = new NotificationHelper(getApplicationContext());
-                    notificationHelper.checkAndSendInitialNotifications(String.valueOf(userId));
-
-
+                        int userId = body.getId();
+                        NotificationHelper notificationHelper = new NotificationHelper(getApplicationContext());
+                        notificationHelper.checkAndSendInitialNotifications(String.valueOf(userId));
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<InfoResponse> call, Throwable t) {
-                Toast.makeText(BaseActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onFailure(Call<InfoResponse> call, Throwable t) {
+                    Toast.makeText(BaseActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+        else {
+            // User is guest, no need to fetch info
+            txtFullName.setText("Guest User");
+            txtUserEmail.setText("");
+        }
     }
     private void updateAvatarHeader(String avatarUrl) {
         if (imgAvatarHeader != null && avatarUrl != null && !avatarUrl.isEmpty()) {
             Glide.with(this)
                     .load(avatarUrl)
-                    .placeholder(R.drawable.avatar1) // Placeholder image
-                    .error(R.drawable.avatar1)       // Error image
+                    .placeholder(R.drawable.avatar1)
+                    .error(R.drawable.avatar1)
                     .into(imgAvatarHeader);
         } else if (imgAvatarHeader != null) {
-            imgAvatarHeader.setImageResource(R.drawable.avatar1); // Set default avatar if URL is null or empty
+            imgAvatarHeader.setImageResource(R.drawable.avatar1);
+        }
+    }
+    private void updateUiForFragment(int itemId) {
+        toolbar.setBackgroundColor(getResources().getColor(R.color.my_yellow));
+        searchView.setVisibility(View.GONE);
+        toolbarTitle.setVisibility(View.GONE);
+        toolbarEndIcon.setVisibility(View.GONE);
+
+        if (itemId == R.id.nav_home) {
+            toolbarTitle.setVisibility(View.VISIBLE);
+            toolbarTitle.setText("Home");
+            toolbarEndIcon.setVisibility(View.VISIBLE);
+            toolbarEndIcon.setImageResource(R.drawable.ic_home_end);
+        } else if (itemId == R.id.nav_notification) {
+            toolbarTitle.setVisibility(View.VISIBLE);
+            toolbarTitle.setText("Notification");
+            toolbarEndIcon.setVisibility(View.VISIBLE);
+            toolbarEndIcon.setImageResource(R.drawable.ic_notification_end);
+        } else if (itemId == R.id.nav_profile) {
+            toolbarTitle.setVisibility(View.VISIBLE);
+            toolbarTitle.setText("Profile");
+            toolbarEndIcon.setVisibility(View.VISIBLE);
+            toolbarEndIcon.setImageResource(R.drawable.ic_profile_end);
+        } else if (itemId == R.id.nav_save) {
+//            toolbar.setBackgroundColor(getResources().getColor(R.color.onPrimary));
+            searchView.setVisibility(View.VISIBLE);
         }
     }
 }
