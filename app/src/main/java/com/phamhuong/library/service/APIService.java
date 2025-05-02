@@ -161,4 +161,6 @@ public interface APIService {
 
     @GET("/books/free")
     Call<List<Book>> getFreeBooks();
+    @GET("books/ebooks")
+    Call<ApiResponseT<List<Book>>> getAllEBooks();
 }

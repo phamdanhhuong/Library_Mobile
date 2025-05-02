@@ -14,7 +14,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:navigationIcon="@drawable/ic_navigate"
+            app:navigationIcon="@drawable/ic_back"
             app:navigationIconTint="@color/onSurface"
             app:title="Sách của bạn"
             app:titleCentered="true"

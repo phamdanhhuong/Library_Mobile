@@ -26,6 +26,7 @@ import com.phamhuong.library.model.Reservation;
 import com.phamhuong.library.model.RetrofitClient;
 import com.phamhuong.library.service.APIService;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,11 +47,13 @@ public class ReservationDetailFragment extends Fragment {
     private TextView tvReservationTitle;
     private TextView tvReservationInfo;
     private Chip chipStatus;
+    private Reservation reservation;
 
-    public static ReservationDetailFragment newInstance(int reservationId) {
+    public static ReservationDetailFragment newInstance(int reservationId, Reservation reservation) {
         ReservationDetailFragment fragment = new ReservationDetailFragment();
         Bundle args = new Bundle();
         args.putInt("reservationId", reservationId);
+        args.putSerializable("reservation", reservation);
         fragment.setArguments(args);
         return fragment;
     }
@@ -60,6 +63,7 @@ public class ReservationDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             reservationId = getArguments().getInt("reservationId");
+            reservation = (Reservation) getArguments().getSerializable("reservation");
         }
     }
 
@@ -70,8 +74,9 @@ public class ReservationDetailFragment extends Fragment {
         
         initViews(view);
         setupRecyclerView();
-        loadReservationBooks();
-        
+        if (reservation != null) {
+            updateReservationInfo(reservation); // Hiển thị thông tin Reservation
+        }
         return view;
     }
 
@@ -102,6 +107,7 @@ public class ReservationDetailFragment extends Fragment {
         APIService apiService = RetrofitClient.getRetrofit().create(APIService.class);
         Log.d("ReservationDetailFragment", "Reservation ID: " + reservationId);
         apiService.getBooksByReservationId(reservationId).enqueue(new Callback<ApiResponseT<List<Book>>>() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(@NonNull Call<ApiResponseT<List<Book>>> call, @NonNull Response<ApiResponseT<List<Book>>> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -147,6 +153,7 @@ public class ReservationDetailFragment extends Fragment {
 
         chipStatus.setChipBackgroundColorResource(statusColor);
         chipStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.onPrimary));
+        loadReservationBooks();
     }
     public String formatDate(String dateString) {
         try {Log.d("ReservationAdapter", "Chuỗi ngày nhận được: " + dateString);
@@ -165,5 +172,4 @@ public class ReservationDetailFragment extends Fragment {
             return "Lỗi định dạng"; // Hoặc trả về dateString gốc nếu bạn muốn
         }
     }
-
 }

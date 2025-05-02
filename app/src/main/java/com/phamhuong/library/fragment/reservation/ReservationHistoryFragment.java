@@ -68,7 +68,6 @@ public class ReservationHistoryFragment extends Fragment {
 
     private void initViews(View view) {
         rvReservations = view.findViewById(R.id.rvReservations);
-//        btnBack = view.findViewById(R.id.btnBack);
 
         MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(v -> {
@@ -100,8 +99,13 @@ public class ReservationHistoryFragment extends Fragment {
             Log.e("ReservationHistory", "reservationId is null!");
             return;
         }
+        ReservationDetailFragment detailFragment = ReservationDetailFragment.newInstance(reservationId, reservation);
+        Bundle bundle = new Bundle();
+        bundle.putInt("reservationId", reservationId);
+        bundle.putSerializable("reservation", reservation);
+        detailFragment.setArguments(bundle);
 
-        ReservationDetailFragment detailFragment = ReservationDetailFragment.newInstance(reservationId);
+//        ReservationDetailFragment detailFragment = ReservationDetailFragment.newInstance(reservationId);
 
         requireActivity()
                 .getSupportFragmentManager()

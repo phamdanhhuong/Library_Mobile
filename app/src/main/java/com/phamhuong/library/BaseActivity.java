@@ -188,9 +188,7 @@ public class BaseActivity extends AppCompatActivity {
             item.setIcon(R.drawable.ic_bottom_navbar_home_on);
             fragment = new HomeFragmentNew();
             toolbarTitle.setVisibility(View.VISIBLE);
-            toolbarTitle.setText("Home");
             toolbarEndIcon.setVisibility(View.VISIBLE);
-            toolbarEndIcon.setImageResource(R.drawable.ic_book_info_score);
         } else if (id == R.id.nav_save) {
             item.setIcon(R.drawable.ic_bottom_navbar_save_on);
             fragment = new FragmentStore();
@@ -199,16 +197,12 @@ public class BaseActivity extends AppCompatActivity {
             item.setIcon(R.drawable.ic_bottom_navbar_setting_on);
             fragment = new NotificationFragment();
             toolbarTitle.setVisibility(View.VISIBLE);
-            toolbarTitle.setText("Notification");
             toolbarEndIcon.setVisibility(View.VISIBLE);
-            toolbarEndIcon.setImageResource(R.drawable.ic_book_info_score);
         } else if (id == R.id.nav_profile) {
             item.setIcon(R.drawable.ic_bottom_navbar_user_on);
             fragment = new FragmentProfile();
             toolbarTitle.setVisibility(View.VISIBLE);
-            toolbarTitle.setText("Profile");
             toolbarEndIcon.setVisibility(View.VISIBLE);
-            toolbarEndIcon.setImageResource(R.drawable.ic_book_info_score);
         }
         if (fragment != null) {
 

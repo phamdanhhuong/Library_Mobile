@@ -4,6 +4,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.phamhuong.library.R;
 import com.phamhuong.library.adapter.recycle.BookHorizontalAdapter;
+import com.phamhuong.library.fragment.store.FragmentStore;
 import com.phamhuong.library.model.Book;
 import com.phamhuong.library.model.RetrofitClient;
 import com.phamhuong.library.service.APIService;
@@ -32,7 +35,7 @@ public class FragmentSeachedBooks extends Fragment {
     private TextView tvSearchQuery;
     private ImageButton btnBack;
     private List<Book> bookList;
-
+    private LinearLayout layoutNoSearchResults;
     public static FragmentSeachedBooks newInstance(String query) {
         FragmentSeachedBooks fragment = new FragmentSeachedBooks();
         Bundle args = new Bundle();
@@ -68,6 +71,7 @@ public class FragmentSeachedBooks extends Fragment {
         btnBack = view.findViewById(R.id.btnBack);
 
         tvSearchQuery.setText("Kết quả tìm kiếm cho \"" + searchQuery + "\"");
+        layoutNoSearchResults = view.findViewById(R.id.layoutNoSearchResults);
     }
 
     private void setupRecyclerView() {
@@ -80,7 +84,10 @@ public class FragmentSeachedBooks extends Fragment {
     private void setupListeners() {
         btnBack.setOnClickListener(v -> {
             if (getActivity() != null) {
-                getActivity().getSupportFragmentManager().popBackStack();
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.content_frame, new FragmentStore())
+                        .commit();
             }
         });
     }
@@ -94,12 +101,25 @@ public class FragmentSeachedBooks extends Fragment {
                     bookList.clear();
                     bookList.addAll(response.body());
                     adapter.notifyDataSetChanged();
+                    if (bookList.isEmpty()) {
+                        layoutNoSearchResults.setVisibility(View.VISIBLE);
+                        rvFilteredBooks.setVisibility(View.GONE);
+                    }
+                    else {
+                        layoutNoSearchResults.setVisibility(View.GONE);
+                        rvFilteredBooks.setVisibility(View.VISIBLE);
+                    }
+                }
+                else {
+                    rvFilteredBooks.setVisibility(View.GONE);
+                    layoutNoSearchResults.setVisibility(View.VISIBLE);
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<List<Book>> call, @NonNull Throwable t) {
-                // Handle error
+                rvFilteredBooks.setVisibility(View.GONE);
+                layoutNoSearchResults.setVisibility(View.VISIBLE);
             }
         });
     }

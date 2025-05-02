@@ -2,10 +2,11 @@ package com.phamhuong.library.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class Reservation {
+public class Reservation implements Serializable {
 
     @SerializedName("reservationId")
     private Integer reservationId;

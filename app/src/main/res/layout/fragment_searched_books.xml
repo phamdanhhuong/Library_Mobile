@@ -32,11 +32,44 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvFilteredBooks"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="8dp"
-        android:clipToPadding="false" />
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvFilteredBooks"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="8dp"
+            android:clipToPadding="false"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:id="@+id/layoutNoSearchResults"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/imgNoSearchResults"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:src="@drawable/img_no_search_results" android:contentDescription="Không có kết quả tìm kiếm" />
+
+            <TextView
+                android:id="@+id/tvNoSearchResults"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Không tìm thấy kết quả nào"
+                android:textSize="16sp"
+                android:textColor="@android:color/darker_gray" />
+
+        </LinearLayout>
+
+    </FrameLayout>
 
 </LinearLayout>

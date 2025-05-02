@@ -19,8 +19,8 @@
             android:id="@+id/btnBack"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:src="@drawable/ic_navigate"
-            android:rotation="180"
+            android:src="@drawable/ic_back"
+            android:rotation="0"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="4dp"/>
 
