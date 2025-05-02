@@ -1,5 +1,6 @@
 package com.phamhuong.library.adapter.reservation;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.view.LayoutInflater;
@@ -28,7 +29,6 @@ public class BorrowHistoryAdapter extends RecyclerView.Adapter<BorrowHistoryAdap
     private Context context;
     private OnRenewButtonClickListener renewButtonClickListener;
 
-    // Interface để xử lý click nút Gia hạn
     public interface OnRenewButtonClickListener {
         void onRenewButtonClick(BorrowingRecord record);
     }
@@ -135,6 +135,7 @@ public class BorrowHistoryAdapter extends RecyclerView.Adapter<BorrowHistoryAdap
         return borrowingRecords != null ? borrowingRecords.size() : 0;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void updateData(List<BorrowingRecord> newRecords) {
         this.borrowingRecords = newRecords;
         notifyDataSetChanged();

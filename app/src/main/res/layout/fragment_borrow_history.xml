@@ -27,8 +27,8 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipeRefreshLayout"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/contentLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -39,7 +39,31 @@
                 android:clipToPadding="false"
                 android:padding="8dp"
                 android:visibility="visible" />
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/item_reservation_shimmer" />
+                <include layout="@layout/item_reservation_shimmer" />
+                <include layout="@layout/item_reservation_shimmer" />
+
+            </LinearLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <include
+            android:id="@+id/errorState"
+            layout="@layout/layout_error_state"
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/layoutNoHistory"
@@ -66,11 +90,11 @@
 
         </LinearLayout>
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone" />
+<!--        <ProgressBar-->
+<!--            android:id="@+id/progressBar"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:visibility="gone" />-->
     </FrameLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

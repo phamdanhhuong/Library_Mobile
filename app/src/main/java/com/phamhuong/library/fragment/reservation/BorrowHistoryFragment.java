@@ -1,5 +1,6 @@
 package com.phamhuong.library.fragment.reservation;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.os.Build;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -20,9 +22,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.phamhuong.library.R;
 import com.phamhuong.library.adapter.reservation.BorrowHistoryAdapter;
+import com.phamhuong.library.adapter.reservation.ReservationHistoryAdapter;
 import com.phamhuong.library.model.ApiReponseWithNoData;
 import com.phamhuong.library.model.ApiResponse;
 import com.phamhuong.library.model.BorrowingRecord;
@@ -48,59 +52,81 @@ import retrofit2.Response;
 
 
 public class BorrowHistoryFragment extends Fragment implements BorrowHistoryAdapter.OnRenewButtonClickListener {
-    private RecyclerView recyclerView;
+    private RecyclerView rvHistory;
     private BorrowHistoryAdapter adapter;
     private List<BorrowingRecord> histories;
     private ProgressBar progressBar;
     private View emptyView;
+    private View loadingView;
+    private View errorView;
     private View layoutNoHistory;
-    private ImageView imgNoHistory;
-    private TextView tvNoHistory;
-    private SwipeRefreshLayout swipeRefreshLayout;
+    private ViewGroup contentView;
+    private ShimmerFrameLayout shimmerLayout;
     private APIService apiService;
     private NotificationHelper notificationHelper;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_borrow_history, container, false);
+        View view = inflater.inflate(R.layout.fragment_borrow_history, container, false);
+
+        initViews(view);
+        setupRecyclerView();
+        loadBorrowHistory();
+
+        return view;
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    private void initViews(View view) {
+        rvHistory = view.findViewById(R.id.recyclerView);
 
-        // Initialize views
-        recyclerView = view.findViewById(R.id.recyclerView);
-        progressBar = view.findViewById(R.id.progressBar);
-        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
-
-        layoutNoHistory = view.findViewById(R.id.layoutNoHistory);
-        imgNoHistory = view.findViewById(R.id.imgNoHistory);
-        tvNoHistory = view.findViewById(R.id.tvNoHistory);
-        // Initialize histories here
-        histories = new ArrayList<>();
         MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(v -> {
             requireActivity().getSupportFragmentManager().popBackStack();
         });
 
-        notificationHelper = new NotificationHelper(getContext());
-        // Setup RecyclerView
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new BorrowHistoryAdapter(getContext(), new ArrayList<>(), this);
-        recyclerView.setAdapter(adapter);
+        errorView = view.findViewById(R.id.errorState);
+        contentView = view.findViewById(R.id.contentLayout);
 
-        // Setup SwipeRefreshLayout
-        swipeRefreshLayout.setOnRefreshListener(this::loadBorrowHistory);
+        layoutNoHistory = view.findViewById(R.id.layoutNoHistory);
 
-        // Load initial data
-        loadBorrowHistory();
+        Button btnRetry = errorView.findViewById(R.id.btnRetry);
+        btnRetry.setOnClickListener(v -> loadBorrowHistory());
+        shimmerLayout = view.findViewById(R.id.shimmerLayout);
+
+        showLoading();
     }
 
-    private void loadBorrowHistory() {
-        progressBar.setVisibility(View.VISIBLE);
-        recyclerView.setVisibility(View.GONE);
+    private void setupRecyclerView() {
+        histories = new ArrayList<>();
+        adapter = new BorrowHistoryAdapter(getContext(), new ArrayList<>(), this);
+        rvHistory.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvHistory.setAdapter(adapter);
+    }
+    private void showLoading() {
+        shimmerLayout.setVisibility(View.VISIBLE);
+        shimmerLayout.startShimmer();
+        errorView.setVisibility(View.GONE);
         layoutNoHistory.setVisibility(View.GONE);
+        contentView.setVisibility(View.GONE);
+    }
+
+    private void showEmpty() {
+        shimmerLayout.stopShimmer();
+        shimmerLayout.setVisibility(View.GONE);
+        errorView.setVisibility(View.GONE);
+        layoutNoHistory.setVisibility(View.VISIBLE);
+        contentView.setVisibility(View.GONE);
+    }
+
+    private void showContent() {
+        shimmerLayout.stopShimmer();
+        shimmerLayout.setVisibility(View.GONE);
+        errorView.setVisibility(View.GONE);
+        layoutNoHistory.setVisibility(View.GONE);
+        contentView.setVisibility(View.VISIBLE);
+    }
+    private void loadBorrowHistory() {
+        showLoading();
 
         if (getContext() == null) return;
         DatabaseHelper dbHelper = new DatabaseHelper(getContext());
@@ -110,10 +136,9 @@ public class BorrowHistoryFragment extends Fragment implements BorrowHistoryAdap
         Log.d("BorrowHistoryFragment", "userId: " + userId);
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
         apiService.getBorrowingRecordsByUser(userId).enqueue(new Callback<List<BorrowingRecord>>() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(@NonNull Call<List<BorrowingRecord>> call, @NonNull Response<List<BorrowingRecord>> response) {
-                progressBar.setVisibility(View.GONE);
-                swipeRefreshLayout.setRefreshing(false);
                 Log.d("BorrowHistoryFragment", "Response received");
 
                 if (response.isSuccessful() && response.body() != null) {
@@ -125,20 +150,16 @@ public class BorrowHistoryFragment extends Fragment implements BorrowHistoryAdap
                     adapter.updateData(records);
                     adapter.notifyDataSetChanged();
                     if (histories.isEmpty()) {
-                        layoutNoHistory.setVisibility(View.VISIBLE);
+                        showEmpty();
                     } else {
-                        layoutNoHistory.setVisibility(View.GONE);
+                        showContent();
                     }
                 }
             }
 
             @Override
             public void onFailure(Call<List<BorrowingRecord>> call, Throwable t) {
-                progressBar.setVisibility(View.GONE);
-                swipeRefreshLayout.setRefreshing(false);
-                Log.e("BorrowHistoryFragment", "API call failed: " + t.getMessage(), t);
-                recyclerView.setVisibility(View.GONE);
-                layoutNoHistory.setVisibility(View.VISIBLE);
+                Log.e("BorrowHistoryFragment", "Error: " + t.getMessage());
             }
         });
     }
@@ -228,7 +249,7 @@ public class BorrowHistoryFragment extends Fragment implements BorrowHistoryAdap
     private void showError(String message) {
         if (getContext() != null) {
             Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-            recyclerView.setVisibility(View.GONE);
+            rvHistory.setVisibility(View.GONE);
             layoutNoHistory.setVisibility(View.VISIBLE); // Use layoutNoHistory instead of emptyView
         }
     }

@@ -1,5 +1,6 @@
 package com.phamhuong.library.fragment.reservation;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -67,7 +68,7 @@ public class ReservationHistoryFragment extends Fragment {
 
     private void initViews(View view) {
         rvReservations = view.findViewById(R.id.rvReservations);
-        btnBack = view.findViewById(R.id.btnBack);
+//        btnBack = view.findViewById(R.id.btnBack);
 
         MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(v -> {
@@ -152,6 +153,7 @@ public class ReservationHistoryFragment extends Fragment {
 
             apiService = RetrofitClient.getRetrofit().create(APIService.class);
             apiService.getReservationHistoryByUserId(userId).enqueue(new Callback<ApiResponseT<List<Reservation>>>() {
+                @SuppressLint("NotifyDataSetChanged")
                 @Override
                 public void onResponse(@NonNull Call<ApiResponseT<List<Reservation>>> call, @NonNull Response<ApiResponseT<List<Reservation>>> response) {
                     if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
