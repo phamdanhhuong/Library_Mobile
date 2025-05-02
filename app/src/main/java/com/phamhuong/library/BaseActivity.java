@@ -215,7 +215,14 @@ public class BaseActivity extends AppCompatActivity {
     private void loadFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+        transaction.setCustomAnimations(R.anim.slide_in_right,
+                R.anim.slide_out_left,
+                R.anim.slide_in_left,
+                R.anim.slide_out_right);
+
         transaction.replace(R.id.content_frame, fragment);
+        transaction.addToBackStack(null); // Thường thêm vào back stack để có thể quay lại
         transaction.commit();
     }
     @Override

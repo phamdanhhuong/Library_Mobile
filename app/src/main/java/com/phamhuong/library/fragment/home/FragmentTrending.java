@@ -138,6 +138,10 @@ public class FragmentTrending extends Fragment implements BookHorizontalAdapter.
         if (getActivity() != null) {
             getActivity().getSupportFragmentManager()
                 .beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_right,  // enter
+                        R.anim.slide_out_left, // exit
+                        R.anim.slide_in_left,  // popEnter
+                        R.anim.slide_out_right)
                 .replace(R.id.content_frame, bookFragment)
                 .addToBackStack(null)
                 .commit();

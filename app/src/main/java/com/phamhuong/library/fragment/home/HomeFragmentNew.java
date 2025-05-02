@@ -34,11 +34,3 @@ public class HomeFragmentNew extends Fragment {
                 .commit();
     }
 }
-
-
-
-
-
-
-
-

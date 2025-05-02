@@ -35,6 +35,7 @@ public class FragmentProfile extends Fragment  {
             Fragment borrowHistoryFragment = new BorrowHistoryFragment();
             requireActivity().getSupportFragmentManager()
                 .beginTransaction()
+                .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
                 .replace(R.id.content_frame, borrowHistoryFragment)
                 .addToBackStack(null)
                 .commit();
@@ -44,6 +45,7 @@ public class FragmentProfile extends Fragment  {
             Fragment reservationHistoryFragment = new ReservationHistoryFragment();
             requireActivity().getSupportFragmentManager()
                 .beginTransaction()
+                .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
                 .replace(R.id.content_frame, reservationHistoryFragment)
                 .addToBackStack(null)
                 .commit();
@@ -53,6 +55,7 @@ public class FragmentProfile extends Fragment  {
             Fragment basketFragment = new BasketFragment();
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
+                    .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
                     .replace(R.id.content_frame, basketFragment)
                     .addToBackStack(null)
                     .commit();

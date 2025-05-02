@@ -82,6 +82,7 @@ public class FragmentExplore extends Fragment {
         AllBooksFragment fragment = AllBooksFragment.newInstance(title, books);
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
+                .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
                 .replace(R.id.content_frame, fragment)
                 .addToBackStack(null)
                 .commit();

@@ -100,7 +100,10 @@ public class BookAdapterRecommended extends RecyclerView.Adapter<BookAdapterReco
         Bundle bundle = new Bundle();
         bundle.putSerializable("book", book);
         bookFragment.setArguments(bundle);
-
+        transaction.setCustomAnimations(R.anim.fade_in,  // enter animation
+                R.anim.fade_out, // exit animation
+                R.anim.fade_in,  // pop enter animation (khi quay lại)
+                R.anim.fade_out);
         transaction.replace(R.id.content_frame, bookFragment);
         transaction.addToBackStack(null);
         transaction.commit();

@@ -95,6 +95,10 @@ public class BookSectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 FragmentActivity activity = (FragmentActivity) context;
                 activity.getSupportFragmentManager()
                         .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right,  // enter animation
+                                R.anim.slide_out_left, // exit animation
+                                R.anim.slide_in_left,  // pop enter animation
+                                R.anim.slide_out_right)
                         .replace(R.id.content_frame, fragment)
                         .addToBackStack(null)
                         .commit();
@@ -170,8 +174,6 @@ public class BookSectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     //rvBooks.setAdapter(new CategoryAdapter(itemView.getContext(), (List<Category>)items, ));
                 }
             } else {
-                // Handle the case where the items list is empty
-                // You might want to set a default adapter or hide the RecyclerView
                 rvBooks.setAdapter(null); // Or set an empty adapter
             }
         }

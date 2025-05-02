@@ -141,6 +141,10 @@ public class FragmentCategories extends Fragment {
                     FragmentActivity activity = getActivity();
                     activity.getSupportFragmentManager()
                             .beginTransaction()
+                            .setCustomAnimations(R.anim.slide_in_right,  // enter animation
+                                    R.anim.slide_out_left, // exit animation
+                                    R.anim.slide_in_left,  // pop enter animation
+                                    R.anim.slide_out_right) // pop exit animation
                             .replace(R.id.content_frame, fragment)
                             .addToBackStack(null)
                             .commit();

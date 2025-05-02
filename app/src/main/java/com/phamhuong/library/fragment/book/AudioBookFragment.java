@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -52,6 +53,7 @@ public class AudioBookFragment extends Fragment {
     private ImageButton next5sButton;
     private ImageButton previous5sButton, btnAddToWishlist, backButton;
     Spinner speedSpinner;
+    private ArrayAdapter<CharSequence> speedAdapter;
 
     public static AudioBookFragment newInstance(int bookId, String bookTitle, String audioUrl) {
         AudioBookFragment fragment = new AudioBookFragment();
@@ -97,6 +99,7 @@ public class AudioBookFragment extends Fragment {
             requireActivity().onBackPressed();
         });
 
+        speedAdapter = (ArrayAdapter<CharSequence>) speedSpinner.getAdapter();
         speedSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -190,6 +193,14 @@ public class AudioBookFragment extends Fragment {
 
         observeLiveData();
 
+        if (speedAdapter != null) {
+            for (int i = 0; i < speedAdapter.getCount(); i++) {
+                if (speedAdapter.getItem(i).toString().equals("1.0x")) {
+                    speedSpinner.setSelection(i);
+                    break;
+                }
+            }
+        }
         return view;
     }
 
