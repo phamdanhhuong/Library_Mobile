@@ -181,34 +181,40 @@ public class ReservationHistoryFragment extends Fragment {
         if (getContext() == null) return;
         DatabaseHelper dbHelper = new DatabaseHelper(getContext());
         UserLoginInfo userLoginInfo = dbHelper.getLoginInfoSQLite();
-        int userId = userLoginInfo.getUserId();
 
-        apiService = RetrofitClient.getRetrofit().create(APIService.class);
-        apiService.getReservationHistoryByUserId(userId).enqueue(new Callback<ApiResponseT<List<Reservation>>>() {
-            @Override
-            public void onResponse(@NonNull Call<ApiResponseT<List<Reservation>>> call, @NonNull Response<ApiResponseT<List<Reservation>>> response) {
-                if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
-                    List<Reservation> reservationList = response.body().getData();
-                    histories.clear();
-                    histories.addAll(reservationList);
-                    Log.d("ReservationHistoryFragment", "Histories size: " + histories.size());
-                    adapter.notifyDataSetChanged();
-                    if (histories.isEmpty()) {
+        if (userLoginInfo != null && !userLoginInfo.getUsername().equals("guest")) {
+            int userId = userLoginInfo.getUserId();
+
+            apiService = RetrofitClient.getRetrofit().create(APIService.class);
+            apiService.getReservationHistoryByUserId(userId).enqueue(new Callback<ApiResponseT<List<Reservation>>>() {
+                @Override
+                public void onResponse(@NonNull Call<ApiResponseT<List<Reservation>>> call, @NonNull Response<ApiResponseT<List<Reservation>>> response) {
+                    if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
+                        List<Reservation> reservationList = response.body().getData();
+                        histories.clear();
+                        histories.addAll(reservationList);
+                        Log.d("ReservationHistoryFragment", "Histories size: " + histories.size());
+                        adapter.notifyDataSetChanged();
+                        if (histories.isEmpty()) {
+                            showEmpty();
+                        } else {
+                            showContent();
+                        }
+                    }
+                    if (response.code() == 404 && response.body() == null) {
                         showEmpty();
-                    } else {
-                        showContent();
                     }
                 }
-                if (response.code() == 404 && response.body() == null ){
-                    showEmpty();
-                }
-            }
 
-            @Override
-            public void onFailure(@NonNull Call<ApiResponseT<List<Reservation>>> call, @NonNull Throwable t) {
-                Log.e("ReservationHistoryFragment", "Error: " + t.getMessage());
-            }
-        });
+                @Override
+                public void onFailure(@NonNull Call<ApiResponseT<List<Reservation>>> call, @NonNull Throwable t) {
+                    Log.e("ReservationHistoryFragment", "Error: " + t.getMessage());
+                }
+            });
+        }
+        else {
+            showEmpty();
+        }
     }
 
     private int getUserId() {
@@ -216,8 +222,6 @@ public class ReservationHistoryFragment extends Fragment {
         return sharedPreferences.getInt("userId", -1);
     }
     private void navigateToBookBrowsing() {
-        // Implement navigation to book browsing screen
-        // Example:
         Fragment browseFragment = new AllBooksFragment();
         requireActivity().getSupportFragmentManager()
                 .beginTransaction()

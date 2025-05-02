@@ -11,8 +11,13 @@ public class User {
 
     @SerializedName("fullName")
     private String fullName;
+    @SerializedName("avatarUrl")
+    private String avatar;
 
     public int getUserId() { return userId; }
     public String getUsername() { return username; }
     public String getFullName() { return fullName; }
+    public String getAvatar() {
+        return avatar;
+    }
 }

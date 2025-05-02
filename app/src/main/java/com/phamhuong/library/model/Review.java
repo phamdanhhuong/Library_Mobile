@@ -8,7 +8,7 @@ public class Review {
     private int reviewId;
 
     @SerializedName("user")
-    private User user; // Thay vì userId và userName riêng lẻ
+    private User user;
 
     @SerializedName("bookId")
     private int bookId;
@@ -19,6 +19,9 @@ public class Review {
     @SerializedName("comment")
     private String comment;
 
+    @SerializedName("createdAt")
+    private String createdAt;
+
     public int getReviewId() { return reviewId; }
     public User getUser() { return user; }  // Thay vì getUserId() và getUserName()
     public int getBookId() { return bookId; }
@@ -27,5 +30,12 @@ public class Review {
 
     public String getUserName() {
         return user != null ? user.getUsername() : "Unknown";
+    }
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 }

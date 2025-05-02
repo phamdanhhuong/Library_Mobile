@@ -63,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
                 Login();
             }
         });
-        btnGuest = findViewById(R.id.btnGuest); // Initialize btnGuest
+        btnGuest = findViewById(R.id.btnGuest);
         btnGuest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,24 +103,28 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<LoginResponse> call, @NonNull Response<LoginResponse> response) {
                 LoginResponse body = response.body();
-                if (body.getToken() != null) {
-                    if (cbRememberMe.isChecked()) {
-                        setRememberMe(true);
+                if (body != null) {
+                    if (body.getToken() != null) {
+                        if (cbRememberMe.isChecked()) {
+                            setRememberMe(true);
+                        }
+                        if (!cbRememberMe.isChecked()) {
+                            setRememberMe(false);
+                        }
+                        saveUserInfo(txtUsername.getText().toString(), txtPassword.getText().toString(), body.getToken());
+                        RetrofitClient.currentToken = body.getToken();
+                        Log.d("LoginActivity", "Token: " + RetrofitClient.currentToken);
+                        Intent intent = new Intent(LoginActivity.this, BaseActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Đăng nhập thất bại", Toast.LENGTH_SHORT).show();
                     }
-                    if (!cbRememberMe.isChecked()) {
-                        setRememberMe(false);
-                    }
-                    saveUserInfo(txtUsername.getText().toString(), txtPassword.getText().toString(), body.getToken());
-                    RetrofitClient.currentToken = body.getToken();
-                    Log.d("LoginActivity", "Token: " + RetrofitClient.currentToken);
-                    Intent intent = new Intent(LoginActivity.this, BaseActivity.class);
-                    startActivity(intent);
-                    finish();
                 } else {
-                    Toast.makeText(LoginActivity.this, "Đăng nhập thất bại", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Đăng nhập thất bại: Lỗi phản hồi từ server", Toast.LENGTH_SHORT).show();
+                    Log.e("LoginActivity", "Login failed: Response body is null");
                 }
             }
-
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
                 Toast.makeText(LoginActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
@@ -134,10 +138,9 @@ public class LoginActivity extends AppCompatActivity {
         editor.putBoolean("isGuest", true);
         editor.apply();
 
-        // Optionally, you can save a special guest user ID or username in DatabaseHelper
         DatabaseHelper dbHelper = new DatabaseHelper(this);
-        dbHelper.clearAllLoginData(); // Clear any previous login info
-        dbHelper.saveGuestLoginInfo(); // Implement this method in DatabaseHelper
+        dbHelper.clearAllLoginData();
+        dbHelper.saveGuestLoginInfo();
 
         Intent intent = new Intent(LoginActivity.this, BaseActivity.class);
         intent.putExtra("isGuest", true); // Indicate guest user

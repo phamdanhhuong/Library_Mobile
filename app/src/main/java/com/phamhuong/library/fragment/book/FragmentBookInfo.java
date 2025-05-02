@@ -23,6 +23,7 @@ import com.phamhuong.library.model.CreateNotificationRequest;
 import com.phamhuong.library.model.Notification;
 import com.phamhuong.library.model.NotificationType;
 import com.phamhuong.library.model.RetrofitClient;
+import com.phamhuong.library.model.UserLoginInfo;
 import com.phamhuong.library.model.VoidResponse;
 import com.phamhuong.library.service.APIService;
 import com.phamhuong.library.service.DatabaseHelper;
@@ -60,38 +61,46 @@ public class FragmentBookInfo extends Fragment {
     void addToWishlist() {
         APIService apiServiceWishlist = RetrofitClient.getRetrofit().create(APIService.class);
         DatabaseHelper dbHelper = new DatabaseHelper(getContext());
-        int userId = dbHelper.getLoginInfoSQLite().getUserId();
-        Map<String, Integer> requestBodyWishlist = new HashMap<>();
-        requestBodyWishlist.put("user_id", userId);
-        requestBodyWishlist.put("book_id", book.getId());
+        UserLoginInfo userLoginInfo = dbHelper.getLoginInfoSQLite();
 
-        // Initialize NotificationHelper
-        NotificationHelper notificationHelper = new NotificationHelper(getContext());
+        if (userLoginInfo != null && !userLoginInfo.getUsername().equals("guest")) {
+            int userId = dbHelper.getLoginInfoSQLite().getUserId();
+            Map<String, Integer> requestBodyWishlist = new HashMap<>();
+            requestBodyWishlist.put("user_id", userId);
+            requestBodyWishlist.put("book_id", book.getId());
 
-        apiServiceWishlist.addToWishList(requestBodyWishlist).enqueue(new Callback<ApiResponse>() {
-            @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                if (response.isSuccessful() && response.body().isStatus()) {
-                    CustomDialogHelper.showWishlistSuccessPopup(getActivity());
-                    // Gọi hàm tạo thông báo từ NotificationHelper
-                    notificationHelper.createNotification(
-                            String.valueOf(userId),
-                            "Đã thêm vào Yêu thích",
-                            "Bạn đã thêm cuốn sách \"" + book.getTitle() + "\" vào danh sách yêu thích.",
-                            NotificationType.RECOMMENDATION.name()
-                    );
+            // Initialize NotificationHelper
+            NotificationHelper notificationHelper = new NotificationHelper(getContext());
 
-                } else {
-                    CustomDialogHelper.showWishlistFailurePopup(getActivity());
-                    Toast.makeText(getContext(), "Thêm vào danh sách yêu thích thất bại", Toast.LENGTH_SHORT).show();
+            apiServiceWishlist.addToWishList(requestBodyWishlist).enqueue(new Callback<ApiResponse>() {
+                @Override
+                public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                    if (response.isSuccessful() && response.body().isStatus()) {
+                        CustomDialogHelper.showWishlistSuccessPopup(getActivity());
+                        // Gọi hàm tạo thông báo từ NotificationHelper
+                        notificationHelper.createNotification(
+                                String.valueOf(userId),
+                                "Đã thêm vào Yêu thích",
+                                "Bạn đã thêm cuốn sách \"" + book.getTitle() + "\" vào danh sách yêu thích.",
+                                NotificationType.RECOMMENDATION.name()
+                        );
+
+                    } else {
+                        CustomDialogHelper.showWishlistFailurePopup(getActivity());
+                        Toast.makeText(getContext(), "Thêm vào danh sách yêu thích thất bại", Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.e("", "Error: " + t.getMessage());
-            }
-        });
+                @Override
+                public void onFailure(Call<ApiResponse> call, Throwable t) {
+                    Log.e("", "Error: " + t.getMessage());
+                }
+            });
+        }
+        else {
+            // Người dùng là khách, hiển thị thông báo
+            Toast.makeText(getContext(), "Tính năng này không khả dụng cho khách.", Toast.LENGTH_SHORT).show();
+        }
     }
     void initView(View view) {
         tvBookName = view.findViewById(R.id.tvBookName);

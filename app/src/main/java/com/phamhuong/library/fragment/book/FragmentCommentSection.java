@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.card.MaterialCardView;
 import com.phamhuong.library.R;
 import com.phamhuong.library.adapter.book.ReviewAdapter;
 import com.phamhuong.library.model.RetrofitClient;
@@ -41,8 +43,9 @@ public class FragmentCommentSection extends Fragment {
     private RatingBar ratingBarAverage, ratingBarUser;
     private RecyclerView recyclerViewComments;
     private EditText edtComment;
-    private MaterialButton btnSendComment;
+    private ImageButton btnSendComment;
     String token ="";
+    private MaterialCardView commentCardView;
 
     public static FragmentCommentSection newInstance(int bookId) {
         FragmentCommentSection fragment = new FragmentCommentSection();
@@ -69,6 +72,7 @@ public class FragmentCommentSection extends Fragment {
         recyclerViewComments = view.findViewById(R.id.recyclerViewComments);
         edtComment = view.findViewById(R.id.edtComment);
         btnSendComment = view.findViewById(R.id.btnSendComment);
+        commentCardView = view.findViewById(R.id.commentCardView);
     }
 
     private void initData() {
@@ -78,42 +82,47 @@ public class FragmentCommentSection extends Fragment {
                 loadComments(bookId);
             }
         }
-        btnSendComment.setOnClickListener(v -> {
-            String commentText = edtComment.getText().toString().trim();
-            float userRating = ratingBarUser.getRating();
-//            SharedPreferences sharedPreferences = requireContext().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE);
-//            int userId = sharedPreferences.getInt("userId", -1);
-            DatabaseHelper dbHelper = new DatabaseHelper(getParentFragment().getContext());
-            UserLoginInfo userLoginInfo = dbHelper.getLoginInfoSQLite();
-            int userId = userLoginInfo.getUserId();
+        DatabaseHelper dbHelper = new DatabaseHelper(getParentFragment().getContext());
+        UserLoginInfo userLoginInfo = dbHelper.getLoginInfoSQLite();
+
+        if (userLoginInfo != null && userLoginInfo.getUsername().equals("guest")) {
+            commentCardView.setVisibility(View.GONE);
+        }
+        else {
+            btnSendComment.setOnClickListener(v -> {
+                String commentText = edtComment.getText().toString().trim();
+                float userRating = ratingBarUser.getRating();
+//                DatabaseHelper dbHelper = new DatabaseHelper(getParentFragment().getContext());
+//                UserLoginInfo userLoginInfo = dbHelper.getLoginInfoSQLite();
+                int userId = userLoginInfo.getUserId();
 
 
-            if (commentText.isEmpty()) {
-                Toast.makeText(getContext(), "Vui lòng nhập bình luận", Toast.LENGTH_SHORT).show();
-                return;
-            }
+                if (commentText.isEmpty()) {
+                    Toast.makeText(getContext(), "Vui lòng nhập bình luận", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-            ReviewRequest review = new ReviewRequest(userId, bookId, userRating, commentText);
-            reviewApiService.createReview(review).enqueue(new Callback<Void>() {
-                @Override
-                public void onResponse(Call<Void> call, Response<Void> response) {
-                    if (response.isSuccessful()) {
-                        Toast.makeText(getContext(), "Đã gửi bình luận!", Toast.LENGTH_SHORT).show();
-                        edtComment.setText("");
-                        ratingBarUser.setRating(0);
-                        loadComments(bookId); // Reload bình luận
-                    } else {
-                        Toast.makeText(getContext(), "Gửi bình luận thất bại", Toast.LENGTH_SHORT).show();
+                ReviewRequest review = new ReviewRequest(userId, bookId, userRating, commentText);
+                reviewApiService.createReview(review).enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (response.isSuccessful()) {
+                            Toast.makeText(getContext(), "Đã gửi bình luận!", Toast.LENGTH_SHORT).show();
+                            edtComment.setText("");
+                            ratingBarUser.setRating(0);
+                            loadComments(bookId); // Reload bình luận
+                        } else {
+                            Toast.makeText(getContext(), "Gửi bình luận thất bại", Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
 
-                @Override
-                public void onFailure(Call<Void> call, Throwable t) {
-                    Toast.makeText(getContext(), "Lỗi kết nối", Toast.LENGTH_SHORT).show();
-                }
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        Toast.makeText(getContext(), "Lỗi kết nối", Toast.LENGTH_SHORT).show();
+                    }
+                });
             });
-        });
-
+        }
     }
 
     private void loadComments(int bookId) {

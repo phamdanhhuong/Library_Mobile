@@ -30,7 +30,7 @@
             android:id="@+id/tvAverageRating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="4.5"
+            android:text="0.0"
             android:textSize="48sp"
             android:textStyle="bold"
             android:textColor="@color/teal_700"
@@ -50,14 +50,14 @@
                 android:numStars="5"
                 android:stepSize="0.1"
                 android:isIndicator="true"
-                android:rating="4.5"
+                android:rating="0.0"
                 style="?android:attr/ratingBarStyleSmall"/>
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tvNumberOfComments"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="83 đánh giá"
+                android:text="0 đánh giá"
                 android:textSize="14sp"
                 android:textColor="@color/teal_700"/>
         </LinearLayout>
@@ -73,6 +73,7 @@
 
     <!-- Nhập bình luận -->
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/commentCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -96,7 +97,7 @@
                     android:id="@+id/imgUserAvatar"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/ic_login_hide_on"
+                    android:src="@drawable/avatar1"
                     android:background="@drawable/circle_background"
                     android:scaleType="centerCrop"
                     android:layout_marginEnd="8dp"/>
@@ -115,17 +116,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Viết bình luận..."
-                        android:textColor="@color/onSurface"
+                        android:textColor="@color/onPrimary"
                         android:textSize="14sp"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.button.MaterialButton
+                <ImageButton
                     android:id="@+id/btnSendComment"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:icon="@drawable/ic_send_comment"
-                    android:iconTint="@android:color/white"
-                    android:backgroundTint="@color/teal_700"
+                    android:background="@drawable/ic_send_comment"
                     app:cornerRadius="24dp"
                     android:contentDescription="Gửi bình luận" />
 
