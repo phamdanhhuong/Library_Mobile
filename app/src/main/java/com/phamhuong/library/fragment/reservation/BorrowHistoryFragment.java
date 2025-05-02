@@ -118,21 +118,18 @@ public class BorrowHistoryFragment extends Fragment implements BorrowHistoryAdap
 
                 if (response.isSuccessful() && response.body() != null) {
                     List<BorrowingRecord> records = response.body();
-                    Log.d("BorrowHistoryFragment", "Records received: " + records.toString());
+                    Log.d("BorrowHistoryFragment", "Records received: " + records.size());
 
-                    if (records != null) {
-                        histories.clear();
-                        histories.addAll(records);
-                        adapter.updateData(records);
-                        recyclerView.setVisibility(View.VISIBLE);
-                        layoutNoHistory.setVisibility(View.GONE);
-                    } else {
-                        recyclerView.setVisibility(View.GONE);
+                    histories.clear();
+                    histories.addAll(records);
+                    adapter.updateData(records);
+                    adapter.notifyDataSetChanged();
+                    if (histories.isEmpty()) {
                         layoutNoHistory.setVisibility(View.VISIBLE);
+                    } else {
+                        layoutNoHistory.setVisibility(View.GONE);
                     }
                 }
-                recyclerView.setVisibility(View.GONE);
-                layoutNoHistory.setVisibility(View.VISIBLE);
             }
 
             @Override

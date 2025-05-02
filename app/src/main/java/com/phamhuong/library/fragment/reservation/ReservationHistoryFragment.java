@@ -42,7 +42,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ReservationHistoryFragment extends Fragment {
-    private RecyclerView rvBorrowHistory;
+    private RecyclerView rvReservations;
     private ReservationHistoryAdapter adapter;
     private List<Reservation> histories;
     private ImageButton btnBack;
@@ -52,8 +52,6 @@ public class ReservationHistoryFragment extends Fragment {
     private ShimmerFrameLayout shimmerLayout;
     private APIService apiService;
     private LinearLayout layoutNoReservations;
-    private ImageView imgNoReservations;
-    private TextView tvNoReservations;
 
     @Nullable
     @Override
@@ -68,7 +66,7 @@ public class ReservationHistoryFragment extends Fragment {
     }
 
     private void initViews(View view) {
-        rvBorrowHistory = view.findViewById(R.id.rvReservations);
+        rvReservations = view.findViewById(R.id.rvReservations);
         btnBack = view.findViewById(R.id.btnBack);
 
         MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
@@ -80,8 +78,6 @@ public class ReservationHistoryFragment extends Fragment {
         contentView = view.findViewById(R.id.contentLayout);
 
         layoutNoReservations = view.findViewById(R.id.layoutNoReservations);
-        imgNoReservations = view.findViewById(R.id.imgNoReservations);
-        tvNoReservations = view.findViewById(R.id.tvNoReservations);
 
         Button btnRetry = errorView.findViewById(R.id.btnRetry);
         btnRetry.setOnClickListener(v -> loadReservations());
@@ -93,8 +89,8 @@ public class ReservationHistoryFragment extends Fragment {
     private void setupRecyclerView() {
         histories = new ArrayList<>();
         adapter = new ReservationHistoryAdapter(getContext(), histories, this::onReservationClick);
-        rvBorrowHistory.setLayoutManager(new LinearLayoutManager(getContext()));
-        rvBorrowHistory.setAdapter(adapter);
+        rvReservations.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvReservations.setAdapter(adapter);
     }
 
     private void onReservationClick(Reservation reservation) {
@@ -118,37 +114,6 @@ public class ReservationHistoryFragment extends Fragment {
                 .replace(R.id.content_frame, detailFragment)
                 .addToBackStack(null)
                 .commit();
-    }
-
-    private void loadBorrowHistory() {
-        if (getContext() == null) return;
-        DatabaseHelper dbHelper = new DatabaseHelper(getContext());
-        UserLoginInfo userLoginInfo = dbHelper.getLoginInfoSQLite();
-        int userId = userLoginInfo.getUserId();
-
-        apiService = RetrofitClient.getRetrofit().create(APIService.class);
-        apiService.getReservationHistoryByUserId(userId).enqueue(new Callback<ApiResponseT<List<Reservation>>>() {
-            @Override
-            public void onResponse(@NonNull Call<ApiResponseT<List<Reservation>>> call, @NonNull Response<ApiResponseT<List<Reservation>>> response) {
-                if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
-                    List<Reservation> reservationList = response.body().getData();
-                    histories.clear();
-                    histories.addAll(reservationList);
-                    Log.d("ReservationHistoryFragment", "Histories size: " + histories.size());
-                    adapter.notifyDataSetChanged();
-                    if (histories.isEmpty()) {
-                        showEmpty();
-                    } else {
-                        showContent();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<ApiResponseT<List<Reservation>>> call, @NonNull Throwable t) {
-                Log.e("ReservationHistoryFragment", "Error: " + t.getMessage());
-            }
-        });
     }
 
     private void showLoading() {

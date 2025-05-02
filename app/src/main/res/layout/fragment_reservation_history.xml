@@ -39,7 +39,8 @@
                 android:clipToPadding="false"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="8dp"
-                android:visibility="gone" /> </androidx.core.widget.NestedScrollView>
+                android:visibility="visible" />
+        </androidx.core.widget.NestedScrollView>
 
         <com.facebook.shimmer.ShimmerFrameLayout
             android:id="@+id/shimmerLayout"
@@ -74,10 +75,10 @@
             android:orientation="vertical"
             android:visibility="visible">
             <ImageView
-            android:id="@+id/imgNoReservations"
-            android:layout_width="180dp"
-            android:layout_height="180dp"
-            android:src="@drawable/img_no_reservation" />
+                android:id="@+id/imgNoReservations"
+                android:layout_width="180dp"
+                android:layout_height="180dp"
+                android:src="@drawable/img_no_reservation" />
 
             <TextView
                 android:id="@+id/tvNoReservations"

@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +50,7 @@ public class BasketFragment extends Fragment {
     private List<Book> books;
     private ImageButton btnBack, btnReservation;
     private TextView tvReservationTitle;
+    LinearLayout layoutNoWishlist;
     List<Book> selectedBooks;
 
     public static ReservationDetailFragment newInstance() {
@@ -83,7 +85,7 @@ public class BasketFragment extends Fragment {
         btnBack = view.findViewById(R.id.btnBack);
         btnReservation = view.findViewById(R.id.btnReservation);
         tvReservationTitle = view.findViewById(R.id.tvReservationTitle);
-
+        layoutNoWishlist = view.findViewById(R.id.layoutNoWishlist);
         tvReservationTitle.setText("Chi tiết giỏ hàng");
 
         btnBack.setOnClickListener(v -> {
@@ -196,6 +198,11 @@ public class BasketFragment extends Fragment {
                     books.clear();
                     books.addAll(bookList);
                     adapter.notifyDataSetChanged();
+                    if (books.isEmpty()) {
+                        layoutNoWishlist.setVisibility(View.VISIBLE);
+                    } else {
+                        layoutNoWishlist.setVisibility(View.GONE);
+                    }
                 }
             }
 
