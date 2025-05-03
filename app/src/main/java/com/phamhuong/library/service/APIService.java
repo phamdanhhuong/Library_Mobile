@@ -30,8 +30,10 @@ import java.util.Objects;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -163,4 +165,8 @@ public interface APIService {
     Call<List<Book>> getFreeBooks();
     @GET("books/ebooks")
     Call<ApiResponseT<List<Book>>> getAllEBooks();
+
+    @POST("/reservations/cancel/{reservationId}")
+    Call<ApiResponse> cancelReservation(@Path("reservationId") int reservationId);
+
 }

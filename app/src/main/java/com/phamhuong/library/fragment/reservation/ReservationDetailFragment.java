@@ -6,8 +6,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,12 +21,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.chip.Chip;
 import com.phamhuong.library.R;
+import com.phamhuong.library.SendPasswordResetOtpActivity;
 import com.phamhuong.library.adapter.recycle.BookHorizontalAdapter;
+import com.phamhuong.library.model.ApiResponse;
 import com.phamhuong.library.model.ApiResponseT;
 import com.phamhuong.library.model.Book;
 import com.phamhuong.library.model.Reservation;
 import com.phamhuong.library.model.RetrofitClient;
 import com.phamhuong.library.service.APIService;
+import com.phamhuong.library.utils.CustomDialogHelper;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -48,6 +53,7 @@ public class ReservationDetailFragment extends Fragment {
     private TextView tvReservationInfo;
     private Chip chipStatus;
     private Reservation reservation;
+    private Button btnCancelReservation;
 
     public static ReservationDetailFragment newInstance(int reservationId, Reservation reservation) {
         ReservationDetailFragment fragment = new ReservationDetailFragment();
@@ -74,8 +80,14 @@ public class ReservationDetailFragment extends Fragment {
         
         initViews(view);
         setupRecyclerView();
+        btnCancelReservation = view.findViewById(R.id.btnCancelReservation); // Ánh xạ nút hủy
+        if (reservation != null && !reservation.getStatus().equalsIgnoreCase("cancelled") && !reservation.getStatus().equalsIgnoreCase("completed")) {
+            btnCancelReservation.setOnClickListener(v -> cancelReservation());
+        } else {
+            btnCancelReservation.setVisibility(View.GONE); // Ẩn nút nếu đã hủy hoặc hoàn thành
+        }
         if (reservation != null) {
-            updateReservationInfo(reservation); // Hiển thị thông tin Reservation
+            updateReservationInfo(reservation);
         }
         return view;
     }
@@ -102,7 +114,43 @@ public class ReservationDetailFragment extends Fragment {
         rvReservationBooks.setLayoutManager(new LinearLayoutManager(getContext()));
         rvReservationBooks.setAdapter(adapter);
     }
+    private void cancelReservation() {
+        APIService apiService = RetrofitClient.getRetrofit().create(APIService.class);
+        Call<ApiResponse> call = apiService.cancelReservation(reservationId);
+        Log.d("ReservationDetailFragment", "Reservation ID: " + reservationId);
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().isStatus()) {
+                    CustomDialogHelper.showCustomDialogSuccess(
+                            getContext(),
+                            "Đã hủy đặt lịch thành công!",
+                            "Hãy kiểm tra lại lịch sử đặt lịch.",
+                            (dialog, which) -> {
+                            }
+                    );
+                    if (getActivity() != null) {
+                        getActivity().getSupportFragmentManager().popBackStack();
+                    }
+                } else {
+                    CustomDialogHelper.showCustomDialogFail(
+                        getContext(),
+                        "Không thể hủy đặt lịch!",
+                        "Hãy kiểm tra lại lịch sử đặt lịch.",
+                        (dialog, which) -> {
+                        }
+                );
+                    Log.e("ReservationDetail", "Hủy đặt lịch thất bại: " + response.code() + " - " + response.message());
+                }
+            }
 
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Toast.makeText(getContext(), "Lỗi kết nối khi hủy đặt lịch", Toast.LENGTH_SHORT).show();
+                Log.e("ReservationDetail", "Lỗi kết nối hủy đặt lịch: " + t.getMessage());
+            }
+        });
+    }
     private void loadReservationBooks() {
         APIService apiService = RetrofitClient.getRetrofit().create(APIService.class);
         Log.d("ReservationDetailFragment", "Reservation ID: " + reservationId);
