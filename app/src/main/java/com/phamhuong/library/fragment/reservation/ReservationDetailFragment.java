@@ -26,10 +26,14 @@ import com.phamhuong.library.adapter.recycle.BookHorizontalAdapter;
 import com.phamhuong.library.model.ApiResponse;
 import com.phamhuong.library.model.ApiResponseT;
 import com.phamhuong.library.model.Book;
+import com.phamhuong.library.model.NotificationType;
 import com.phamhuong.library.model.Reservation;
 import com.phamhuong.library.model.RetrofitClient;
+import com.phamhuong.library.model.UserLoginInfo;
 import com.phamhuong.library.service.APIService;
+import com.phamhuong.library.service.DatabaseHelper;
 import com.phamhuong.library.utils.CustomDialogHelper;
+import com.phamhuong.library.utils.NotificationHelper;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -128,6 +132,16 @@ public class ReservationDetailFragment extends Fragment {
                             "Hãy kiểm tra lại lịch sử đặt lịch.",
                             (dialog, which) -> {
                             }
+                    );
+                    DatabaseHelper dbHelper = new DatabaseHelper(getContext());
+                    UserLoginInfo userLoginInfo = dbHelper.getLoginInfoSQLite();
+                    int userId = dbHelper.getLoginInfoSQLite().getUserId();
+                    NotificationHelper notificationHelper = new NotificationHelper(getContext());
+                    notificationHelper.createNotification(
+                            String.valueOf(userId),
+                            "Đã hủy đặt lịch thành công!",
+                            "Bạn hủy đặt lịch đơn #\"" + reservationId + "\".",
+                            NotificationType.ORDER_STATUS.name()
                     );
                     if (getActivity() != null) {
                         getActivity().getSupportFragmentManager().popBackStack();

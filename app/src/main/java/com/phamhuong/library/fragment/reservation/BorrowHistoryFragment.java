@@ -203,16 +203,13 @@ public class BorrowHistoryFragment extends Fragment implements BorrowHistoryAdap
 
     private void renewBook(int recordId, LocalDate renewalDate, String bookTitle) {
         Log.d("BorrowHistoryFragment", "Renew request: recordId=" + recordId + ", selectedDate=" + renewalDate);
-        progressBar.setVisibility(View.VISIBLE);
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
         apiService.renewBorrowingRecord(recordId, renewalDate).enqueue(new Callback<ApiReponseWithNoData>() {
             @Override
             public void onResponse(@NonNull Call<ApiReponseWithNoData> call, @NonNull Response<ApiReponseWithNoData> response) {
                 Log.d("BorrowHistoryFragment", "Response renew: " + response);
-                progressBar.setVisibility(View.GONE);
 
                 if (response.isSuccessful() && response.body() != null && response.body().isStatus()) {
-                    Toast.makeText(getContext(), "Gia hạn thành công", Toast.LENGTH_SHORT).show();
                     loadBorrowHistory();
                     // Send notification on successful renewal
                     DatabaseHelper dbHelper = new DatabaseHelper(getContext());
@@ -225,6 +222,7 @@ public class BorrowHistoryFragment extends Fragment implements BorrowHistoryAdap
                             message = "Bạn đã gia hạn thành công cuốn sách '" + bookTitle + "' đến ngày " + renewalDate.format(DateTimeFormatter.ISO_DATE) + ".";
                         }
                         CustomDialogHelper.showRenewSuccessPopup(getContext(), message);
+                        NotificationHelper notificationHelper = new NotificationHelper(getContext());
                         notificationHelper.createNotification(userId, title, message, NotificationType.RENEWAL_SUCCESS.name());
                     }
                 } else {
@@ -239,7 +237,6 @@ public class BorrowHistoryFragment extends Fragment implements BorrowHistoryAdap
 
             @Override
             public void onFailure(@NonNull Call<ApiReponseWithNoData> call, @NonNull Throwable t) {
-                progressBar.setVisibility(View.GONE);
                 CustomDialogHelper.showRenewFailurePopup(getContext(), "Lỗi kết nối khi gia hạn");
                 Log.e("BorrowHistoryFragment", "Renew API call failed: " + t.getMessage(), t);
             }

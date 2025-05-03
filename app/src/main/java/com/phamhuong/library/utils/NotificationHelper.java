@@ -115,7 +115,7 @@ public class NotificationHelper { // Đặt tên class cho phù hợp
                         messageBuilder.append("'").append(record.getBook().getTitle()).append("', ");
                     }
                     if (messageBuilder.length() > 0) {
-                        messageBuilder.delete(messageBuilder.length() - 2, messageBuilder.length()); // Xóa dấu phẩy và khoảng trắng cuối cùng
+                        messageBuilder.delete(messageBuilder.length() - 2, messageBuilder.length());
                         createNotification(userId, title, messageBuilder.toString(), "DUE_REMINDER");
                     } else {
                         Log.d("NotificationAPI", "Không có sách sắp đến hạn trả.");
