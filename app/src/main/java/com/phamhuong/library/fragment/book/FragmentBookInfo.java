@@ -42,7 +42,7 @@ import retrofit2.Response;
 public class FragmentBookInfo extends Fragment {
     TextView tvBookName, tvBookAuthor, tvBookDescription, tvGenre, tvNumberOfReviews, tvAverageScore;
     ImageView imgBookCover;
-    MaterialButton btnAddToWishlist;
+    MaterialButton btnAddToWishlist, btnListen;
     Book book;
     TextView tvPublisher, tvPublicationDate, tvQuantity, tvBorrowedCount, tvPrice;
 
@@ -55,9 +55,31 @@ public class FragmentBookInfo extends Fragment {
 
         btnAddToWishlist.setOnClickListener(v -> addToWishlist());
 
+        btnListen.setOnClickListener(v -> handleListenButtonClick());
         return view;
     }
-
+    void handleListenButtonClick() {
+        if (book != null && book.getAudioUrl() != null && !book.getAudioUrl().isEmpty()) {
+            // Chuyển đến trang nghe audiobook (bạn cần implement logic chuyển trang này)
+            navigateToAudioBookFragment(book.getId(), book.getTitle(), book.getAuthor(), book.getAudioUrl(), book.getCoverUrl());
+        } else {
+            // Hiển thị custom dialog thông báo không có bản nghe thử
+            CustomDialogHelper.showCustomDialogFail(
+                    getActivity(),
+                    "Không có bản nghe thử",
+                    "Rất tiếc, cuốn sách này hiện chưa có bản nghe thử.",
+                    (dialog, which) -> dialog.dismiss()
+            );
+        }
+    }
+    private void navigateToAudioBookFragment(int bookId, String bookTitle, String bookAuthor, String audioUrl, String coverUrl) {
+        AudioBookFragment fragment = AudioBookFragment.newInstance(bookId, bookTitle, bookAuthor, audioUrl, coverUrl);
+        requireActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.content_frame, fragment)
+                .addToBackStack(null)
+                .commit();
+    }
     void addToWishlist() {
         APIService apiServiceWishlist = RetrofitClient.getRetrofit().create(APIService.class);
         DatabaseHelper dbHelper = new DatabaseHelper(getContext());
@@ -108,9 +130,10 @@ public class FragmentBookInfo extends Fragment {
         tvBookDescription = view.findViewById(R.id.tvDescription);
         imgBookCover = view.findViewById(R.id.bookImage);
         tvGenre = view.findViewById(R.id.tvGenre);
-        tvNumberOfReviews = view.findViewById(R.id.tvNumberOfReviews);
+//        tvNumberOfReviews = view.findViewById(R.id.tvNumberOfReviews);
         tvAverageScore = view.findViewById(R.id.tvAverageScore);
         btnAddToWishlist = view.findViewById(R.id.btnAddToWishlist);
+        btnListen = view.findViewById(R.id.btnListen);
         tvPublisher = view.findViewById(R.id.tvPublisher);
         tvPublicationDate = view.findViewById(R.id.tvPublicationDate);
         tvQuantity = view.findViewById(R.id.tvQuantity);

@@ -38,6 +38,7 @@ public class CustomDialogHelper {
         // Thiết lập OnClickListener cho các nút
         positiveButton.setOnClickListener(v -> alertDialog.dismiss());
 
+        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         alertDialog.show();
     }
     public static void showCustomDialogFail(Context context, String title, String message,
@@ -65,6 +66,7 @@ public class CustomDialogHelper {
         // Thiết lập OnClickListener cho các nút
         positiveButton.setOnClickListener(v -> alertDialog.dismiss());
 
+        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         alertDialog.show();
     }
     public static void showWishlistSuccessPopup(Context context) {
@@ -84,6 +86,8 @@ public class CustomDialogHelper {
 
         AlertDialog alertDialog = builder.create();
         positiveButton.setOnClickListener(v -> alertDialog.dismiss());
+
+        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         alertDialog.show();
     }
 
@@ -104,6 +108,8 @@ public class CustomDialogHelper {
 
         AlertDialog alertDialog = builder.create();
         positiveButton.setOnClickListener(v -> alertDialog.dismiss());
+
+        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         alertDialog.show();
     }
 
@@ -125,6 +131,8 @@ public class CustomDialogHelper {
 
         AlertDialog alertDialog = builder.create();
         positiveButton.setOnClickListener(v -> alertDialog.dismiss());
+
+        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         alertDialog.show();
     }
 
@@ -145,6 +153,8 @@ public class CustomDialogHelper {
 
         AlertDialog alertDialog = builder.create();
         positiveButton.setOnClickListener(v -> alertDialog.dismiss());
+
+        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         alertDialog.show();
     }
     public static void showReservationSuccessPopup(Context context) {
@@ -164,6 +174,8 @@ public class CustomDialogHelper {
 
         AlertDialog alertDialog = builder.create();
         dialogButton.setOnClickListener(v -> alertDialog.dismiss());
+
+        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         alertDialog.show();
     }
 
@@ -184,6 +196,8 @@ public class CustomDialogHelper {
 
         AlertDialog alertDialog = builder.create();
         dialogButton.setOnClickListener(v -> alertDialog.dismiss());
+
+        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         alertDialog.show();
     }
     public static void showNoBookSelectedForReservationPopup(Context context) {
@@ -203,6 +217,8 @@ public class CustomDialogHelper {
 
         AlertDialog alertDialog = builder.create();
         dialogButton.setOnClickListener(v -> alertDialog.dismiss());
+
+        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         alertDialog.show();
     }
 }
