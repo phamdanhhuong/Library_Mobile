@@ -46,7 +46,7 @@
 
             <TextView
                 android:id="@+id/tvAudiobook"
-        android:layout_width="match_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Sách nói"
                 android:textSize="16sp"

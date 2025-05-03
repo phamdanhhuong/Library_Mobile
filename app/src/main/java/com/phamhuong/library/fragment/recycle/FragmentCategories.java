@@ -45,7 +45,7 @@ public class FragmentCategories extends Fragment {
         initViews(view);
         setupToggleButtons();
         setupRecyclerView();
-        loadCategories(true); // Load ebook categories by default
+        loadCategories(true);
         return view;
     }
 
@@ -89,13 +89,16 @@ public class FragmentCategories extends Fragment {
         tvAudiobook.setBackgroundColor(!isEbook ? 
             getResources().getColor(R.color.selectedButton) :
             Color.WHITE);
+        if (categoryAdapter != null) {
+            categoryAdapter.updateData(categoryAdapter.getCategories(), isEbookSelected);
+        }
     }
 
     private void setupRecyclerView() {
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
         rvCategories.setLayoutManager(layoutManager);
         
-        categoryAdapter = new CategoryAdapter(getContext(), new ArrayList<>(), this::fetchBooksByCategory);
+        categoryAdapter = new CategoryAdapter(getContext(), new ArrayList<>(), this::fetchBooksByCategory, isEbookSelected);
         rvCategories.setAdapter(categoryAdapter);
     }
 
@@ -103,17 +106,16 @@ public class FragmentCategories extends Fragment {
         APIService apiService = RetrofitClient.getRetrofit().create(APIService.class);
         Call<List<Category>> call;
 
-        // Nếu isEbook là true, gọi API dành cho Ebook, ngược lại gọi API dành cho Audiobook
         if (isEbook) {
-            call = apiService.getEbookCategories(); // API riêng cho Ebook
+            call = apiService.getEbookCategories();
         } else {
-            call = apiService.getAudiobookCategories(); // API riêng cho Audiobook
+            call = apiService.getAudiobookCategories();
         }
         call.enqueue(new Callback<List<Category>>() {
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    categoryAdapter.updateData(response.body());
+                    categoryAdapter.updateData(response.body(), isEbook);
                 } else {
                     Toast.makeText(getContext(), "Không thể tải danh sách thể loại", Toast.LENGTH_SHORT).show();
                 }

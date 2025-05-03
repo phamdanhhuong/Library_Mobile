@@ -19,6 +19,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.phamhuong.library.R;
 import com.phamhuong.library.model.ApiResponse;
 import com.phamhuong.library.model.AudioPlayerViewModel;
@@ -42,6 +44,7 @@ public class AudioBookFragment extends Fragment {
     private String bookTitle;
     private String audioUrl;
     private String bookAuthor; // You might need to pass author as well
+    private String coverUrl;
     private AudioPlayerViewModel audioPlayerViewModel;
     private ImageView audioBookCoverImageView;
     private TextView audioBookTitleTextView;
@@ -55,13 +58,14 @@ public class AudioBookFragment extends Fragment {
     Spinner speedSpinner;
     private ArrayAdapter<CharSequence> speedAdapter;
 
-    public static AudioBookFragment newInstance(int bookId, String bookTitle, String audioUrl) {
+    public static AudioBookFragment newInstance(int bookId, String bookTitle, String bookAuthor, String audioUrl, String coverUrl) {
         AudioBookFragment fragment = new AudioBookFragment();
         Bundle args = new Bundle();
         args.putInt("bookId", bookId);
         args.putString("bookTitle", bookTitle);
         args.putString("audioUrl", audioUrl);
-        // You might need to pass author as well: args.putString("bookAuthor", bookAuthor);
+        args.putString("coverUrl", coverUrl);
+        args.putString("bookAuthor", bookAuthor);
         fragment.setArguments(args);
         return fragment;
     }
@@ -73,8 +77,8 @@ public class AudioBookFragment extends Fragment {
             bookId = getArguments().getInt("bookId");
             bookTitle = getArguments().getString("bookTitle");
             audioUrl = getArguments().getString("audioUrl");
-            bookAuthor = getArguments().getString("bookAuthor"); // Retrieve author if passed
-
+            bookAuthor = getArguments().getString("bookAuthor");
+            coverUrl = getArguments().getString("coverUrl");
         }
     }
 
@@ -124,10 +128,17 @@ public class AudioBookFragment extends Fragment {
         if (bookAuthor != null) {
             audioBookAuthorTextView.setText(bookAuthor);
         }
-        // Load cover image if you passed coverUrl as an argument
+
+        Glide.with(this)
+                .load(coverUrl)
+                .apply(new RequestOptions()
+                        .placeholder(R.drawable.img_profile_book_more)
+                        .error(R.drawable.img_profile_book_more))
+                .into(audioBookCoverImageView);
+
 
         if (audioUrl != null) {
-            audioPlayerViewModel.playAudio(audioUrl, bookTitle, true); // Or false for MediaPlayer
+            audioPlayerViewModel.playAudio(audioUrl, bookTitle, true);
         } else {
             Toast.makeText(requireContext(), "Audio URL not provided", Toast.LENGTH_SHORT).show();
         }
@@ -195,7 +206,7 @@ public class AudioBookFragment extends Fragment {
 
         if (speedAdapter != null) {
             for (int i = 0; i < speedAdapter.getCount(); i++) {
-                if (speedAdapter.getItem(i).toString().equals("1.0x")) {
+                if (speedAdapter.getItem(i).toString().equals("1x")) {
                     speedSpinner.setSelection(i);
                     break;
                 }

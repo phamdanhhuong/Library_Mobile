@@ -22,16 +22,20 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     private Context context;
     private List<Category> categories;
     private OnCategoryClickListener listener;
+    private boolean isEbookSelected;
 
-    public CategoryAdapter(Context context, List<Category> categories, OnCategoryClickListener listener) {
+    public CategoryAdapter(Context context, List<Category> categories, OnCategoryClickListener listener, boolean isEbookSelected) {
         this.context = context;
         this.categories = categories;
         this.listener = listener;
+        this.isEbookSelected = isEbookSelected;
     }
     public interface OnCategoryClickListener {
         void onCategoryClick(Category category);
     }
-
+    public List<Category> getCategories() {
+        return categories;
+    }
     @NonNull
     @Override
     public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -42,7 +46,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     @Override
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
         Category category = categories.get(position);
-        holder.bind(category);
+        holder.bind(category, isEbookSelected);
     }
 
     @Override
@@ -63,9 +67,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         }
 
         @SuppressLint("SetTextI18n")
-        void bind(Category category) {
+        void bind(Category category, boolean isEbookSelected) {
             tvCategoryName.setText(category.getGenre());
-            tvBookCount.setText(category.getBookCount() + " books");
+            if (isEbookSelected) {
+                tvBookCount.setText(category.getEBookCount() + " ebooks");
+            } else {
+                tvBookCount.setText(category.getAudioBookCount() + " audiobooks");
+            }
             
             // Load category image using Glide
             Glide.with(context)
@@ -80,9 +88,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             });
         }
     }
-    public void updateData(List<Category> newCategories) {
+    public void updateData(List<Category> newCategories, boolean isEbookSelected) {
         categories.clear();
         categories.addAll(newCategories);
+        this.isEbookSelected = isEbookSelected;
         notifyDataSetChanged();
     }
 }

@@ -90,7 +90,7 @@ public class AudioBookListFragment extends Fragment implements AudioBookAdapter.
     public void onItemClick(Book audiobook) {
         // Handle item click to replace content_frame with AudioBookFragment
         if (getActivity() != null) {
-            AudioBookFragment audioBookFragment = AudioBookFragment.newInstance(audiobook.getId(), audiobook.getTitle(), audiobook.getAudioUrl());
+            AudioBookFragment audioBookFragment = AudioBookFragment.newInstance(audiobook.getId(), audiobook.getTitle(), audiobook.getAuthor(), audiobook.getAudioUrl(), audiobook.getCoverUrl());
 
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             fragmentManager.beginTransaction()
