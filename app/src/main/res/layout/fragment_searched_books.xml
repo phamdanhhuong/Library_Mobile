@@ -18,8 +18,8 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_navigate"
-            android:rotation="180"
+            android:src="@drawable/ic_back"
+            android:rotation="0"
             android:contentDescription="Back" />
 
         <TextView

@@ -222,7 +222,7 @@ public class BaseActivity extends AppCompatActivity {
                 R.anim.slide_out_right);
 
         transaction.replace(R.id.content_frame, fragment);
-        transaction.addToBackStack(null); // Thường thêm vào back stack để có thể quay lại
+        transaction.addToBackStack(null);
         transaction.commit();
     }
     @Override
