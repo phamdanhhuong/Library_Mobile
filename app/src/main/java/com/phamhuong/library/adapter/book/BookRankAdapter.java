@@ -54,7 +54,7 @@ public class BookRankAdapter extends RecyclerView.Adapter<BookRankAdapter.ViewHo
         holder.tvAuthor.setText(book.getAuthor());
         
         // Set book type
-        holder.tvBookType.setText(isEbook ? "Sách điện tử" : "Sách nói");
+        holder.tvBookType.setText(book.getAudioUrl() != null ? "Sách nói" : "Sách điện tử");
         
         // Set rating
         if (book.getRating() > 0) {

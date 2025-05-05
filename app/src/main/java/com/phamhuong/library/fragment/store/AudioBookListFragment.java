@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -93,8 +94,12 @@ public class AudioBookListFragment extends Fragment implements AudioBookAdapter.
             AudioBookFragment audioBookFragment = AudioBookFragment.newInstance(audiobook.getId(), audiobook.getTitle(), audiobook.getAuthor(), audiobook.getAudioUrl(), audiobook.getCoverUrl());
 
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.content_frame, audioBookFragment)
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.setCustomAnimations(R.anim.fade_in,  // enter animation
+                    R.anim.fade_out, // exit animation
+                    R.anim.fade_in,  // pop enter animation (khi quay lại)
+                    R.anim.fade_out);
+            transaction.replace(R.id.content_frame, audioBookFragment)
                     .addToBackStack(null)
                     .commit();
         }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -87,6 +88,11 @@ public class BookInfoAdapter extends RecyclerView.Adapter<BookInfoAdapter.MyView
         Bundle bundle = new Bundle();
         bundle.putSerializable("book", book);
         bookFragment.setArguments(bundle);
+
+        // Thêm animation fade
+        AlphaAnimation fadeIn = new AlphaAnimation(0.0f, 1.0f);
+        fadeIn.setDuration(500);
+        transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
 
         transaction.replace(R.id.content_frame, bookFragment);
         transaction.addToBackStack(null);
