@@ -1,5 +1,6 @@
 package com.phamhuong.library;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -99,6 +100,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     void CallAPI(RegisterRequest registerRequest){
+
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
         Call<ApiResponse> call = apiService.register(registerRequest);
         call.enqueue(new Callback<ApiResponse>() {
@@ -121,12 +123,18 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     void SendOtpActiveAccount(String email){
+        ProgressDialog progressDialog = new ProgressDialog(RegisterActivity.this);
+        progressDialog.setMessage("Đang gửi OTP...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
         Map<String,String> requestBody = Map.of("email", email);
         Call<ApiResponse> call = apiService.SendOtpActiveAccount(requestBody);
         call.enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                progressDialog.dismiss();
                 ApiResponse body = response.body();
                 if(body.isStatus()){
                     Intent intent = new Intent(RegisterActivity.this, OtpRegisterActivity.class);
