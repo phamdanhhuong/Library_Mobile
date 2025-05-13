@@ -20,6 +20,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_PASSWORD = "password";
     public static final String COLUMN_TOKEN = "token";
     public static final String COLUMN_AVATAR_URL = "avatar_url";
+    public static final String PHONE_NUMBER = "phone_number";
 
     private static final String SQL_CREATE_LOGIN_TABLE =
             "CREATE TABLE " + TABLE_LOGIN + " (" +
@@ -29,7 +30,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COLUMN_FULLNAME + " TEXT, " +
                     COLUMN_EMAIL + " TEXT, " +
                     COLUMN_TOKEN + " TEXT, " +
-                    COLUMN_AVATAR_URL + " TEXT)";
+                    COLUMN_AVATAR_URL + " TEXT,"+
+                    PHONE_NUMBER + " TEXT"+ ")";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -98,19 +100,54 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String email = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_EMAIL));
             String token = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TOKEN));
             String avatarUrl = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_AVATAR_URL)); // Lấy avatarUrl
-            loginInfo = new UserLoginInfo(userId, username, password, fullName, email, token, avatarUrl);
+            String phoneNumber = cursor.getString(cursor.getColumnIndexOrThrow(PHONE_NUMBER));
+            loginInfo = new UserLoginInfo(userId, username, password, fullName, email, token, avatarUrl, phoneNumber);
             cursor.close();
             db.close();
         }
         return loginInfo;
     }
 
-    public int updateLoginInfoSQLite(int userId, String fullName, String email, String usernameToUpdate, String avatarUrl) {
+    public int updateLoginInfoSQLite(int userId, String fullName, String email, String usernameToUpdate, String avatarUrl, String phoneNumber) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_FULLNAME, fullName);
         values.put(COLUMN_EMAIL, email);
         values.put(COLUMN_USERID, userId);
+        values.put(COLUMN_AVATAR_URL, avatarUrl);
+        values.put(PHONE_NUMBER, phoneNumber);
+
+        // Cập nhật hàng trong bảng login dựa trên username
+        int rowsAffected = db.update(
+                TABLE_LOGIN,
+                values,
+                COLUMN_USERNAME + "=?",
+                new String[]{usernameToUpdate}
+        );
+        db.close(); // Đóng kết nối cơ sở dữ liệu sau khi hoàn tất
+        return rowsAffected;
+    }
+
+    public int updateInfo(String usernameToUpdate, String fullName, String phoneNumber) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_FULLNAME, fullName);
+        values.put(PHONE_NUMBER, phoneNumber);
+
+        // Cập nhật hàng trong bảng login dựa trên username
+        int rowsAffected = db.update(
+                TABLE_LOGIN,
+                values,
+                COLUMN_USERNAME + "=?",
+                new String[]{usernameToUpdate}
+        );
+        db.close(); // Đóng kết nối cơ sở dữ liệu sau khi hoàn tất
+        return rowsAffected;
+    }
+
+    public int updateAvatarUrl(String usernameToUpdate, String avatarUrl) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
         values.put(COLUMN_AVATAR_URL, avatarUrl);
 
         // Cập nhật hàng trong bảng login dựa trên username

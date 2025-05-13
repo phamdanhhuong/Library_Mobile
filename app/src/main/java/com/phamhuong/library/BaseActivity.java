@@ -249,7 +249,8 @@ public class BaseActivity extends AppCompatActivity {
                         txtFullName.setText(body.getFull_name());
                         txtUserEmail.setText(body.getEmail());
                         String avatarUrl = body.getAvatar();
-                        dbHelper.updateLoginInfoSQLite(body.getId(), body.getFull_name(), body.getEmail(), userLoginInfo.username, avatarUrl);
+                        String phoneNumber = body.getPhone_number();
+                        dbHelper.updateLoginInfoSQLite(body.getId(), body.getFull_name(), body.getEmail(), userLoginInfo.username, avatarUrl, phoneNumber);
                         updateAvatarHeader(avatarUrl);
 
                         int userId = body.getId();

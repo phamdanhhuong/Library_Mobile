@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.phamhuong.library.R;
+import com.phamhuong.library.fragment.reservation.BorrowHistoryFragment;
 import com.phamhuong.library.model.ApiResponseT;
 import com.phamhuong.library.model.Book;
 import com.phamhuong.library.model.BorrowingRecord;
@@ -73,6 +74,15 @@ public class FragmentUserInfo extends Fragment {
         tvSavedCount = view.findViewById(R.id.tv_saved_count);
         tvBorrowedCount = view.findViewById(R.id.tv_borrowed_count);
         apiService = RetrofitClient.getRetrofit().create(APIService.class);
+        view.findViewById(R.id.img_avatar).setOnClickListener(v -> {
+            Fragment editFragment = new FragmentEditProfile();
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
+                    .replace(R.id.content_frame, editFragment)
+                    .addToBackStack(null)
+                    .commit();
+        });
         return view;
     }
 

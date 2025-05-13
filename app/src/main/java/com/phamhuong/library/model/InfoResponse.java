@@ -14,11 +14,17 @@ public class InfoResponse implements Serializable {
     @SerializedName("avatar")
     String avatar;
 
-    public InfoResponse(String full_name, int id, String email, String avatar) {
+
+
+    @SerializedName("phone_number")
+    String phone_number;
+
+    public InfoResponse(String full_name, int id, String email, String avatar, String phone_number) {
         this.full_name = full_name;
         this.id = id;
         this.email = email;
         this.avatar = avatar;
+        this.phone_number = phone_number;
     }
 
     public String getFull_name() {
@@ -49,5 +55,12 @@ public class InfoResponse implements Serializable {
     }
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+    public String getPhone_number() {
+        return phone_number;
+    }
+
+    public void setPhone_number(String phone_number) {
+        this.phone_number = phone_number;
     }
 }

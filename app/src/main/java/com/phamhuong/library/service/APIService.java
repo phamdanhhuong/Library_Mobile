@@ -169,4 +169,9 @@ public interface APIService {
     @POST("/reservations/cancel/{reservationId}")
     Call<ApiResponse> cancelReservation(@Path("reservationId") int reservationId);
 
+    @POST("/info/update")
+    Call<ApiResponse> updateInfo(@Body Map<String, String> requestBody);
+
+    @POST("/info/avatar_update")
+    Call<ApiResponse> avatarUpdate(@Body Map<String, String> requestBody);
 }

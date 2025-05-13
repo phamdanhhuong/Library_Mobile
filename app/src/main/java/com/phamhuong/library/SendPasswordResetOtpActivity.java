@@ -1,5 +1,6 @@
 package com.phamhuong.library;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -51,6 +52,10 @@ public class SendPasswordResetOtpActivity extends AppCompatActivity {
     }
 
     void sendOtp() {
+        ProgressDialog progressDialog = new ProgressDialog(SendPasswordResetOtpActivity.this);
+        progressDialog.setMessage("Đang gửi OTP...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
         String email = editTextEmail.getText().toString().trim();
         if (email.isEmpty()) {
             Toast.makeText(this, "Vui lòng nhập email", Toast.LENGTH_SHORT).show();
@@ -64,6 +69,7 @@ public class SendPasswordResetOtpActivity extends AppCompatActivity {
         call.enqueue(new Callback<ApiResponseT<String>>() {
             @Override
             public void onResponse(Call<ApiResponseT<String>> call, Response<ApiResponseT<String>> response) {
+                progressDialog.dismiss();
                 if (response.isSuccessful() && response.body() != null) {
                     saveResetInfo(email);
                     CustomDialogHelper.showCustomDialogSuccess(

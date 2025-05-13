@@ -8,6 +8,7 @@ public class UserLoginInfo {
     public String email;
     public String token;
     private String avatarUrl;
+    public String phoneNumber;
 
     public UserLoginInfo() {
     }
@@ -21,7 +22,7 @@ public class UserLoginInfo {
         this.token = token;
     }
     // Thêm constructor có avatarUrl
-    public UserLoginInfo(int userId, String username, String password, String fullName, String email, String token, String avatarUrl) {
+    public UserLoginInfo(int userId, String username, String password, String fullName, String email, String token, String avatarUrl, String phoneNumber) {
         this.userId = userId;
         this.username = username;
         this.password = password;
@@ -29,6 +30,7 @@ public class UserLoginInfo {
         this.email = email;
         this.token = token;
         this.avatarUrl = avatarUrl;
+        this.phoneNumber = phoneNumber;
     }
     public int getUserId() {
         return userId;
@@ -83,5 +85,12 @@ public class UserLoginInfo {
 
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
+    }
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }
