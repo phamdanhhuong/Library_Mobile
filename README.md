@@ -37,6 +37,15 @@
 
 ---
 
+---
+### 🎨 Thiết kế giao diện (Figma)
+
+Bạn có thể xem toàn bộ thiết kế của ứng dụng tại đây
+
+https://www.figma.com/design/loSBaiWZJyNaiaA4lWqfb1/LibraryApp?t=RkPxRcGFxvRkzh9R-0
+
+---
+
 ## 🖥️ Hướng dẫn cài đặt
 
 ### 1. Backend (Spring Boot)
