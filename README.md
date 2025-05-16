@@ -57,6 +57,12 @@ retrofit = new Retrofit.Builder()
 ```
 Chạy ứng dụng trên thiết bị/emulator.
 
+### 📌 Định hướng phát triển
+📲 Gợi ý sách theo thói quen người dùng
+🤖 Tích hợp chatbot hỗ trợ thủ thư ảo
+🔗 Thanh toán phí phạt
+🌐 Phát triển phiên bản Web cho thủ thư quản trị
+
 ### 👨‍💻 Nhóm phát triển
 | Họ tên          | MSSV                  | Nhiệm vụ chính                                |
 | --------------- | --------------------- | --------------------------------------------- |
