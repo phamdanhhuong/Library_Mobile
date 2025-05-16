@@ -8,7 +8,7 @@
 
 - 🔐 Đăng ký / đăng nhập bằng email và OTP
 - 🔁 Lấy lại mật khẩu qua OTP
-- 🔍 Tìm kiếm và lọc sách theo tên, thể loại, đánh giá
+- 🔍 Tìm kiếm và lọc sách theo tên
 - 🎧 Nghe thử sách nói trực tiếp từ ứng dụng
 - 🕘 Xem lịch sử mượn sách và **gia hạn mượn**
 - 📝 Đánh giá, nhận xét sách
