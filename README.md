@@ -33,7 +33,7 @@
 | Lưu trữ ảnh        | Cloudinary                       |
 | Lưu trữ âm thanh   | Supabase                         |
 | Kiểu giao tiếp     | RESTful API (JSON)               |
-| UI                 | RecyclerView, Fragment, Material Design |
+| UI                 | RecyclerView, Fragment           |
 
 ---
 
